@@ -181,36 +181,36 @@ position $q_i$ to its Eulerian position $x_i$
 whose determinant is related to overdensity by
 \begin{equation}
     \delta = \Bigl| \frac{\partial\vx}{\partial\vq} \Bigr|^{-1} - 1
-    \simeq - \Psi_{i,i},
+    \simeq - \Psi_{i,i}^{(1)},
     \label{J}
 \end{equation}
 where $\Psi_{i,j} \equiv \partial\Psi_i / \partial q_j$, and we've only kept
 the leading order term in the second equality.
 Substitute \eqref{disp} into \eqref{pecvel} to derive
 \begin{equation}
-    \ddot \Psi_i + 2 H_i \dot \Psi_i = - \frac1{a_i}
+    \ddot \Psi_i^{(1)} + 2 H_i \dot \Psi_i^{(1)} = - \frac1{a_i}
     \frac{\partial\phi}{\partial r_i}.
 \end{equation}
 Take gradient of $x_i$ on both sides and then sum over $i$
 \begin{equation}
-    \ddot \Psi_{i,i} + 2 H_i \dot \Psi_{i,i} \simeq - \nabla_\vr^2 \phi
-    \simeq \frac{3\Omega_\mathrm{m} H_0^2}{2 a^3} (1 + \Delta_0) \Psi_{i,i},
+    \ddot \Psi_{i,i}^{(1)} + 2 H_i \dot \Psi_{i,i}^{(1)} \simeq - \nabla_\vr^2 \phi
+    \simeq \frac{3\Omega_\mathrm{m} H_0^2}{2 a^3} (1 + \Delta_0) \Psi_{i,i}^{(1)},
     \label{disp_evo}
 \end{equation}
 in which we have used \eqref{poisson}, \eqref{J}, and the fact that at leading
-order $\partial\Psi_i / \partial x_i \simeq \Psi_{i,i}$.
-In the linear order the vorticity in $\Psi_{i,j}$ decays, so the displacement
-is a potential flow $\Psi_i = - \partial\psi / \partial q_i \equiv -\psi_{,i}$
-with the displacement potential $\psi$ sourced by the overdensity in Lagrangian
+order $\partial\Psi_i^{(1)} / \partial x_i \simeq \Psi_{i,i}^{(1)}$.
+In the linear order the vorticity in $\Psi_{i,j}^{(1)}$ decays, so the displacement
+is a potential flow $\Psi_i^{(1)} = - \partial\psi^{(1)}/ \partial q_i \equiv -\psi_{,i}^{(1)}$
+with the displacement potential $\psi^{(1)}$ sourced by the overdensity in Lagrangian
 space
 \begin{equation}
-    \nabla_\vq^2 \psi \simeq \delta.
+    \nabla_\vq^2 \psi^{(1)} \simeq \delta^{(1)}.
 \end{equation}
 Rewrite \eqref{disp_evo} with $\psi$ in Fourier space, and change its time
 variable to $\ln a$
 \begin{equation}
-    \psi'' + \Bigl( 2 \frac{H_i \hat p_i^2} H + \frac{H'} H \Bigr) \psi'
-    - \frac32 \Omega_\mathrm{m}(a) (1 + \Delta_0) \psi = 0,
+    \psi^{(1)\prime\prime} + \Bigl( 2 \frac{H_i \hat p_i^2} H + \frac{H'} H \Bigr) \psi^{(1)\prime}
+    - \frac32 \Omega_\mathrm{m}(a) (1 + \Delta_0) \psi^{(1)} = 0,
     \label{pot_evo}
 \end{equation}
 where $\hat p_i$ denotes the unit vector or direction cosine of the wavevector
@@ -224,31 +224,31 @@ history of the long modes $\Delta_i(a)$.
 Apparently without the long modes the evolution in \eqref{pot_evo} reduces to
 that of the usual linear growth function $D(a)$
 \begin{equation}
-    D'' + \Bigl( 2 + \frac{H'} H \Bigr) D'
-    - \frac32 \Omega_\mathrm{m}(a) D = 0,
+    D^{(1)\prime\prime} + \Bigl( 2 + \frac{H'} H \Bigr) D^{(1)\prime}
+    - \frac32 \Omega_\mathrm{m}(a) D^{(1)} = 0,
     \label{D}
 \end{equation}
-In the presence of the long modes, the growth function $D_W(a, \hat\vp)$
+In the presence of the long modes, the growth function $D^{(1)}_W(a, \hat\vp)$
 receives corrections of order $\order(\Delta_i)$.
 The subscript $W$ here and throughout denotes locally averaged quantities
 defined in a \emph{window} with non-vanishing long modes.
-Let $\epsilon(a, \hat\vp) \equiv D_W - D$. It follows
+Let $\epsilon^{(1)}(a, \hat\vp) \equiv D^{(1)}_W - D^{(1)}$. It follows
 \begin{equation}
-    \epsilon'' + \Bigl( 2 + \frac{H'} H \Bigr) \epsilon'
-    - \frac32 \Omega_\mathrm{m}(a) \epsilon
+    \epsilon^{(1)\prime\prime} + \Bigl( 2 + \frac{H'} H \Bigr) \epsilon^{(1)\prime}
+    - \frac32 \Omega_\mathrm{m}(a) \epsilon^{(1)}
     \simeq
-    - 2 D' \hat p_i^2 \Delta_i' + \frac32 \Omega_\mathrm{m}(a) D \Delta_0.
+    - 2 D^{(1)\prime} \hat p_i^2 \Delta_i' + \frac32 \Omega_\mathrm{m}(a) D^{(1)} \Delta_0.
 \end{equation}
 To solve this equation we can first decompose it as
 \begin{equation}
-    \epsilon(a, \hat\vp) = \hat p_i^2 \epsilon_i(a),
+    \epsilon^{(1)}(a, \hat\vp) = \hat p_i^2 \epsilon^{(1)}_i(a),
     \label{e}
 \end{equation}
-with each component $\epsilon_i(a)$ solves
+with each component $\epsilon^{(1)}_i(a)$ solves
 \begin{equation}
-    \epsilon_i'' + \Bigl( 2 + \frac{H'} H \Bigr) \epsilon_i'
-    - \frac32 \Omega_\mathrm{m}(a) \epsilon_i
-    = - 2 D' \Delta_i' + \frac32 \Omega_\mathrm{m}(a) D \Delta_0.
+    \epsilon_i^{(1)\prime\prime} + \Bigl( 2 + \frac{H'} H \Bigr) \epsilon_i^{(1)\prime}
+    - \frac32 \Omega_\mathrm{m}(a) \epsilon_i^{(1)}
+    = - 2 D^{(1)\prime} \Delta_i' + \frac32 \Omega_\mathrm{m}(a) D^{(1)} \Delta_0.
     \label{ei}
 \end{equation}
 For the simplest scenarios we assume that the universe has been matter
@@ -257,19 +257,81 @@ that the long modes are well sub-horizon ($\Delta_0, \Delta_i \propto D$), so
 that we can set up the initial conditions of the linear growth equations
 \eqref{D} and \eqref{ei} as
 \begin{align}
-    D &= D' = a_\mathrm{ini}, \nonumber\\
-    \epsilon_i &= \frac12 \epsilon_i'
-    = -\frac47 \Delta_i D + \frac37 \Delta_0 D,
+    D^{(1)} &= D^{(1)\prime} = a_\mathrm{ini}, \nonumber\\
+    \epsilon^{(1)}_i &= \frac12 \epsilon^{(1)\prime}_i
+    = -\frac47 \Delta_i D^{(1)} + \frac37 \Delta_0 D^{(1)},
     \label{ICs}
 \end{align}
 at $a_\mathrm{ini}$ deep in the matter dominated era.
 
 \eqref{ICs} can be directly compared to the results derived with standard
 perturbation theory in an Einstein de-Sitter universe.
-For isotropic perturbation, $\Delta_i = - \Delta_0 / 3$, so $D_W = D (1 + 13
+For isotropic perturbation, $\Delta_i = - \Delta_0 / 3$, so $D^{(1)}_W = D^{(1)} (1 + 13
 \Delta_0 / 21)$.
 
-\HL{Say why 2LPT is not working.}
+At second order, we have to come back to the master equation for the Lagrangian perturbation theory
+in the anisotropic background, which is given by
+\begin{align}
+    \Bigl| \frac{\partial\vx}{\partial\vq} \Bigr|^{-1} 
+    \left[ \delta_{ij} + \Psi_{i,j} \right]^{-1}
+    \left[ \ddot{\Psi}_{i,j} + 2H_i\dot{\Psi}_{i,j} \right]
+    =\frac32 H^2\Omega_{\rm m}(a)(1+\Delta_0)\delta.
+\end{align}
+Keeping up to the second order terms, we find 
+\begin{align}
+&\Bigl| \frac{\partial\vx}{\partial\vq} \Bigr|^{-1}  \simeq 
+    1 + \Psi_{i,i}^{(1)} + \Psi_{i,i}^{(2)} + \frac12 \left[\left(\Psi_{i,i}^{(1)} \right)^2 - \Psi_{i,j}^{(1)}\Psi_{j,i}^{(1)} \right]
+    \\
+&\left[ \delta_{ij} + \Psi_{i,j} \right]^{-1} \simeq \delta_{ij} - \Psi_{i,j}^{(1)},
+\end{align}
+leading to the second order equation
+\begin{align}
+\ddot \Psi^{(2)}_{i,i} &+ 2H_i\dot \Psi^{(2)}_{i,i} -\frac32 H^2\Omega_{\rm m}(a)(1+\Delta_0)\Psi_{i,i}^{(2)}
+    \nonumber\\
+    &= -\Psi_{i,i}^{(1)}\left[\ddot \Psi^{(1)}_{j,j} + 2H_i\dot \Psi_{j,j}^{(1)} \right]
+    + \Psi_{i,j}^{(1)}\left[\ddot \Psi^{(1)}_{i,j} + 2H_i\dot \Psi_{i,j}^{(1)} \right]
+    + \frac32 H^2 \Omega_{\rm m}(a) (1+\Delta_0) 
+    \left[\frac12\left(\Psi_{i,i}^{(1)}\right)^2 - \frac12\Psi_{i,j}^{(1)}\Psi_{j,i}^{(1)}  \right].
+\end{align}
+Similar to the linear order, we introduce the second order displacement potential
+thruough $\Psi_i^{(2)} = \partial\psi_W^{(2)}/\partial q_i \equiv \psi^{(2)}_{W,i}$. 
+In the absence of the long modes, the equation for $\psi^{(2)}$ reduces
+\begin{align}
+\ddot \psi^{(2)}_{,ii} + 2H\dot \psi^{(2)}_{,ii}-\frac32 H^2 \Omega_{\rm m}(a)\psi^{(2)}_{,ii}
+ = -\frac32 H^2 \Omega_{\rm m}\left[\frac12 \left( \psi^{(1)}_{,ii} \right)^2 -\frac12 \psi^{(1)}_{,ij}\psi^{(1)}_{,ji} \right],
+\end{align}
+where we used the linear equation \eqref{pot_evo} without long modes.
+In this usual case, we denote the time-dependent part of $\psi^{(2)}$ as $D^{(2)}(t)$, which obeys
+\begin{align}
+\ddot D^{(2)} + 2H \dot D^{(2)} - \frac32 H^2 \Omega_{\rm m}(a) D^{(2)} = -\frac32 H^2 \Omega_{\rm m}\left( D^{(1)} \right)^2.
+\end{align}
+In the matter dominated era, we have $D^{(2)}= -\frac37 \left[D^{(1)}\right]^2$.
+The correction induced by the long modes, which is expressed by $\epsilon^{(2)}(t, \vq)\equiv \psi_W^{(2)}(t, \vq) - \psi^{(2)}(t, \vq)$, 
+follows
+\begin{align}
+\ddot \epsilon^{(2)}_{,ii} &+ 2H \dot \epsilon^{(2)}_{,ii} - \frac32 H^2 \Omega_{\rm m}(a) \epsilon_{,ii}^{(2)}=
+\nonumber\\
+&-2\dot\psi^{(2)}_{,ii} \dot\Delta_i + 2\dot\Delta_i\dot\psi_{,ij}^{(1)}\psi_{,ji}^{(1)}
+-\frac32 H^2 \Omega_{\rm m}(a) \epsilon^{(1)}_{,jj}\psi^{(1)}_{,ii} + \psi^{(1)}_{,ij} \left[ \ddot\epsilon_{,ij}^{(1)} + 2H\dot\epsilon_{,ij}^{(1)} \right]
+\nonumber\\
+&+\frac32 H^2 \Omega_{\rm m}(a)\Delta_0\left[ \psi_{,ii}^{(2)} + \frac12\left( \psi^{(1)}_{,ii}\right)^2- \frac12\psi^{(1)}_{,ij}\psi^{(1)}_{,ji} \right],
+\label{eq:2nd_epsilon}
+\end{align}
+where $\epsilon^{(1)}(t,\vq) = \int_\vp \epsilon^{(1)}(a, \vp)e^{i\vp\cdot\vq}$
+and we neglect $\mathcal{O}(\Delta_i^2)$ terms.
+Notice that $\epsilon^{(1)}$ is $\mathcal{O}(\Delta_i)$.
+For the matter dominated era, in which we have $H=2/3t$ and $\Omega_{\rm m}(a)=1$,
+%$\Delta_0, \Delta_i, \psi^{(1)} \propto D^{(1)}$ and $\psi^{(2)},\epsilon^{(1)}\propto D^{(2)}$
+the solution for Eq.\eqref{eq:2nd_epsilon} is given by
+\begin{align}
+\epsilon^{(2)}_{,ii}(t, \vq)
+=&\frac14 \left[\frac{16}{21}\psi^{(2)}_{,ii}(t,\vq) + \frac89\psi^{(1)}_{,ij}(t,\vq)\psi^{(1)}_{,ji}(t,\vq) \right]\Delta_i
+\nonumber\\
+&+\frac16 \left[\psi_{,ii}^{(2)} + \frac12\left( \psi^{(1)}_{,ii}\right)^2- \frac12\psi^{(1)}_{,ij}\psi^{(1)}_{,ji}   \right]\Delta_0
+\nonumber\\
+&+\frac14\left[-\frac23\psi^{(1)}_{,ii}(t,\vq)\epsilon_{,jj}^{(1)}(t,\vq) + \frac{20}{9}\psi^{(1)}_{,ij}(t,\vq)\epsilon_{,ij}^{(1)}(t,\vq)  \right].
+\end{align}
+Although the modified second order growth factor, $D^{(2)}_W$, due to the long modes can be identified as $D^{(2)}_W (t, \vp) = D^{(2)}(1 + \Delta_0/6 + 4\hat{p}_i^2\Delta_i/21 )$, the local gravitational tides cannot be neglected at second order.
 
 
 \subsection{Power spectrum responses}
