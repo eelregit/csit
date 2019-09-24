@@ -180,6 +180,7 @@ void find_next_sync_point_and_drift(void)
       All.Ti_Current = All.Ti_nextoutput;
 
       All.Time = All.TimeBegin * exp(All.Ti_Current * All.Timebase_interval);
+      eval_aniss(All.Time, All.TimeAni);
 
       savepositions(All.SnapshotFileCount++);	/* write snapshot file */
 
@@ -191,6 +192,7 @@ void find_next_sync_point_and_drift(void)
   All.Ti_Current = min_glob;
 
   All.Time = All.TimeBegin * exp(All.Ti_Current * All.Timebase_interval);
+  eval_aniss(All.Time, All.TimeAni);
 
   All.TimeStep = All.Time - timeold;
   
@@ -256,9 +258,6 @@ void find_dt_displacement_constraint(void)
   double hfac, hubble_a;
 
   hubble_a = hubble_function(All.Time);
-//ll.Hubble * sqrt(All.Omega0 / (All.Time * All.Time * All.Time)
-//			       + (1 - All.Omega0 - All.OmegaLambda) / (All.Time * All.Time)
-//			       + All.OmegaLambda);
 
   hfac = All.Time * All.Time * hubble_a;
 

@@ -614,6 +614,10 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
   double eff_dist;
   double rcut, asmthfac, rcut2, dist;
   double boxsize, boxhalf;
+  double anifac = sqrt(All.TimeAni[0]*All.TimeAni[1]*All.TimeAni[2] / All.Time);
+  double anifacx = All.TimeAni[0] / anifac;
+  double anifacy = All.TimeAni[1] / anifac;
+  double anifacz = All.TimeAni[2] / anifac;
 
   boxsize = All.BoxSize;
   boxhalf = 0.5 * All.BoxSize;
@@ -660,9 +664,9 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  dy = P[no].Pos[1] - pos_y;
 	  dz = P[no].Pos[2] - pos_z;
 
-	  dx = NEAREST(dx);
-	  dy = NEAREST(dy);
-	  dz = NEAREST(dz);
+	  dx = anifacx * NEAREST(dx);
+	  dy = anifacy * NEAREST(dy);
+	  dz = anifacz * NEAREST(dz);
 
 	  r2 = dx * dx + dy * dy + dz * dz;
 
@@ -699,9 +703,9 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  dy = nop->u.d.s[1] - pos_y;
 	  dz = nop->u.d.s[2] - pos_z;
 
-	  dx = NEAREST(dx);
-	  dy = NEAREST(dy);
-	  dz = NEAREST(dz);
+	  dx = anifacx * NEAREST(dx);
+	  dy = anifacy * NEAREST(dy);
+	  dz = anifacz * NEAREST(dz);
 
 	  r2 = dx * dx + dy * dy + dz * dz;
 
@@ -710,21 +714,21 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	      /* check whether we can stop walking along this branch */
 	      eff_dist = rcut + 0.5 * nop->len;
 
-	      dist = NEAREST(nop->center[0] - pos_x);
+	      dist = NEAREST(nop->center[0] - pos_x) * anifacx;
 	      if(dist < -eff_dist || dist > eff_dist)
 		{
 		  no = nop->u.d.sibling;
 		  continue;
 		}
 
-	      dist = NEAREST(nop->center[1] - pos_y);
+	      dist = NEAREST(nop->center[1] - pos_y) * anifacy;
 	      if(dist < -eff_dist || dist > eff_dist)
 		{
 		  no = nop->u.d.sibling;
 		  continue;
 		}
 
-	      dist = NEAREST(nop->center[2] - pos_z);
+	      dist = NEAREST(nop->center[2] - pos_z) * anifacz;
 	      if(dist < -eff_dist || dist > eff_dist)
 		{
 		  no = nop->u.d.sibling;
@@ -754,11 +758,11 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 
 	      /* check in addition whether we lie inside the cell */
 
-	      if(fabs(nop->center[0] - pos_x) < 0.60 * nop->len)
+	      if(anifacx * fabs(nop->center[0] - pos_x) < 0.60 * nop->len)
 		{
-		  if(fabs(nop->center[1] - pos_y) < 0.60 * nop->len)
+		  if(anifacy * fabs(nop->center[1] - pos_y) < 0.60 * nop->len)
 		    {
-		      if(fabs(nop->center[2] - pos_z) < 0.60 * nop->len)
+		      if(anifacz * fabs(nop->center[2] - pos_z) < 0.60 * nop->len)
 			{
 			  no = nop->u.d.nextnode;
 			  continue;
@@ -799,9 +803,9 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	{
 	  fac *= shortrange_table[tabindex];
 
-	  acc_x += dx * fac;
-	  acc_y += dy * fac;
-	  acc_z += dz * fac;
+	  acc_x += dx * fac * All.Time*All.Time/(All.TimeAni[1]*All.TimeAni[2]);
+	  acc_y += dy * fac * All.Time*All.Time/(All.TimeAni[2]*All.TimeAni[0]);
+	  acc_z += dz * fac * All.Time*All.Time/(All.TimeAni[0]*All.TimeAni[1]);
 
 	  ninteractions++;
 	}

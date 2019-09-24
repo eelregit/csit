@@ -246,3 +246,6 @@ double INLINE_FUNC hubble_function_external(double a);
 #endif /* TIMEDEPDE */
 #endif /* DARKENERGY */
 
+/* ANIsotropic Super-Sample modes */
+int init_aniss();
+void eval_aniss(double Time, double* TimeAni);

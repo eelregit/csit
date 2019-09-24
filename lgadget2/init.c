@@ -40,6 +40,7 @@ void init(void)
     }
 
   All.Time = All.TimeBegin;
+  eval_aniss(All.Time, All.TimeAni);
 
 
   All.Timebase_interval = (log(All.TimeMax) - log(All.TimeBegin)) / TIMEBASE;
@@ -65,7 +66,7 @@ void init(void)
 
   for(i = 0; i < NumPart; i++)
     for(j = 0; j < 3; j++)
-      P[i].Vel[j] *= sqrt(All.Time) * All.Time;
+      P[i].Vel[j] *= sqrt(All.TimeAni[j]) * All.TimeAni[j];
 
   for(i = 0; i < NumPart; i++)	/*  start-up initialization */
     {

@@ -138,13 +138,14 @@ void save_snapshot(int num)
   char buf[300];
   int i, j, k, n, pc;
   double xx, yy, zz;
-  double sqrta3inv;
+  double sqrta3inv[3];
   double scalefac;
   int prev_cell, hash_cell, first_hash_cell, last_hash_cell;
 
 
 
-  sqrta3inv = sqrt(1 / (All.Time * All.Time * All.Time));
+  for(i=0; i<3; ++i)
+      sqrta3inv[i] = sqrt(1 / (All.TimeAni[i] * All.TimeAni[i] * All.TimeAni[i]));
 
   sprintf(buf, "%ssnapdir_%03d/%s_%03d.%d", All.OutputDir, num, All.SnapshotFileBase, num, ThisTask);
 
@@ -233,7 +234,7 @@ void save_snapshot(int num)
   for(i = 0, pc = 0; i < NumPart; i++)
     {
       for(k = 0; k < 3; k++)
-	block[3 * pc + k] = P[i].Vel[k] * sqrta3inv;
+	block[3 * pc + k] = P[i].Vel[k] * sqrta3inv[k];
 
       pc++;
 

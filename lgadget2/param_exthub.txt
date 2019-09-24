@@ -1,0 +1,101 @@
+%  File name parameters:
+
+DarkEnergyFile      Ha.txt
+
+InitCondFile        /path/to/ics
+OutputDir           /path/to/output
+
+EnergyFile        energy.txt
+InfoFile          info.txt
+TimingsFile       timings.txt
+CpuFile           cpu.txt
+
+RestartFile       restart
+SnapshotFileBase  snapshot
+
+
+
+% CPU-time limit
+
+TimeLimitCPU      129600
+ResubmitOn        0
+ResubmitCommand   ./resub.sh
+
+CpuTimeBetRestartFile  128400
+
+MaxMemSize        1500  % maximum allowed memory ceiling per CPU
+
+
+
+% Code options
+
+ICFormat              1       % only 1 is presently supported
+SnapFormat            1       % only 1 is presently supported
+
+NumFilesWrittenInParallel 32   % maximum number of files for which
+                              % simultaneous I/O is done
+
+
+%  Characteristics of run
+
+TimeBegin           0.02
+TimeMax	            1.0
+
+Omega0	              0.3
+OmegaLambda           0.7
+DarkEnergyParam      -0.5
+OmegaBaryon           0.05
+HubbleParam           0.7
+
+BoxSize                500.0
+
+Softening             0.015
+SofteningMaxPhys      0.015
+
+
+
+% Output frequency
+
+OutputListFilename  outputtimes.txt
+OutputListOn        1
+
+TimeBetSnapshot        0
+TimeOfFirstSnapshot    0
+ 
+TimeBetStatistics      0.1
+
+
+
+% Accuracy of time integration
+
+ErrTolIntAccuracy      0.025
+
+MaxSizeTimestep        0.025 
+MinSizeTimestep        0
+MaxRMSDisplacementFac  0.2
+
+
+
+% Tree algorithm and force accuracy
+
+ErrTolTheta            0.5
+TypeOfOpeningCriterion 1
+ErrTolForceAcc         0.002
+
+
+
+% Parameters that affect memory usage of the code
+
+PartAllocFactor       2.0
+TreeAllocFactor       0.9
+
+BufferSize            150  % in MByte
+
+
+
+% System of units
+
+UnitLength_in_cm         3.085678e24        %  1.0 Mpc
+UnitMass_in_g            1.989e43           %  1.0e10 solar masses
+UnitVelocity_in_cm_per_s 1e5                %  1 km/sec
+GravityConstantInternal  0

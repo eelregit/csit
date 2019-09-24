@@ -123,6 +123,10 @@ void pmforce_periodic(void)
   int dimprod;
   size_t bytes_tot = 0, bytes;
   MPI_Status status;
+  double anifac = All.TimeAni[0]*All.TimeAni[1]*All.TimeAni[2] / All.Time;
+  double anifacx = anifac / (All.TimeAni[0]*All.TimeAni[0]);
+  double anifacy = anifac / (All.TimeAni[1]*All.TimeAni[1]);
+  double anifacz = anifac / (All.TimeAni[2]*All.TimeAni[2]);
 
   if(ThisTask == 0)
     {
@@ -431,7 +435,7 @@ void pmforce_periodic(void)
 	  else
 	    kz = z;
 
-	  k2 = kx * kx + ky * ky + kz * kz;
+	  k2 = anifacx * kx*kx + anifacy * ky*ky + anifacz * kz*kz;
 
 	  if(k2 > 0)
 	    {

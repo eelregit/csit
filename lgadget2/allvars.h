@@ -326,6 +326,7 @@ extern struct global_data_all_processes
   /* Current time of the simulation, global step, and end of simulation */
 
   double Time, TimeBegin, TimeStep, TimeMax;	/* marks end of the simulation */
+  double TimeAni[3];                            /* anisotroptic scale factors */
 
   /* variables for organizing discrete timeline */
 
@@ -405,6 +406,7 @@ extern struct global_data_all_processes
     SnapshotFileBase[100],
     EnergyFile[100],
     CpuFile[100], InfoFile[100], TimingsFile[100], RestartFile[100], ResubmitCommand[100], OutputListFilename[100];
+  char AniFile[100];
 
   double OutputListTimes[MAXLEN_OUTPUTLIST];	/* was 200 in earlier version */
   int OutputListLength;

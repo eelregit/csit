@@ -1,7 +1,7 @@
-OPT   +=  -DPMGRID=384
+OPT   +=  -DPMGRID=1024
 OPT   +=  -DWALLCLOCK   
 
-OPT   +=  -DFOF
+#OPT   +=  -DFOF
 OPT   +=  -DTWOPOINT
 OPT   +=  -DPOWERSPEC
 #OPT   +=  -DOUTPUT_LONGRANGE_POTENTIAL
@@ -57,7 +57,7 @@ SYSTYPE="midway"
 #SYSTYPE="fulla-gcc"
 
 CC       =   mpicc        # sets the C-compiler (default)
-OPTIMIZE =   -g -O3 # optimization and warning flags (default)
+OPTIMIZE =   -g -O3 -Wall # optimization and warning flags (default)
 
 ifeq ($(SYSTYPE),"midway")
 CC       =  mpicc 
@@ -149,7 +149,7 @@ EXEC   = L-Gadget2
 OBJS   = main.o mymalloc.o fof.o  run.o  predict.o begrun.o endrun.o global.o  \
 	 init.o restart.o  io.o accel.o   read_ic.o  twopoint.o \
 	 system.o  allocate.o gravtree.o  driftfac.o darkenergy.o \
-	 domain.o  allvars.o forcetree.o   peano.o  pm_periodic.o lightcone.o $(MEMWATCH)
+	 domain.o  allvars.o forcetree.o   peano.o  pm_periodic.o lightcone.o aniss.o $(MEMWATCH)
 
 
 INCL   = allvars.h  proto.h  forcetree.h  domain.h fof.h  Makefile

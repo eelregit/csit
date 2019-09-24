@@ -58,6 +58,8 @@ void begrun(void)
 
   pm_init_periodic();
 
+  init_aniss();  /* before init() */
+
   if(RestartFlag == 0 || RestartFlag == 2)
     {
       init();			/* ... read in initial model */
@@ -399,6 +401,10 @@ void read_parameter_file(char *fname)
   if(ThisTask == 0)		/* read parameter file on process 0 */
     {
       nt = 0;
+
+      strcpy(tag[nt], "AniFile");
+      addr[nt] = All.AniFile;
+      id[nt++] = STRING;
 
       strcpy(tag[nt], "InitCondFile");
       addr[nt] = All.InitCondFile;
