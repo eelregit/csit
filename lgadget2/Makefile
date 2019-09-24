@@ -1,0 +1,187 @@
+OPT   +=  -DPMGRID=384
+OPT   +=  -DWALLCLOCK   
+
+OPT   +=  -DFOF
+OPT   +=  -DTWOPOINT
+OPT   +=  -DPOWERSPEC
+#OPT   +=  -DOUTPUT_LONGRANGE_POTENTIAL
+
+#OPT   +=  -DDOUBLEPRECISION      
+#OPT   +=  -DDOUBLEPRECISION_FFTW
+
+#OPT   +=  -DNOTREERND 
+#OPT   +=  -DNOSTOP_WHEN_BELOW_MINTIMESTEP
+#OPT   +=  -DT3E    
+#OPT   +=  -DNOTYPEPREFIX_FFTW        
+#OPT   +=  -DMAKEGLASS=1000000    # if a value is assigned to MAKEGLASS, a glass is generated
+		 	          # with this number of particles, otherwise a file is read
+
+#OPT   +=  -DASMTH=1.25         #  Can be used to override default value of 1.25 
+#OPT   +=  -DRCUT=4.5          # Can be used to override default value of 4.5
+
+#OPT   +=  -DGROUP_MIN_LEN=20  # Can be used to override default minimum particle number of 32 in groups 
+#OPT   +=  -DLINKLENGTH=0.2    # Can be used to override default linking length of 0.2
+
+#OPT   +=  -DDOMAINLEVELS=5    # For Millennium run: Override default value of 4 with 5 
+#OPT   +=  -DHASHBITS=8        # For Millennium run: Override default value of 6 with 8
+#OPT   +=  -DFRACTION_TP=20.0  # for Millennium run: Override with 20.0
+#OPT   +=  -DHPM
+
+#OPT   +=  -DLIGHTCONE #Added by MBUSHA for making lightcones on the fly
+#OPT   +=  -DLIGHTCONE_OUTPUT_AINT #added by matt becker to add expansion factor at intersection to finalized light cone outputs
+#OPT   +=  -DOCTANT1 #light cone octant based at origin
+#OPT   +=  -DOCTANT2 #light cone octant based at far corner
+#OPT   +=  -DOCTANT3 #light cone octant based at far corner
+#OPT   +=  -DOCTANT4 #light cone octant based at far corner
+#OPT   +=  -DOCTANT5 #light cone octant based at far corner
+#OPT   +=  -DOCTANT6 #light cone octant based at far corner
+#OPT   +=  -DOCTANT7 #light cone octant based at far corner
+#OPT   +=  -DOCTANT8 #light cone octant based at far corner
+#OPT   +=  -DSPHERE     #light cone sphere based at center
+
+#OPT   += -DSYSMALLOC #added by matt becker to force code to use system malloc calls
+#OPT   += -DPHDOMAINDECOMP #added by matt becker - tell code *NOT* to use an equlvolume domain decomp
+
+#--------------------------------------- Dark energy
+#OPT   +=  -DDARKENERGY # Enables Dark Energy
+#OPT   +=  -DTIMEDEPDE  # read w(z) from a file
+#OPT   +=  -DRESCALEVINI # rescale v_ini in read_ic / read_ic_cluster
+#OPT   +=  -DTIMEDEPGRAV # resacles H and G according to DE model <- NOT IMPLEMENTED
+
+SYSTYPE="midway"
+#SYSTYPE="orange"
+#SYSTYPE="ranger"
+#SYSTYPE="trestles"
+#SYSTYPE="flux"
+#SYSTYPE="mandor-gcc"
+#SYSTYPE="fulla-gcc"
+
+CC       =   mpicc        # sets the C-compiler (default)
+OPTIMIZE =   -g -O3 # optimization and warning flags (default)
+
+ifeq ($(SYSTYPE),"midway")
+CC       =  mpicc 
+OPTIMIZE =  -O3 
+endif
+
+ifeq ($(SYSTYPE),"ranger")
+#echo "Compiling for Ranger"
+CC       =  mpicc 
+OPTIMIZE =  -O3 
+GSL_INCL =  -I${TACC_GSL_INC}
+GSL_LIBS =  -L${TACC_GSL_LIB}
+FFTW_INCL=  -I${TACC_FFTW2_INC}
+FFTW_LIBS=  -L${TACC_FFTW2_LIB}
+endif
+
+ifeq ($(SYSTYPE),"trestles")
+#echo "Compiling for Ranger"
+CC       =  mpicc
+OPTIMIZE =  -O3
+GSL_INCL =  -I/home/diag/opt/gsl/1.14/intel/include
+GSL_LIBS =  -L/home/diag/opt/gsl/1.14/intel/lib
+FFTW_INCL=  -I/home/brandone/privatemodules/fftw-2.1.5/include
+FFTW_LIBS=  -L/home/brandone/privatemodules/fftw-2.1.5/lib
+endif
+
+
+ifeq ($(SYSTYPE),"orange")
+#echo "Compiling for orange"
+CC	 =  mpicc -fno-strict-aliasing 
+OPTIMIZE =  -Wall -O3
+GSL_INCL =  -I/afs/slac.stanford.edu/g/ki/software/gsl/include
+GSL_LIBS =  -L/afs/slac.stanford.edu/g/ki/software/gsl/lib
+FFTW_INCL=  -I/afs/slac.stanford.edu/g/ki/software/fftw/2.1.5-mpi/include
+FFTW_LIBS=  -L/afs/slac.stanford.edu/g/ki/software/fftw/2.1.5-mpi/lib
+#HDF5INCL =  -I/afs/slac.stanford.edu/g/ki/software/hdf5/amd64_linux26/include
+#HDF5LIB  =  -L/afs/slac.stanford.edu/g/ki/software/hdf5/amd64_linux26/lib
+HDF5INCL =  
+HDF5LIB  =  
+MPICHLIB = 
+endif
+
+ifeq ($(SYSTYPE),"flux")
+#echo "Compiling for flux"
+CC       =  mpicc
+OPTIMIZE =  -O3
+GSL_INCL =  -I${GSL_INC}
+GSL_LIBS =  -L${GSL_LINK}
+#FFTW_INCL=  -I${FFTW_INC}
+#FFTW_LIBS=  -L${FFTW_LINK}
+FFTW_INCL=  -I/home2/bmse/include
+FFTW_LIBS=  -L/home2/bmse/lib
+#HDF5INCL =  -I/afs/slac.stanford.edu/g/ki/software/hdf5/amd64_linux26/include
+#HDF5LIB  =  -L/afs/slac.stanford.edu/g/ki/software/hdf5/amd64_linux26/lib
+HDF5INCL =
+HDF5LIB  =
+MPICHLIB =
+endif
+
+ifeq ($(SYSTYPE),"fulla-gcc")
+CC       =  /usr/local/mpich2-gcc/bin/mpicc -fno-strict-aliasing 
+OPTIMIZE =  -O3 -Wall
+GSL_INCL =  -I/home/beckermr/include
+GSL_LIBS =  -L/home/beckermr/lib 
+FFTW_INCL= 
+FFTW_LIBS= 
+MPICHLIB =
+HDF5INCL =  
+HDF5LIB  =
+endif
+
+ifeq ($(SYSTYPE),"mandor-gcc")
+CC       = /usr/local/bin/mpicc 
+OPTIMIZE = -g -O3 -Wall -fno-strict-aliasing #-DMEMWATCH -DMEMWATCH_STDIO
+GSL_INCL = -I/home/beckermr/include
+GSL_LIBS = -L/home/beckermr/lib
+endif
+
+CFLAGS =   $(OPTIMIZE) $(OPT) $(GSL_INCL) $(FFTW_INCL) 
+
+ifeq (MEMWATCH,$(findstring MEMWATCH,$(CFLAGS)))    # using memwatch
+  MEMWATCH = memwatch.o
+else
+  MEMWATCH = 
+endif
+
+EXEC   = L-Gadget2
+
+OBJS   = main.o mymalloc.o fof.o  run.o  predict.o begrun.o endrun.o global.o  \
+	 init.o restart.o  io.o accel.o   read_ic.o  twopoint.o \
+	 system.o  allocate.o gravtree.o  driftfac.o darkenergy.o \
+	 domain.o  allvars.o forcetree.o   peano.o  pm_periodic.o lightcone.o $(MEMWATCH)
+
+
+INCL   = allvars.h  proto.h  forcetree.h  domain.h fof.h  Makefile
+
+ifeq (NOTYPEPREFIX_FFTW,$(findstring NOTYPEPREFIX_FFTW,$(OPT)))    # fftw installed with type prefix?
+  FFTW_LIB = $(FFTW_LIBS) -lrfftw_mpi -lfftw_mpi -lrfftw -lfftw
+else
+ifeq (DOUBLEPRECISION_FFTW,$(findstring DOUBLEPRECISION_FFTW,$(OPT))) 
+  FFTW_LIB = $(FFTW_LIBS) -ldrfftw_mpi -ldfftw_mpi -ldrfftw -ldfftw
+else
+  FFTW_LIB = $(FFTW_LIBS) -lsrfftw_mpi -lsfftw_mpi -lsrfftw -lsfftw
+endif
+endif
+
+
+LIBS   =   $(GSL_LIBS) -lgsl -lgslcblas -lm  $(FFTW_LIB)
+
+ifeq ($(SYSTYPE),"Solaris")
+LIBS   =   -R/opt/local/lib/sparcv9  -lmpi   $(GSL_LIBS) -lgsl -lgslcblas -lm  $(FFTW_LIB)
+endif
+
+ifeq ($(SYSTYPE),"Regatta")
+ifeq (HPM,$(findstring HPM,$(OPT)))  
+LIBS   =  -L/afs/rzg/@sys/lib -lhpm -lpmapi   $(GSL_LIBS) -lgsl -lgslcblas -lm $(FFTW_LIB)
+endif
+endif
+
+$(EXEC): $(OBJS) 
+	$(CC) $(OPTIMIZE) $(OBJS) $(LIBS)   -o  $(EXEC)  
+
+$(OBJS): $(INCL) 
+
+
+clean:
+	rm -f $(OBJS) $(EXEC)

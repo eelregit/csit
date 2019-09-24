@@ -1,0 +1,622 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+//#include <mpi.h>
+#include "mpi.h"
+#include <unistd.h>
+
+#include "allvars.h"
+#include "proto.h"
+
+/* This routine checks for when a particles redshift (from the origin)
+   is less than the particles time and write out the particle to a
+   lightcone.  I would like to modify this to allow for the lightcone
+   center to be placed arbitrarily (i.e. center for a full sky lightcone) */
+
+#ifdef LIGHTCONE
+
+/*the initial setup to make sure all the files are present, etc...*/
+void setup_lightcone(void)
+{
+  int i;
+
+  /*initialize the output buffer to zero*/
+  for(i=0;i<NLCS;i++)
+    NPart_in_buf[i] = 0;
+
+  /*set the number corresponding to which lightcones we're making*/
+  for(i=0;i<NLCS;i++)
+    LCNum[i] = 0;
+
+#ifdef OCTANT1
+  LCNum[0] = 1;
+#endif
+#ifdef OCTANT2
+  LCNum[1] = 1;
+#endif
+#ifdef OCTANT3
+  LCNum[2] = 1;
+#endif
+#ifdef OCTANT4
+  LCNum[3] = 1;
+#endif
+#ifdef OCTANT5
+  LCNum[4] = 1;
+#endif
+#ifdef OCTANT6
+  LCNum[5] = 1;
+#endif
+#ifdef OCTANT7
+  LCNum[6] = 1;
+#endif
+#ifdef OCTANT8
+  LCNum[7] = 1;
+#endif
+#ifdef SPHERE
+  LCNum[8] = 1;
+#endif
+
+  /*Remove old output files if they exist and we're not restarting*/
+  char fname_p[500], fname_v[500], fname_i[500];
+  if(RestartFlag == 0)
+    {
+      for(i=0;i<NLCS;i++)
+	{
+	  if (ThisTask == 0) 
+	    printf("Removing any old Lightcone files...\n");
+	  sprintf(fname_p, "%s%s_Lightcone.p.%d.%d", All.OutputDir, All.SnapshotFileBase,ThisTask,i);
+	  sprintf(fname_v, "%s%s_Lightcone.v.%d.%d", All.OutputDir, All.SnapshotFileBase,ThisTask,i);
+	  sprintf(fname_i, "%s%s_Lightcone.i.%d.%d", All.OutputDir, All.SnapshotFileBase,ThisTask,i);
+	  remove(fname_p);
+	  remove(fname_v);
+	  remove(fname_i);
+	}
+      /*we also want to clear the output data if we're not restarting*/
+      for(i=0;i<All.MaxPart;i++)
+	P[i].LC_out = 0;
+      for(i=0;i<NLCS;i++)
+	NPart_Written[i] = 0;
+    }
+
+  /*generate the lookup table for calculating redshift of a distance*/
+  MakeZofRTable();
+
+  /*The largest time needed of the box*/
+  double rbox = sqrt(3*All.BoxSize*All.BoxSize);
+  double zbox = ZofR(rbox);
+  BoxTime = 1./(1+zbox);
+  if (ThisTask == 0) 
+    printf("On the opposite corner of the box:  r = %f, z = %f, a = %f\n", rbox, zbox, BoxTime);
+}
+
+
+/* This routine determines which LC geometries we want to consider and if the particle has already been saved*/
+//void check_particle(int part, float t_part)
+void check_particle(int part, float r_box)
+{
+  float origin[3];
+  float fbox;
+  fbox = (float) All.BoxSize;
+#ifdef OCTANT1
+  //if (P[part].LC_out % 2 == 0)
+  if (P[part].LC_out % 2 == 0)
+    {
+      origin[0] = 0.;
+      origin[1] = 0.;
+      origin[2] = 0.;
+      PartLC(part, r_box, 0, origin);
+    }
+#endif
+#ifdef OCTANT2
+  //if (P[part].LC_out == 0 || P[part].LC_out == 1 || P[part].LC_out == 4 || P[part].LC_out == 5)
+  if ((P[part].LC_out >> 1) % 2 == 0)
+    {
+      origin[0] = fbox;
+      origin[1] = 0.;
+      origin[2] = 0.;
+      PartLC(part, r_box, 1, origin);
+    }
+#endif
+#ifdef OCTANT3
+  if ((P[part].LC_out >> 2) % 2 == 0)
+    {
+      origin[0] = 0.;
+      origin[1] = fbox;
+      origin[2] = 0.;
+      PartLC(part, r_box, 2, origin);
+    }
+#endif
+#ifdef OCTANT4
+  if ((P[part].LC_out >> 3) % 2 == 0)
+    {
+      origin[0] = 0.;
+      origin[1] = 0.;
+      origin[2] = fbox;
+      PartLC(part, r_box, 3, origin);
+    }
+#endif
+#ifdef OCTANT5
+  if ((P[part].LC_out >> 4) % 2 == 0)
+    {
+      origin[0] = fbox;
+      origin[1] = fbox;
+      origin[2] = 0.;
+      PartLC(part, r_box, 4, origin);
+    }
+#endif
+#ifdef OCTANT6
+  if ((P[part].LC_out >> 5) % 2 == 0)
+    {
+      origin[0] = fbox;
+      origin[1] = 0.;
+      origin[2] = fbox;
+      PartLC(part, r_box, 5, origin);
+    }
+#endif
+#ifdef OCTANT7
+  if ((P[part].LC_out >> 6) % 2 == 0)
+    {
+      origin[0] = 0.;
+      origin[1] = fbox;
+      origin[2] = fbox;
+      PartLC(part, r_box, 6, origin);
+    }
+#endif
+#ifdef OCTANT8
+  if ((P[part].LC_out >> 7) % 2 == 0)
+    {
+      origin[0] = fbox;
+      origin[1] = fbox;
+      origin[2] = fbox;
+      PartLC(part, r_box, 7, origin);
+    }
+#endif
+
+#ifdef SPHERE
+  //if (P[part].LC_out < 4)
+  if ((P[part].LC_out >> 8) % 2 == 0)
+    {
+      origin[0] = fbox/2.0;
+      origin[1] = fbox/2.0;
+      origin[2] = fbox/2.0;
+      PartLC(part, r_box, 8, origin);
+    }
+#endif
+}
+
+
+/*the main routine -- is the particle in a location that should be output?*/
+//void PartLC(int part, float t_part, int LC, float origin)
+void PartLC(int part, float r_box, int LC, float origin[3])
+{
+  int k;
+  double R_LC;
+  //double z_LC, a_LC;
+
+  /*The particles distance in the lightcone geometry*/
+  R_LC = 0;
+  for(k=0;k<3;k++)
+    R_LC += (P[part].Pos[k]-origin[k])*(P[part].Pos[k]-origin[k]);
+  R_LC = sqrt(R_LC);
+  //z_LC = ZofR(R_LC);
+  //a_LC = 1./(1.+z_LC);
+  //if(a_LC <= t_part)  /*do we write out this particle?*/
+  if(R_LC >= r_box)  /*do we write out this particle?*/
+    {
+      /*transfer information to output buffer*/
+      for(k=0;k<3;k++)
+	{
+	  out_particles[LC][NPart_in_buf[LC]].Pos[k] = P[part].Pos[k];
+	  out_particles[LC][NPart_in_buf[LC]].Vel[k] = P[part].Vel[k];
+	}
+      out_particles[LC][NPart_in_buf[LC]].ID = P[part].ID;
+      out_particles[LC][NPart_in_buf[LC]].a = (float) All.Time;
+      NPart_in_buf[LC]++;
+      if(NPart_in_buf[LC] == LC_OUTPUT_BUF)
+	dump_lc_buf(LC);
+      
+      /*update markers to indicate that particle has been written*/
+      P[part].LC_out += 1<<LC;
+      //if (LC == 0)
+	//P[part].LC_out += 1;
+      //else if (LC == 1)
+	//P[part].LC_out += 2;
+      //else if (LC == 2)
+	//P[part].LC_out += 4;
+    }
+}
+
+/*When a task has enough particles, dump the information to disk*/
+void dump_lc_buf(int LC)
+{
+  int i;
+  FILE *fd_p, *fd_v, *fd_i;
+  FILE *fd_a;
+  char fname_p[500], fname_v[500], fname_i[500];
+  char fname_a[500];
+
+  /*actually write the particle*/
+  sprintf(fname_p, "%s%s_Lightcone.p.%d.%d", All.OutputDir, All.SnapshotFileBase,ThisTask,LC);
+  sprintf(fname_v, "%s%s_Lightcone.v.%d.%d", All.OutputDir, All.SnapshotFileBase,ThisTask,LC);
+  sprintf(fname_i, "%s%s_Lightcone.i.%d.%d", All.OutputDir, All.SnapshotFileBase,ThisTask,LC);
+  sprintf(fname_a, "%s%s_Lightcone.a.%d.%d", All.OutputDir, All.SnapshotFileBase,ThisTask,LC);
+  
+  if(!(fd_p = fopen(fname_p, "a")))
+    {
+      printf("Task %d can't open file `%s' for writing lightcone.\n",ThisTask, fname_p);
+      endrun(123);
+    }
+  if(!(fd_v = fopen(fname_v, "a")))
+    {
+      printf("Task %d can't open file `%s' for writing lightcone.\n",ThisTask, fname_v);
+      endrun(123);
+    }
+  if(!(fd_i = fopen(fname_i, "a")))
+    {
+      printf("Task %d can't open file `%s' for writing lightcone.\n",ThisTask, fname_i);
+      endrun(123);
+    }
+  if(!(fd_a = fopen(fname_a, "a")))
+    {
+      printf("Task %d can't open file `%s' for writing lightcone.\n",ThisTask, fname_i);
+      endrun(123);
+    }
+  for (i=0;i<NPart_in_buf[LC];i++)
+    {
+      my_fwrite(&out_particles[LC][i].Pos[0], 3*sizeof(float), 1, fd_p);
+      my_fwrite(&out_particles[LC][i].Vel[0], 3*sizeof(float), 1, fd_v);
+#ifndef LONGIDS
+      my_fwrite(&out_particles[LC][i].ID, sizeof(unsigned int), 1, fd_i);
+#else
+      my_fwrite(&out_particles[LC][i].ID, sizeof(unsigned long long), 1, fd_i);
+#endif
+      my_fwrite(&out_particles[LC][i].a, sizeof(float), 1, fd_a);
+    }
+
+  fclose(fd_p);
+  fclose(fd_v);
+  fclose(fd_i);
+
+  NPart_Written[LC] += NPart_in_buf[LC];
+  NPart_in_buf[LC] = 0;
+
+}
+
+/*Calculates z given distance from a lookup table*/
+double ZofR(double R)
+{
+  int i;
+  double slope = 0.;
+
+  for(i=1;i<NZofRSteps;i++)
+    {
+      if (ZofRTable[i].r > R)
+	break;
+    }
+  slope = (ZofRTable[i].z - ZofRTable[i-1].z)/(ZofRTable[i].r - ZofRTable[i-1].r);
+  return ZofRTable[i-1].z + slope*(R-ZofRTable[i-1].r);
+}			
+
+double RofZ(double Z)
+{
+  int i;
+  double slope = 0.;
+
+  for(i=1;i<NZofRSteps;i++)
+    {
+      if (ZofRTable[i].z > Z)
+	break;
+    }
+  slope = (ZofRTable[i].r - ZofRTable[i-1].r)/(ZofRTable[i].z - ZofRTable[i-1].z);
+  return ZofRTable[i-1].r + slope*(Z-ZofRTable[i-1].z);
+}
+
+/*generates the lookup dable for calculating z given r*/
+void MakeZofRTable(void)
+{
+  int i;
+  double da, Thisa, ThisH, c;
+
+  c = C/All.UnitVelocity_in_cm_per_s;
+  da = (All.TimeMax-All.TimeBegin)/((double) NZofRSteps);
+
+  Thisa = 1.;
+  ZofRTable[NZofRSteps-1].r = 0.0;
+  ZofRTable[NZofRSteps-1].a = Thisa;
+  ZofRTable[NZofRSteps-1].z = 1./Thisa - 1;
+  ZofRTable[0].r = 0.0;
+  ZofRTable[0].a = Thisa;
+  ZofRTable[0].z = 1./Thisa - 1;
+
+  for (i=1;i<=NZofRSteps-1;i++)
+    {
+      Thisa = ((double) 1) - da*((double) i);
+      ThisH = All.Hubble*sqrt(All.Omega0/(Thisa*Thisa*Thisa) + All.OmegaLambda);
+      ZofRTable[i].r = ZofRTable[i-1].r + 1./(ThisH*Thisa*Thisa)*da*c;
+      ZofRTable[i].a = Thisa;
+      ZofRTable[i].z = 1./Thisa - 1.;
+    }
+}
+
+
+
+/* Task 0 reads in the individual task lightcone information and writes as a 
+   Gadget output file */
+void Finalize_LightCone(void)
+{
+  char fname_p[500], fname_v[500], fname_i[500];
+  char sfx[50];
+  long NPartPerFile, NPartLastFile, ThisNPart;
+  int i, buf, LC, TaskN, NumWritten;
+  FILE *fp, *fv, *fi, *fd;
+  float tPos[3];
+#ifndef LONGIDS
+  unsigned int tId;
+  unsigned int NInLC[NLCS];
+#else
+  unsigned long long tId;
+  long long NInLC[NLCS];
+#endif
+  int NPartThisFile;
+
+
+
+  if (ThisTask == 0)
+    printf("Finalizing the LC output\n");
+
+  /*First we need to write out remainder of buffer*/
+  for(i=0;i<NLCS;i++)
+    {
+      if(LCNum[i] == 0)
+	continue;
+      dump_lc_buf(i);
+    }
+
+  //Count how many particles have been output
+  for(i=0;i<NLCS;i++)
+    {
+#ifndef LONGIDS
+      MPI_Reduce(&NPart_Written[i], &NInLC[i], 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+#else
+      MPI_Reduce(&NPart_Written[i], &NInLC[i], 1, MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
+#endif
+    }
+
+  //NPartPerFile = All.TotNumPart/ header.num_files;
+  //NPartLastFile = All.TotNumPart - NPartPerFile*(header.num_files - 1);
+
+  /*A sync point to make sure dumps have been completed since only task 0 combines the files*/
+  MPI_Barrier(MPI_COMM_WORLD);
+
+  if (ThisTask == 0)
+    {
+      //printf("The first %d lightcone files will have %d particles, the last will have %d.\n",header.num_files,(int) NPartPerFile, (int) NPartLastFile);
+
+    for(LC=0;LC<NLCS;LC++)
+      {
+	/*Are we even interested in this lightcone geometry?*/
+	if(LCNum[LC] == 0)
+	  continue;
+	
+#ifdef LONGIDS
+	printf("Lightcone %d has a total of %li particles.\n", LC, NInLC[LC]);
+#else
+	printf("Lightcone %d has a total of %u particles.\n", LC, NInLC[LC]);
+#endif
+
+	//# of particles in a file
+	NPartPerFile = NInLC[LC]/ header.num_files;
+	NPartLastFile = NInLC[LC] - NPartPerFile*(header.num_files - 1);
+	printf("The first %d lightcone files will have %d particles, the last will have %d.\n",header.num_files-1,(int) NPartPerFile, (int) NPartLastFile);
+
+	//sprintf(sfx, "PO");
+	//if (LC == 1)
+	  //sprintf(sfx, "NO");
+	//else if (LC == 2)
+	  //sprintf(sfx, "MS");
+	sprintf(sfx, "%d", LC);
+	i = 0;
+	NumWritten = 0;
+	fd = StartLCFile(sfx,i, NPartPerFile, NInLC[LC]);
+	ThisNPart = NPartPerFile;
+	/*the buffer for the position and velocity information*/
+	printf("writing positions...\n");
+	//buf = header.npart[1]*3*4;
+	buf = ThisNPart*3*4;
+	fwrite(&buf, sizeof(int),1,fd);
+	for(TaskN=0;TaskN<NTask;TaskN++)
+	  {
+	    /*read in position information and write it out*/
+	    sprintf(fname_p, "%s%s_Lightcone.p.%d.%d", All.OutputDir, All.SnapshotFileBase,TaskN,LC);
+	    if(!(fp = fopen(fname_p, "r")))
+	      {
+		printf("can't open file `%s' for finishing lightcone.\n",fname_p);
+		endrun(123);
+	      }
+	    NPartThisFile = 0;
+	    //while(!(feof(fd)))
+	    while(1)
+	      {
+		//if(fread(&tPos[0], sizeof(float), 3, fp) == 0)
+		  //break;
+		fread(&tPos[0], sizeof(float), 3, fp);
+		if (feof(fp))
+		  break;
+		fwrite(&tPos[0], sizeof(float), 3, fd);
+		NumWritten++;
+		NPartThisFile++;
+		if (NumWritten == ThisNPart)
+		  {
+		    /*write the tail of the pos buffer*/
+		    printf("Finalized %d particles for file %d, expected %d\n", NumWritten, i, (int) ThisNPart);
+		    fwrite(&buf, sizeof(int),1,fd);
+		    fclose(fd);
+		    printf("The file is closed.\n");
+		    i++;
+		    printf("Setting up file %i (NFiles = %d)\n", i, header.num_files);
+		    if (i == header.num_files-1)
+		      ThisNPart = NPartLastFile;
+		    if (i != header.num_files) 
+		      {
+			fd = StartLCFile(sfx,i, ThisNPart, NInLC[LC]);
+			buf = ((int) ThisNPart)*3*4;
+			fwrite(&buf, sizeof(int),1,fd);
+		      }
+		    NumWritten = 0;
+		    printf("The Next file is set up.\n");
+		  }
+	      }
+	    fclose(fp);
+	    /*printf("This file contained %d particles\n", NPartThisFile);*/
+	  }
+	
+	/*Now do the same thing for velocities*/
+	printf("writing velocities...\n");
+	i = 0;
+	NumWritten = 0;
+	fd = AppendLCFile(sfx,i);
+	ThisNPart = NPartPerFile;
+	buf = ((int) ThisNPart)*3*4;
+	fwrite(&buf, sizeof(int),1,fd);
+	for(TaskN=0;TaskN<NTask;TaskN++)
+	  {
+	    sprintf(fname_v, "%s%s_Lightcone.v.%d.%d", All.OutputDir, All.SnapshotFileBase,TaskN,LC);
+	    if(!(fv = fopen(fname_v, "r")))
+	      {
+		printf("can't open file `%s' for finishing lightcone.\n",fname_v);
+		endrun(123);
+	      }
+	    //while(!(feof(fd)))
+	    while(1)
+	      {
+		/*if(fread(&tPos[0], sizeof(float), 3, fv) == NULL)
+		  break;*/
+                fread(&tPos[0], sizeof(float), 3, fv);
+                if (feof(fv))
+                  break;
+		fwrite(&tPos[0], sizeof(float), 3, fd);
+		NumWritten++;
+		if (NumWritten == ThisNPart)
+		  {
+		    /*write the tail of the vel buffer*/
+		    fwrite(&buf, sizeof(int),1,fd);
+		    fclose(fd);
+		    i++;
+		    if (i == header.num_files-1)
+		      ThisNPart = NPartLastFile;
+		    if (i != header.num_files) 
+		      {
+			fd = AppendLCFile(sfx,i);
+			buf = ((int) ThisNPart)*3*4;
+			fwrite(&buf, sizeof(int),1,fd);
+		      }
+		    NumWritten = 0;
+		  }
+	      }
+	    fclose(fv);
+	  }
+	
+	/*and finally the ids*/
+	printf("writing ids...\n");
+	i = 0;
+	NumWritten = 0;
+	fd = AppendLCFile(sfx,i);
+	ThisNPart = NPartPerFile;
+	buf = ((int) ThisNPart)*4;
+	fwrite(&buf, sizeof(int),1,fd);
+	for(TaskN=0;TaskN<NTask;TaskN++)
+	  {
+	    sprintf(fname_i, "%s%s_Lightcone.i.%d.%d", All.OutputDir, All.SnapshotFileBase,TaskN,LC);
+	    if(!(fi = fopen(fname_i, "r")))
+	      {
+		printf("can't open file `%s' for finishing lightcone.\n",fname_v);
+		endrun(123);
+	      }
+	    //while(!(feof(fd)))
+	    while(1)
+	      {
+		/*if(fread(&tId, sizeof(tId), 1, fi) == NULL)
+		  break;*/
+                fread(&tId, sizeof(tId), 1, fi);
+                if (feof(fi))
+                  break;
+		fwrite(&tId, sizeof(tId), 1, fd);
+		NumWritten++;
+		if (NumWritten == ThisNPart)
+		  {
+		    /*write the tail of the id buffer*/
+		    fwrite(&buf, sizeof(int),1,fd);
+		    fclose(fd);
+		    i++;
+		    if (i == header.num_files-1)
+		      ThisNPart = NPartLastFile;
+		    if (i != header.num_files) 
+		      {
+			fd = AppendLCFile(sfx,i);
+			buf = ((int) ThisNPart)*4;
+			fwrite(&buf, sizeof(int),1,fd);
+		      }
+		    NumWritten = 0;
+		  }
+	      }
+	    fclose(fi);
+	  }	  
+	printf("Finished output for format # %d\n", LC);
+	/*Remove the now unnecessary single processor LC files*/
+	for(TaskN=0;TaskN<NTask;TaskN++)
+	  {
+	    sprintf(fname_p, "%s%s_Lightcone.p.%d.%d", All.OutputDir, All.SnapshotFileBase,TaskN,LC);
+	    sprintf(fname_v, "%s%s_Lightcone.v.%d.%d", All.OutputDir, All.SnapshotFileBase,TaskN,LC);
+	    sprintf(fname_i, "%s%s_Lightcone.i.%d.%d", All.OutputDir, All.SnapshotFileBase,TaskN,LC);
+	    //remove(fname_p);
+	    //remove(fname_v);
+	    //remove(fname_i);
+	  }
+      }
+    }
+}
+
+
+/*Starts a new output file when converting the lightcone to Gadget format*/
+FILE * StartLCFile(char sfx[50], int i, long npart, long npartall)
+{
+  FILE *fd;
+  char fname[500];
+  int buf;
+  struct io_header outheader;
+
+  sprintf(fname, "%s%s_Lightcone_%s.%d", All.OutputDir, All.SnapshotFileBase,sfx,i);
+  if(!(fd = fopen(fname, "w")))
+    {
+      printf("can't open file `%s' for making final lightcone.\n",fname);
+      endrun(123);
+    }
+  //write the header with buffer
+  outheader = header;
+  outheader.npart[1] = (int) npart;
+  outheader.npartTotal[1] = (int) npartall;
+  buf = 256;
+  fwrite(&buf, sizeof(int), 1, fd);
+  fwrite(&outheader, sizeof(struct io_header), 1, fd);
+  fwrite(&buf, sizeof(int), 1, fd);
+
+  return fd;
+}
+
+/*used for adding velocity and id data to lightcone file when converting to Gadget format*/
+FILE * AppendLCFile(char sfx[50],int i)
+{
+  FILE *fd;
+  char fname[500];
+
+  sprintf(fname, "%s%s_Lightcone_%s.%d", All.OutputDir, All.SnapshotFileBase,sfx,i);
+  if(!(fd = fopen(fname, "a")))
+    {
+      printf("can't open file `%s' for making final lightcone.\n",fname);
+      endrun(123);
+    }
+  return fd;
+}
+
+#endif

@@ -1,0 +1,95 @@
+%  Example parameterfile for L-Gadget2
+
+%  File name parameters:
+
+InitCondFile             /gmpa/mpa/vrs/test216a/ics_216.dat
+OutputDir                /gmpa/mpa/vrs/testrun/
+
+EnergyFile        energy.txt
+InfoFile          info.txt
+TimingsFile       timings.txt
+CpuFile           cpu.txt
+
+RestartFile       restart
+SnapshotFileBase  snapshot
+
+% CPU-time limit
+
+TimeLimitCPU      430000
+ResubmitOn        0
+ResubmitCommand   xyz
+
+CpuTimeBetRestartFile  7200.0
+
+
+MaxMemSize        800.0  % maximum allowed memory ceiling per CPU
+
+% Code options
+
+ICFormat              1       % only 1 is presently supported
+SnapFormat            1       % only 1 is presently supported
+
+NumFilesWrittenInParallel 2   % maximum number of files for which
+                              % simultaneous I/O is done
+
+
+%  Characteristics of run
+
+TimeBegin           0.02
+TimeMax	            1.0
+
+Omega0	              0.3
+OmegaLambda           0.7
+OmegaBaryon           0.0
+HubbleParam           0.7
+
+BoxSize                50000.0
+
+Softening             7.0
+SofteningMaxPhys      7.0
+
+% Output frequency
+
+OutputListFilename  parameterfiles/outputs.txt
+OutputListOn        1
+
+TimeBetSnapshot        0
+TimeOfFirstSnapshot    0
+ 
+TimeBetStatistics      0.1
+
+
+% Accuracy of time integration
+
+ErrTolIntAccuracy       0.05
+
+MaxSizeTimestep        0.025 
+MinSizeTimestep        0
+MaxRMSDisplacementFac  0.25
+
+
+% Tree algorithm and force accuracy
+
+ErrTolTheta            0.5
+TypeOfOpeningCriterion 1
+ErrTolForceAcc         0.005
+
+
+% Parameters that affect memory usage of the code
+
+PartAllocFactor       2.0
+TreeAllocFactor       0.7
+
+BufferSize            150  % in MByte
+
+% System of units
+
+UnitLength_in_cm         3.085678e21        ;  1.0 kpc
+UnitMass_in_g            1.989e43           ;  1.0e10 solar masses
+UnitVelocity_in_cm_per_s 1e5                ;  1 km/sec
+GravityConstantInternal  0
+
+
+
+
+

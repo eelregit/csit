@@ -1,0 +1,155 @@
+/////////////////////////////////////////////
+L-GADGET2-LCGen
+/////////////////////////////////////////////
+
+Original Author of N-body code
+   Volker Springel
+   Max-Planck-Institute for Astrophysics
+   Garching, Germany
+   volker@mpa-garching.mpg.de
+
+   Description from original documentation - see main.c
+    "L-GADGET2 is a special "lean" version of GADGET2, optimized
+     for having low memory footprint (while still being efficient) when
+     running pure N-body simulations of cosmological structure formation." 
+
+The "-LCGen" stands for light cone generation.  This functionality was added by 
+    Michael Busha - Zurich
+    Matthew Becker - UChicago
+    Andrey Kravtsov - UChicago 
+    
+Additionaly this code has been modified to work with XBaya workflows by 
+   Brandon Erickson - Michigan
+
+/////////////////////////////////////////////
+Current versions and changes 
+/////////////////////////////////////////////
+
+These are tagged in the Mercurial repository.
+
+   v0.3a - added README documentation
+   v0.3  - changed directory layout for light cone buffer files - NOT backwards compatible with v0.2b 
+   v0.2b - added some printf statements for the workflow
+   v0.2a - fixed dirty restart bug
+   v0.2  - rewrote light cone generator, fixed bug in light cone velocity units, added more printf statements for the workflows
+   v0.1a - fixed a bug that was introduced by accident
+   v0.1  - fixed a few compile problems on various machines, basically the first commit
+
+
+/////////////////////////////////////////////
+Light Cone Generator Documentation 
+/////////////////////////////////////////////
+
+To enable light cone production, set the following preprocessor flag in the Makefile
+   
+   LIGHTCONE
+
+This flag will turn on the on-the-fly light cone generator which produces light cones as the simulation 
+is running.  This generator uses Gauss-Legendre integration and second order fits to the redshift-comoving distance 
+relation to interpolate between time steps when find light cone surface intersections for each particle.
+
+You also have to tell the code which light cones to produce.  This is done by setting one or 
+more of the following preprocessor flags
+
+   OCTANT1    #octant based at [0,0,0] out to L
+   OCTANT2    #octant based at [L,0,0] out to L
+   OCTANT3    #octant based at [0,L,0] out to L
+   OCTANT4    #octant based at [0,0,L] out to L
+   OCTANT5    #octant based at [L,L,0] out to L
+   OCTANT6    #octant based at [L,0,L] out to L
+   OCTANT7    #octant based at [0,L,L] out to L
+   OCTANT8    #octant based at [L,L,L] out to L
+   SPHERE     #sphere based at [0,0,0] out to L/2
+
+The files are written to disc at 
+    
+   OutputDir/lightcone/lightcone00X
+
+where X ranges from 0 to 8 for OCTANT1 - SPHERE above.  The file format is exactly like a normal L-Gadget2 snapshot.
+
+If you set this flag
+
+   LIGHTCONE_OUTPUT_AINT 
+
+the final light cone output files will have the expansion factor a of each particle stored in them.  This block comes after 
+the ID block in the light cone snapshot files.
+
+As of v0.3 the light cone generator produces a set of buffer files on disc as it runs in the directories
+
+   OutputDir/lightcone_buff/lightcone00X/[p,v,i,a]
+
+where X takes the values given above and the directories [p,v,i,a] store the positions, velocities, indexes, and expansion factors 
+of the particles for each particle in the light cone.  These files are pure binary and are not for general use.
+
+/////////////////////////////////////////////
+Dark Energy Documentation
+/////////////////////////////////////////////
+
+This code includes the option to run with lcdm, wcdm or w(z)cdm cosmologies.
+
+The Makefile contains the following flags
+   DARKENERGY
+   TIMEDEPDE
+   RESCALEVINI
+   TIMEDEPGRAV
+
+
+If none of these flags are set, the simulation will run a lcdm cosmology, w = -1.0.
+
+
+If you set only the flag
+
+   DARKENERGY
+
+you will enable a (constant)wCDM simulation.  To set the value of w, you will
+need to set the value for w in the parameter file for the simulation with a 
+new line like this
+
+DarkEnergyParam     -0.6
+
+the other dark energy flags require the DARKENERGY flag to be enabled.
+Note:  This type of simulation has been tested in the BCC production process.
+
+
+If you additionally set the flag
+
+   TIMEDEPDE
+
+you will enable a w(z)CDM simulation.  To give the values for w as a function
+of z, you will need to create a file containing a w(z).  The file needs to have
+two columns, the first containing the values for (1+z) and the second column
+containing values for w.  The path to the file needs to be specified in the
+parameter file like this
+
+DarkEnergyFile     /path/to/file
+
+Note: w(z)CDM has not been thoroughly tested in the BCC process yet.
+
+The remaining flag
+
+   RESCALEVINI
+
+may need to be set if you are running a wCDM or w(z)CDM simulation, depending
+on how you generate your initial conditions.  When this flag is enabled, Gadget
+will multiply the velocities in an initial conditions file by the factor
+given in the parameter file like this
+
+VelIniScale     1.30
+
+If the initial conditions for the simulation were generated assuming an lcdm
+cosmology, then the starting redshift for the simulation and IC particle
+velocities may need to be scaled.  Growth factors for the two cosmolgoies (lcdm
+of the ICs and wCDM of the sim) need to be matched as described in these papers:
+
+Hydrodynamical simulations of galaxy clusters in dark energy cosmologies - I. General properties. De Boni, C; et al.
+arXiv:1008.5376  10.1111/j.1365-2966.2011.18894.x
+Numerical study of halo concentrations in dark-energy cosmologies. Dolag, K; et al.
+arXiv:astro-ph/0309771  10.1051/0004-6361:20031757   
+
+Note: To restart from a *snapshot* this option should be turned off.
+
+The flag
+
+   TIMEDEPGRAV
+
+has not been implemented as of v0.3a of this code.
