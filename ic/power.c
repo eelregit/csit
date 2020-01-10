@@ -183,7 +183,7 @@ void initialize_powerspectrum(void)
   if(ThisTask == 0 && WhichSpectrum == 2)
     printf("\nNormalization of spectrum in file:  Sigma8 = %g\n", sqrt(res));
 
-  Norm = Sigma8 * Sigma8 / res;
+//  Norm = Sigma8 * Sigma8 / res;
 
   if(ThisTask == 0 && WhichSpectrum == 2)
     printf("Normalization adjusted to  Sigma8=%g   (Normfac=%g)\n\n", Sigma8, Norm);

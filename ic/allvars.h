@@ -126,6 +126,7 @@ extern double ShapeGamma;
 
 extern double Dplus; /* growth factor */
 
+extern double Lambda_x, Lambda_y, Lambda_z; /* tidal field@z=0 */
 
 #ifdef DIFFERENT_TRANSFER_FUNC
 extern int Type, MinType, MaxType;

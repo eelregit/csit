@@ -24,6 +24,18 @@ void read_parameterfile(char *fname)
 
   nt = 0;
 
+  strcpy(tag[nt], "Lambda_x");
+  addr[nt] = &Lambda_x;
+  id[nt++] = FLOAT;
+  
+  strcpy(tag[nt], "Lambda_y");
+  addr[nt] = &Lambda_y;
+  id[nt++] = FLOAT;
+
+  strcpy(tag[nt], "Lambda_z");
+  addr[nt] = &Lambda_z;
+  id[nt++] = FLOAT;
+
   strcpy(tag[nt], "Omega");
   addr[nt] = &Omega;
   id[nt++] = FLOAT;

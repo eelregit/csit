@@ -98,6 +98,12 @@ void displacement_fields(void)
   double dis, dis2, maxdisp, max_disp_glob;
   unsigned int *seedtable;
 
+  double lambda[3]; /*Tidal correction @z=initial */
+  lambda[0] = (4./7.)*Lambda_x/Dplus;
+  lambda[1] = (4./7.)*Lambda_y/Dplus;
+  lambda[2] = (4./7.)*Lambda_z/Dplus;
+  printf("\nlambda[0] = %lf, lambda[1] = %lf, lambda[2] = %lf\n",lambda[0], lambda[1], lambda[2]);
+
   unsigned int bytes, nmesh3;
   int coord;
   fftw_complex *(cdisp[3]), *(cdisp2[3]) ; /* ZA and 2nd order displacements */
@@ -113,6 +119,7 @@ void displacement_fields(void)
 
   if(ThisTask == 0)
     {
+      printf("\nTidal Field @ z=0 : (%lf, %lf, %lf) \n", Lambda_x, Lambda_y, Lambda_z);
       printf("\nstart computing displacement fields...\n");
       fflush(stdout);
     }
@@ -261,6 +268,9 @@ void displacement_fields(void)
 		      p_of_k *= -log(ampl);
 		      
 		      delta = fac * sqrt(p_of_k) / Dplus;	/* scale back to starting redshift */
+
+		      double epsilon = (kvec[0]*kvec[0]*lambda[0] + kvec[1]*kvec[1]*lambda[1] + kvec[2]*kvec[2]*lambda[2])/kmag2;
+		      delta = delta * (1+epsilon);
 		      
 		      if(k > 0)
 			{

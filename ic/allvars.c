@@ -71,6 +71,8 @@ double ShapeGamma;
 double PrimordialIndex;
 double Dplus;			/* growth factor */
 
+double Lambda_x, Lambda_y, Lambda_z; /* tidal field */
+
 #ifdef DIFFERENT_TRANSFER_FUNC
 int Type, MinType, MaxType;
 #endif
