@@ -132,15 +132,6 @@ local mean overdensity relative to $\rhobarm$
 and $\delta$ denotes the overdensity with respect to the local background
 density $\rhobarm (1 + \Delta_0)$.
 
-
-
-\subsection{Lagrangian perturbation theory}
-\label{sub:lpt}
-
-In the presence of long modes, we solve the anisotropic perturbations to the
-Lagrangian displacement with the Zel'dovich approximation (or linear Lagrangian
-perturbation theory), which we will use later to generate the initial
-conditions.
 Without loss of generality, we can simplify the equations (and the numerical
 implementation) by performing a rotation to align the principal axes of the
 long tide with the Cartesian axes (of the simulation box), so that $a_{ij} =
@@ -159,6 +150,49 @@ Therefore
 where $' \equiv \d/\d\ln a$, $H$ is the global expansion rate.
 The approximation holds at sufficiently high redshift when $\Delta_i \ll 1$
 even if it becomes nonlinear later.
+
+In order to determine the evolution of $\Delta_i$ in the presence of the large-scale tides $\tau_{ij}={\rm diag}(\tau_1,\tau_2,\tau_3)$,
+we consider the effective background potential as
+\begin{align}
+    \phi = \frac{2}{3}\pi G(\bar{\rho}+3\bar{\cal P}) r_i^2
+            +\frac{2}{3}\pi G\bar{\rho}_m\tau_i r_i^2,
+            \label{eq:ani_phi_background}
+\end{align}
+where the second term corresponds to the potential sourced by the long-wavelength tidal mode.
+One can easily verify substituting the first term into Eq.~(\ref{Friedmann}) 
+gives rise to the usual Friedmann equation.
+Plugging Eq.~\eqref{eq:ani_phi_background} into Eq.~\eqref{Friedmann} 
+and using the usual Friedmann equation,
+we derive
+\begin{align}
+    \ddot \Delta_i + 2H\dot \Delta_i 
+    = -\frac{4}{3}\pi G \bar{\rho}_m\tau_i (1+\Delta_i).
+\end{align}
+Thus given that $\tau_i = (D(t)/D_0)\tau_{i0}$ we can compute the anisotropic scale factor 
+by solving this equation.
+At linear order, we get
+\begin{align}
+    \Delta_i = -\tau_i.
+    \label{eq:Di_taui}
+\end{align}
+
+Defining the conjugate momenta of $x_{i}$ as $P_{i}\equiv a_i^2 m \dot x_{i}$,
+the equation of motion for the peculiar part takes a simple form of
+\begin{align}
+    \dot P_{i} = - \frac{\partial \Phi}{\partial x^i},
+    \label{eq:mod_EoM}
+\end{align}
+for the unit mass.
+
+
+
+\subsection{Lagrangian perturbation theory}
+\label{sub:lpt}
+
+In the presence of long modes, we solve the anisotropic perturbations to the
+Lagrangian displacement with the Zel'dovich approximation (or linear Lagrangian
+perturbation theory), which we will use later to generate the initial
+conditions.
 
 Alternatively one can parametrize the remaining 3 degrees of freedom of the
 background strain by its isotropic dilation and shears \cite{BondMyers96I},
