@@ -93,21 +93,26 @@ void displacement_fields(void)
   double fac, vel_prefac, vel_prefac2;
   double kvec[3], kmag, kmag2, p_of_k;
   double delta, phase, ampl, hubble_a;
+  double tides = 0.; /* tidal correction */
   double u, v, w;
   double f1, f2, f3, f4, f5, f6, f7, f8;
   double dis, dis2, maxdisp, max_disp_glob;
+  double eps;
   unsigned int *seedtable;
 
   double lambda[3]; /*Tidal correction @z=initial */
-  lambda[0] = (4./7.)*Lambda_x/Dplus;
-  lambda[1] = (4./7.)*Lambda_y/Dplus;
-  lambda[2] = (4./7.)*Lambda_z/Dplus;
+  lambda[0] = Lambda_x/Dplus;
+  lambda[1] = Lambda_y/Dplus;
+  lambda[2] = Lambda_z/Dplus;
   printf("\nlambda[0] = %lf, lambda[1] = %lf, lambda[2] = %lf\n",lambda[0], lambda[1], lambda[2]);
 
   unsigned int bytes, nmesh3;
   int coord;
   fftw_complex *(cdisp[3]), *(cdisp2[3]) ; /* ZA and 2nd order displacements */
   fftw_real *(disp[3]), *(disp2[3]) ;
+
+  fftw_complex *(cepsi[3]); /* epsilon */
+  fftw_real *(epsi[3]);
 
   fftw_complex *(cdigrad[6]);
   fftw_real *(digrad[6]);
@@ -185,6 +190,14 @@ void displacement_fields(void)
 
   ASSERT_ALLOC(cdisp[0] && cdisp[1] && cdisp[2]);
 
+  for(axes=0,bytes=0; axes < 3; axes++)
+    {
+      cepsi[axes] = (fftw_complex *) malloc(bytes += sizeof(fftw_real) * TotalSizePlusAdditional);
+      epsi[axes] = (fftw_real *) cepsi[axes];
+    }
+
+  ASSERT_ALLOC(cepsi[0] && cepsi[1] && cepsi[2]);
+
 
 #if defined(MULTICOMPONENTGLASSFILE) && defined(DIFFERENT_TRANSFER_FUNC)
   for(Type = MinType; Type <= MaxType; Type++)
@@ -204,6 +217,8 @@ void displacement_fields(void)
 	      {
 		cdisp[axes][(i * Nmesh + j) * (Nmesh / 2 + 1) + k].re = 0;
 		cdisp[axes][(i * Nmesh + j) * (Nmesh / 2 + 1) + k].im = 0;
+		cepsi[axes][(i * Nmesh + j) * (Nmesh / 2 + 1) + k].re = 0;
+		cepsi[axes][(i * Nmesh + j) * (Nmesh / 2 + 1) + k].im = 0;
 	      }
 
       for(i = 0; i < Nmesh; i++)
@@ -269,8 +284,7 @@ void displacement_fields(void)
 		      
 		      delta = fac * sqrt(p_of_k) / Dplus;	/* scale back to starting redshift */
 
-		      double epsilon = (kvec[0]*kvec[0]*lambda[0] + kvec[1]*kvec[1]*lambda[1] + kvec[2]*kvec[2]*lambda[2])/kmag2;
-		      delta = delta * (1+epsilon);
+		      tides = (4./7.)*(kvec[0]*kvec[0]*lambda[0] + kvec[1]*kvec[1]*lambda[1] + kvec[2]*kvec[2]*lambda[2])/kmag2;
 		      
 		      if(k > 0)
 			{
@@ -279,8 +293,12 @@ void displacement_fields(void)
 			      {
 				cdisp[axes][((i - Local_x_start) * Nmesh + j) * (Nmesh / 2 + 1) + k].re =
 				  -kvec[axes] / kmag2 * delta * sin(phase);
+				cepsi[axes][((i - Local_x_start) * Nmesh + j) * (Nmesh / 2 + 1) + k].re =
+				  -kvec[axes] / kmag2 * delta * sin(phase) * tides;
 				cdisp[axes][((i - Local_x_start) * Nmesh + j) * (Nmesh / 2 + 1) + k].im =
 				  kvec[axes] / kmag2 * delta * cos(phase);
+				cepsi[axes][((i - Local_x_start) * Nmesh + j) * (Nmesh / 2 + 1) + k].im =
+				  kvec[axes] / kmag2 * delta * cos(phase) * tides; 
 			      }
 			}
 		      else	/* k=0 plane needs special treatment */
@@ -299,13 +317,21 @@ void displacement_fields(void)
 					{
 					  cdisp[axes][((i - Local_x_start) * Nmesh + j) * (Nmesh / 2 + 1) + k].re =
 					    -kvec[axes] / kmag2 * delta * sin(phase);
+					  cepsi[axes][((i - Local_x_start) * Nmesh + j) * (Nmesh / 2 + 1) + k].re =
+					    -kvec[axes] / kmag2 * delta * sin(phase) * tides;
 					  cdisp[axes][((i - Local_x_start) * Nmesh + j) * (Nmesh / 2 + 1) + k].im =
 					    kvec[axes] / kmag2 * delta * cos(phase);
+					  cepsi[axes][((i - Local_x_start) * Nmesh + j) * (Nmesh / 2 + 1) + k].im =
+					    kvec[axes] / kmag2 * delta * cos(phase) * tides;
 					  
 					  cdisp[axes][((i - Local_x_start) * Nmesh + jj) * (Nmesh / 2 + 1) + k].re =
 					    -kvec[axes] / kmag2 * delta * sin(phase);
+					  cepsi[axes][((i - Local_x_start) * Nmesh + jj) * (Nmesh / 2 + 1) + k].re =
+					    -kvec[axes] / kmag2 * delta * sin(phase) * tides;
 					  cdisp[axes][((i - Local_x_start) * Nmesh + jj) * (Nmesh / 2 + 1) + k].im =
 					    -kvec[axes] / kmag2 * delta * cos(phase);
+					  cepsi[axes][((i - Local_x_start) * Nmesh + jj) * (Nmesh / 2 + 1) + k].im =
+					    -kvec[axes] / kmag2 * delta * cos(phase) * tides;
 					}
 				    }
 				}
@@ -328,8 +354,12 @@ void displacement_fields(void)
 				      {
 					cdisp[axes][((i - Local_x_start) * Nmesh + j) * (Nmesh / 2 + 1) + k].re =
 					  -kvec[axes] / kmag2 * delta * sin(phase);
+					cepsi[axes][((i - Local_x_start) * Nmesh + j) * (Nmesh / 2 + 1) + k].re =
+					  -kvec[axes] / kmag2 * delta * sin(phase) * tides;
 					cdisp[axes][((i - Local_x_start) * Nmesh + j) * (Nmesh / 2 + 1) + k].im =
 					  kvec[axes] / kmag2 * delta * cos(phase);
+					cepsi[axes][((i - Local_x_start) * Nmesh + j) * (Nmesh / 2 + 1) + k].im =
+					  kvec[axes] / kmag2 * delta * cos(phase) * tides;
 				      }
 				  
 				  if(ii >= Local_x_start && ii < (Local_x_start + Local_nx))
@@ -337,8 +367,12 @@ void displacement_fields(void)
 				      {
 					cdisp[axes][((ii - Local_x_start) * Nmesh + jj) * (Nmesh / 2 + 1) +
 					      k].re = -kvec[axes] / kmag2 * delta * sin(phase);
+					cepsi[axes][((ii - Local_x_start) * Nmesh + jj) * (Nmesh / 2 + 1) +
+					      k].re = -kvec[axes] / kmag2 * delta * sin(phase) * tides;
 					cdisp[axes][((ii - Local_x_start) * Nmesh + jj) * (Nmesh / 2 + 1) +
 					      k].im = -kvec[axes] / kmag2 * delta * cos(phase);
+					cepsi[axes][((ii - Local_x_start) * Nmesh + jj) * (Nmesh / 2 + 1) +
+					      k].im = -kvec[axes] / kmag2 * delta * cos(phase) * tides;
 				      }
 				}
 			    }
@@ -511,6 +545,7 @@ void displacement_fields(void)
           if(ThisTask == 0) printf("Fourier transforming displacements, axis %d.\n",axes);
 
 	  rfftwnd_mpi(Inverse_plan, 1, disp[axes], Workspace, FFTW_NORMAL_ORDER);
+	  rfftwnd_mpi(Inverse_plan, 1, epsi[axes], Workspace, FFTW_NORMAL_ORDER);
 	  rfftwnd_mpi(Inverse_plan, 1, disp2[axes], Workspace, FFTW_NORMAL_ORDER);
 
 	  /* now get the plane on the right side from neighbour on the right, 
@@ -549,7 +584,17 @@ void displacement_fields(void)
 	      
 	      MPI_Wait(&request, &status);
 
+	      /* send epsilon */
+	      MPI_Isend(&(epsi[axes][0]),
+			sizeof(fftw_real) * Nmesh * (2 * (Nmesh / 2 + 1)),
+			MPI_BYTE, recvTask, 10, MPI_COMM_WORLD, &request);
 	      
+	      MPI_Recv(&(epsi[axes][(Local_nx * Nmesh) * (2 * (Nmesh / 2 + 1))]),
+		       sizeof(fftw_real) * Nmesh * (2 * (Nmesh / 2 + 1)),
+		       MPI_BYTE, sendTask, 10, MPI_COMM_WORLD, &status);
+	      
+	      MPI_Wait(&request, &status);
+
 	      /* send 2nd order disp */
 	      MPI_Isend(&(disp2[axes][0]),
 			sizeof(fftw_real) * Nmesh * (2 * (Nmesh / 2 + 1)),
@@ -624,6 +669,15 @@ void displacement_fields(void)
 		    disp[axes][(ii * Nmesh + jj) * (2 * (Nmesh / 2 + 1)) + k] * f7 +
 		    disp[axes][(ii * Nmesh + jj) * (2 * (Nmesh / 2 + 1)) + kk] * f8;
 
+		  eps = epsi[axes][(i * Nmesh + j) * (2 * (Nmesh / 2 + 1)) + k] * f1 +
+		    epsi[axes][(i * Nmesh + j) * (2 * (Nmesh / 2 + 1)) + kk] * f2 +
+		    epsi[axes][(i * Nmesh + jj) * (2 * (Nmesh / 2 + 1)) + k] * f3 +
+		    epsi[axes][(i * Nmesh + jj) * (2 * (Nmesh / 2 + 1)) + kk] * f4 +
+		    epsi[axes][(ii * Nmesh + j) * (2 * (Nmesh / 2 + 1)) + k] * f5 +
+		    epsi[axes][(ii * Nmesh + j) * (2 * (Nmesh / 2 + 1)) + kk] * f6 +
+		    epsi[axes][(ii * Nmesh + jj) * (2 * (Nmesh / 2 + 1)) + k] * f7 +
+		    epsi[axes][(ii * Nmesh + jj) * (2 * (Nmesh / 2 + 1)) + kk] * f8;
+
 		  dis2 = disp2[axes][(i * Nmesh + j) * (2 * (Nmesh / 2 + 1)) + k] * f1 +
 		    disp2[axes][(i * Nmesh + j) * (2 * (Nmesh / 2 + 1)) + kk] * f2 +
 		    disp2[axes][(i * Nmesh + jj) * (2 * (Nmesh / 2 + 1)) + k] * f3 +
@@ -636,7 +690,7 @@ void displacement_fields(void)
 	      
 		  
 #ifdef ONLY_ZA
-		  P[n].Pos[axes] += dis;
+		  P[n].Pos[axes] += dis + eps;
 		  P[n].Vel[axes] = dis * vel_prefac;
 #else
 		  P[n].Pos[axes] += dis - 3./7. * dis2;
@@ -654,6 +708,7 @@ void displacement_fields(void)
   
 
   for(axes = 0; axes < 3; axes++) free(cdisp[axes]);
+  for(axes = 0; axes < 3; axes++) free(cepsi[axes]);
   for(axes = 0; axes < 3; axes++) free(cdisp2[axes]);
 
   gsl_rng_free(random_generator);
