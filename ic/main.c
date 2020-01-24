@@ -97,7 +97,7 @@ void displacement_fields(void)
   double u, v, w;
   double f1, f2, f3, f4, f5, f6, f7, f8;
   double dis, dis2, maxdisp, max_disp_glob;
-  double eps;
+  double eps, eps2; /* 1st and 2nd tidal correction for displacement */
   unsigned int *seedtable;
 
   double lambda[3]; /*Tidal correction @z=initial */
@@ -111,12 +111,14 @@ void displacement_fields(void)
   fftw_complex *(cdisp[3]), *(cdisp2[3]) ; /* ZA and 2nd order displacements */
   fftw_real *(disp[3]), *(disp2[3]) ;
 
-  fftw_complex *(cepsi[3]); /* epsilon */
-  fftw_real *(epsi[3]);
+  fftw_complex *(cepsi[3]), *(cepsi2[3]) ; /* 1st and 2nd order epsilons */
+  fftw_real *(epsi[3]), *(epsi2[3]) ;
 
   fftw_complex *(cdigrad[6]);
   fftw_real *(digrad[6]);
 
+  fftw_complex *(cepgrad[6]); /* gradient of epsilon */
+  fftw_real *(epgrad[6]);
 
 #ifdef CORRECT_CIC
   double fx, fy, fz, ff, smth;
@@ -396,6 +398,13 @@ void displacement_fields(void)
 	  digrad[i] = (fftw_real *) cdigrad[i];
 	  ASSERT_ALLOC(cdigrad[i]);
 	}
+
+      for(i = 0; i < 6; i++)
+	{
+	  cepgrad[i] = (fftw_complex *) malloc(bytes = sizeof(fftw_real) * TotalSizePlusAdditional);
+	  epgrad[i] = (fftw_real *) cepgrad[i];
+	  ASSERT_ALLOC(cepgrad[i]);
+	}
       
       for(i = 0; i < Local_nx; i++)
 	for(j = 0; j < Nmesh; j++)
@@ -436,11 +445,32 @@ void displacement_fields(void)
 
 	      cdigrad[5][coord].re = -cdisp[2][coord].im * kvec[2]; /* disp2,2 */
 	      cdigrad[5][coord].im = cdisp[2][coord].re * kvec[2];
+
+	      /* Derivatives of epsilon field  */
+	      /* d(eps_i)/d(q_j) => sqrt(-1) k_j eps_i */
+	      cepgrad[0][coord].re = -cepsi[0][coord].im * kvec[0]; /* eps0,0 */
+	      cepgrad[0][coord].im = cepsi[0][coord].re * kvec[0];
+
+	      cepgrad[1][coord].re = -cepsi[0][coord].im * kvec[1]; /* eps0,1 */
+	      cepgrad[1][coord].im = cepsi[0][coord].re * kvec[1];
+
+	      cepgrad[2][coord].re = -cepsi[0][coord].im * kvec[2]; /* eps0,2 */
+	      cepgrad[2][coord].im = cepsi[0][coord].re * kvec[2];
+
+	      cepgrad[3][coord].re = -cepsi[1][coord].im * kvec[1]; /* eps1,1 */
+	      cepgrad[3][coord].im = cepsi[1][coord].re * kvec[1];
+
+	      cepgrad[4][coord].re = -cepsi[1][coord].im * kvec[2]; /* eps1,2 */
+	      cepgrad[4][coord].im = cepsi[1][coord].re * kvec[2];
+
+	      cepgrad[5][coord].re = -cepsi[2][coord].im * kvec[2]; /* eps2,2 */
+	      cepgrad[5][coord].im = cepsi[2][coord].re * kvec[2];
 	    }
 
 
       if(ThisTask == 0) printf("Fourier transforming displacement gradient...");
       for(i = 0; i < 6; i++) rfftwnd_mpi(Inverse_plan, 1, digrad[i], Workspace, FFTW_NORMAL_ORDER);
+      for(i = 0; i < 6; i++) rfftwnd_mpi(Inverse_plan, 1, epgrad[i], Workspace, FFTW_NORMAL_ORDER);
       if(ThisTask == 0) printf("Done.\n");
 
       /* Compute second order source and store it in digrad[3]*/
@@ -451,6 +481,16 @@ void displacement_fields(void)
 	    {
 	      coord = (i * Nmesh + j) * (2 * (Nmesh / 2 + 1)) + k;
 
+	      epgrad[3][coord] = 
+
+	    -2./9.*lambda[0]*(digrad[0][coord]*digrad[0][coord] + digrad[1][coord]*digrad[1][coord] + digrad[2][coord]*digrad[2][coord] )
+	    -2./9.*lambda[1]*(digrad[1][coord]*digrad[1][coord] + digrad[3][coord]*digrad[3][coord] + digrad[4][coord]*digrad[4][coord] )
+	    -2./9.*lambda[2]*(digrad[2][coord]*digrad[2][coord] + digrad[4][coord]*digrad[4][coord] + digrad[5][coord]*digrad[5][coord] )
+	    +7./18.*(digrad[0][coord]*(epgrad[0][coord]+epgrad[3][coord]+epgrad[5][coord]) /* diagonal part*/
+	    		+digrad[3][coord]*(epgrad[0][coord]+epgrad[3][coord]+epgrad[5][coord])
+	    		+digrad[5][coord]*(epgrad[0][coord]+epgrad[3][coord]+epgrad[5][coord]) ) 
+	    +5./9.*(digrad[1][coord]*epgrad[1][coord] + digrad[2][coord]*epgrad[2][coord] + digrad[4][coord]*epgrad[4][coord]); /* off-diagonal part*/
+
 	      digrad[3][coord] =
 
 		digrad[0][coord]*(digrad[3][coord]+digrad[5][coord])+digrad[3][coord]*digrad[5][coord]
@@ -459,6 +499,7 @@ void displacement_fields(void)
 
       if(ThisTask == 0) printf("Fourier transforming second order source...");
       rfftwnd_mpi(Forward_plan, 1, digrad[3], Workspace, FFTW_NORMAL_ORDER);
+      rfftwnd_mpi(Forward_plan, 1, epgrad[3], Workspace, FFTW_NORMAL_ORDER);
       if(ThisTask == 0) printf("Done.\n");
       
       /* The memory allocated for cdigrad[0], [1], and [2] will be used for 2nd order displacements */
@@ -470,7 +511,15 @@ void displacement_fields(void)
 	  disp2[axes] = (fftw_real *) cdisp2[axes];
 	}
 
-      free(cdigrad[4]); free(cdigrad[5]); 
+      free(cdigrad[4]); free(cdigrad[5]);
+
+      for(axes = 0; axes < 3; axes++) 
+	{
+	  cepsi2[axes] = cepgrad[axes]; 
+	  epsi2[axes] = (fftw_real *) cepsi2[axes];
+	}
+
+      free(cepgrad[4]); free(cepgrad[5]); 
 
       /* Solve Poisson eq. and calculate 2nd order displacements */
 
@@ -519,14 +568,23 @@ void displacement_fields(void)
 #endif
 
 	      /* cdisp2 = source * k / (sqrt(-1) k^2) */
+	    tides = (4./9.) * (kvec[0]*kvec[0]*lambda[0] + kvec[1]*kvec[1]*lambda[1] + kvec[2]*kvec[2]*lambda[2]) / kmag2; 
 	      for(axes = 0; axes < 3; axes++)
 		{
 		  if(kmag2 > 0.0) 
 		    {
 		      cdisp2[axes][coord].re = cdigrad[3][coord].im * kvec[axes] / kmag2;
 		      cdisp2[axes][coord].im = -cdigrad[3][coord].re * kvec[axes] / kmag2;
+		      cepsi2[axes][coord].re = cepgrad[3][coord].im * kvec[axes] / kmag2
+		      								+ tides * cdisp2[axes][coord].re;
+		      cepsi2[axes][coord].im = -cepgrad[3][coord].re * kvec[axes] / kmag2
+		      								+ tides * cdisp2[axes][coord].im;
 		    }
-		  else cdisp2[axes][coord].re = cdisp2[axes][coord].im = 0.0;
+		  else
+		    {
+		    	cdisp2[axes][coord].re = cdisp2[axes][coord].im = 0.0;
+		  		cepsi2[axes][coord].re = cepsi2[axes][coord].im = 0.0;
+		    }
 #ifdef CORRECT_CIC
 		  cdisp[axes][coord].re *= smth;   cdisp[axes][coord].im *= smth;
 		  cdisp2[axes][coord].re *= smth;  cdisp2[axes][coord].im *= smth;
@@ -536,6 +594,7 @@ void displacement_fields(void)
       
       /* Free cdigrad[3] */
       free(cdigrad[3]);
+      free(cepgrad[3]);
 
       
       /* Now, both cdisp, and cdisp2 have the ZA and 2nd order displacements */
@@ -547,6 +606,7 @@ void displacement_fields(void)
 	  rfftwnd_mpi(Inverse_plan, 1, disp[axes], Workspace, FFTW_NORMAL_ORDER);
 	  rfftwnd_mpi(Inverse_plan, 1, epsi[axes], Workspace, FFTW_NORMAL_ORDER);
 	  rfftwnd_mpi(Inverse_plan, 1, disp2[axes], Workspace, FFTW_NORMAL_ORDER);
+	  rfftwnd_mpi(Inverse_plan, 1, epsi2[axes], Workspace, FFTW_NORMAL_ORDER);
 
 	  /* now get the plane on the right side from neighbour on the right, 
 	     and send the left plane */
@@ -601,6 +661,17 @@ void displacement_fields(void)
 			MPI_BYTE, recvTask, 10, MPI_COMM_WORLD, &request);
 	      
 	      MPI_Recv(&(disp2[axes][(Local_nx * Nmesh) * (2 * (Nmesh / 2 + 1))]),
+		       sizeof(fftw_real) * Nmesh * (2 * (Nmesh / 2 + 1)),
+		       MPI_BYTE, sendTask, 10, MPI_COMM_WORLD, &status);
+	      
+	      MPI_Wait(&request, &status);
+
+	      /* send 2nd order epsilon */
+	      MPI_Isend(&(epsi2[axes][0]),
+			sizeof(fftw_real) * Nmesh * (2 * (Nmesh / 2 + 1)),
+			MPI_BYTE, recvTask, 10, MPI_COMM_WORLD, &request);
+	      
+	      MPI_Recv(&(epsi2[axes][(Local_nx * Nmesh) * (2 * (Nmesh / 2 + 1))]),
 		       sizeof(fftw_real) * Nmesh * (2 * (Nmesh / 2 + 1)),
 		       MPI_BYTE, sendTask, 10, MPI_COMM_WORLD, &status);
 	      
@@ -688,18 +759,27 @@ void displacement_fields(void)
 		    disp2[axes][(ii * Nmesh + jj) * (2 * (Nmesh / 2 + 1)) + kk] * f8;
 		  dis2 /= (float) nmesh3;
 	      
+		  eps2 = epsi2[axes][(i * Nmesh + j) * (2 * (Nmesh / 2 + 1)) + k] * f1 +
+		    epsi2[axes][(i * Nmesh + j) * (2 * (Nmesh / 2 + 1)) + kk] * f2 +
+		    epsi2[axes][(i * Nmesh + jj) * (2 * (Nmesh / 2 + 1)) + k] * f3 +
+		    epsi2[axes][(i * Nmesh + jj) * (2 * (Nmesh / 2 + 1)) + kk] * f4 +
+		    epsi2[axes][(ii * Nmesh + j) * (2 * (Nmesh / 2 + 1)) + k] * f5 +
+		    epsi2[axes][(ii * Nmesh + j) * (2 * (Nmesh / 2 + 1)) + kk] * f6 +
+		    epsi2[axes][(ii * Nmesh + jj) * (2 * (Nmesh / 2 + 1)) + k] * f7 +
+		    epsi2[axes][(ii * Nmesh + jj) * (2 * (Nmesh / 2 + 1)) + kk] * f8;
+		  eps2 /= (float) nmesh3;
 		  
 #ifdef ONLY_ZA
 		  P[n].Pos[axes] += dis + eps;
 		  P[n].Vel[axes] = (dis + 2. * eps ) * vel_prefac;
 #else
-		  P[n].Pos[axes] += dis - 3./7. * dis2;
-		  P[n].Vel[axes] = dis * vel_prefac - 3./7. * dis2 * vel_prefac2;
+		  P[n].Pos[axes] += dis + eps - 3./7. * dis2 + eps2;
+		  P[n].Vel[axes] = (dis + 2*eps) * vel_prefac + ( - 3./7. * dis2 + eps2 ) * vel_prefac2 + eps2 * vel_prefac;
 #endif
 
 		  P[n].Pos[axes] = periodic_wrap(P[n].Pos[axes]);
 
-		  if(dis - 3./7. * dis2 > maxdisp)
+		  if(dis + eps - 3./7. * dis2 + eps2 > maxdisp)
 		    maxdisp = dis;
 		}
 	    }
@@ -710,6 +790,7 @@ void displacement_fields(void)
   for(axes = 0; axes < 3; axes++) free(cdisp[axes]);
   for(axes = 0; axes < 3; axes++) free(cepsi[axes]);
   for(axes = 0; axes < 3; axes++) free(cdisp2[axes]);
+  for(axes = 0; axes < 3; axes++) free(cepsi2[axes]);
 
   gsl_rng_free(random_generator);
 
