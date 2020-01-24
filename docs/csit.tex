@@ -2,6 +2,7 @@
 \usepackage{jcappub}
 \usepackage{aas_macros}
 \usepackage{bm}
+\usepackage[usenames,dvipsnames,svgnames,x11names]{xcolor}
 
 \let\L\relax
 \DeclareMathOperator{\L}{\mathcal{L}}
@@ -34,6 +35,7 @@
 \newcommand{\hMpc}{{\,h/\Mpc}}
 
 \newcommand{\HL}[1]{\textcolor{red}{#1}} % highlight
+\newcommand{\YL}[1]{\textcolor{Bittersweet}{(YL: #1)}}
 
 
 \title{Cosmological simulation in tides}
@@ -152,25 +154,30 @@ The approximation holds at sufficiently high redshift when $\Delta_i \ll 1$
 even if it becomes nonlinear later.
 
 In order to determine the evolution of $\Delta_i$ in the presence of the large-scale tides $\tau_{ij}={\rm diag}(\tau_1,\tau_2,\tau_3)$,
+\YL{$\tau_{ij} \equiv \partial_i \partial_j \nabla^{-2} \delta_\mathrm{long}$, alternatively the traceless version
+$\tau_{ij} \equiv (\partial_i \partial_j \nabla^{-2} - \frac13\delta_{ij}) \delta_\mathrm{long}$}
 we consider the effective background potential as
 \begin{align}
     \phi = \frac{2}{3}\pi G(\bar{\rho}+3\bar{\cal P}) r_i^2
             +\frac{2}{3}\pi G\bar{\rho}_m\tau_i r_i^2,
             \label{eq:ani_phi_background}
 \end{align}
+\YL{Maybe we shouldn't have 3 in the denominator of the second term.}
 where the second term corresponds to the potential sourced by the long-wavelength tidal mode.
-One can easily verify substituting the first term into Eq.~(\ref{Friedmann}) 
+One can easily verify substituting the first term into Eq.~(\ref{Friedmann})
 gives rise to the usual Friedmann equation.
-Plugging Eq.~\eqref{eq:ani_phi_background} into Eq.~\eqref{Friedmann} 
+Plugging Eq.~\eqref{eq:ani_phi_background} into Eq.~\eqref{Friedmann}
 and using the usual Friedmann equation,
 we derive
 \begin{align}
-    \ddot \Delta_i + 2H\dot \Delta_i 
+    \ddot \Delta_i + 2H\dot \Delta_i
     = -\frac{4}{3}\pi G \bar{\rho}_m\tau_i (1+\Delta_i).
 \end{align}
-Thus given that $\tau_i = (D(t)/D_0)\tau_{i0}$ we can compute the anisotropic scale factor 
+\YL{Similarly we shouldn't have 3 in the denominator here.}
+Thus given that $\tau_i = (D(t)/D_0)\tau_{i0}$ we can compute the anisotropic scale factor
 by solving this equation.
 At linear order, we get
+\YL{Let's elaborate here.}
 \begin{align}
     \Delta_i = -\tau_i.
     \label{eq:Di_taui}
@@ -238,8 +245,9 @@ is a potential flow $\Psi_i^{(1)} = - \partial\psi^{(1)}/ \partial q_i \equiv -\
 with the displacement potential $\psi^{(1)}$ sourced by the overdensity in Lagrangian
 space
 \begin{equation}
-    \nabla_\vq^2 \psi^{(1)} \simeq \delta^{(1)}.
+    \nabla_\vq^2 \psi^{(1)} \simeq \delta^{(1)},
 \end{equation}
+where $\delta^{(1)}$ is the linear density field in Lagrangian space.
 Rewrite \eqref{disp_evo} with $\psi$ in Fourier space, and change its time
 variable to $\ln a$
 \begin{equation}
@@ -306,14 +314,14 @@ For isotropic perturbation, $\Delta_i = - \Delta_0 / 3$, so $D^{(1)}_W = D^{(1)}
 At second order, we have to come back to the master equation for the Lagrangian perturbation theory
 in the anisotropic background, which is given by
 \begin{align}
-    \Bigl| \frac{\partial\vx}{\partial\vq} \Bigr|^{-1} 
+    \Bigl| \frac{\partial\vx}{\partial\vq} \Bigr|^{-1}
     \left[ \delta_{ij} + \Psi_{i,j} \right]^{-1}
     \left[ \ddot{\Psi}_{i,j} + 2H_i\dot{\Psi}_{i,j} \right]
     =\frac32 H^2\Omega_{\rm m}(a)(1+\Delta_0)\delta.
 \end{align}
-Keeping up to the second order terms, we find 
+Keeping up to the second order terms, we find
 \begin{align}
-&\Bigl| \frac{\partial\vx}{\partial\vq} \Bigr|^{-1}  \simeq 
+&\Bigl| \frac{\partial\vx}{\partial\vq} \Bigr|^{-1}  \simeq
     1 + \Psi_{i,i}^{(1)} + \Psi_{i,i}^{(2)} + \frac12 \left[\left(\Psi_{i,i}^{(1)} \right)^2 - \Psi_{i,j}^{(1)}\Psi_{j,i}^{(1)} \right]
     \\
 &\left[ \delta_{ij} + \Psi_{i,j} \right]^{-1} \simeq \delta_{ij} - \Psi_{i,j}^{(1)},
@@ -324,11 +332,11 @@ leading to the second order equation
     \nonumber\\
     &= -\Psi_{i,i}^{(1)}\left[\ddot \Psi^{(1)}_{j,j} + 2H_i\dot \Psi_{j,j}^{(1)} \right]
     + \Psi_{i,j}^{(1)}\left[\ddot \Psi^{(1)}_{i,j} + 2H_i\dot \Psi_{i,j}^{(1)} \right]
-    + \frac32 H^2 \Omega_{\rm m}(a) (1+\Delta_0) 
+    + \frac32 H^2 \Omega_{\rm m}(a) (1+\Delta_0)
     \left[\frac12\left(\Psi_{i,i}^{(1)}\right)^2 - \frac12\Psi_{i,j}^{(1)}\Psi_{j,i}^{(1)}  \right].
 \end{align}
 Similar to the linear order, we introduce the second order displacement potential
-thruough $\Psi_i^{(2)} = \partial\psi_W^{(2)}/\partial q_i \equiv \psi^{(2)}_{W,i}$. 
+through $\Psi_i^{(2)} = \partial\psi_W^{(2)}/\partial q_i \equiv \psi^{(2)}_{W,i}$.
 In the absence of the long modes, the equation for $\psi^{(2)}$ reduces
 \begin{align}
 \ddot \psi^{(2)}_{,ii} + 2H\dot \psi^{(2)}_{,ii}-\frac32 H^2 \Omega_{\rm m}(a)\psi^{(2)}_{,ii}
@@ -340,7 +348,7 @@ In this usual case, we denote the time-dependent part of $\psi^{(2)}$ as $D^{(2)
 \ddot D^{(2)} + 2H \dot D^{(2)} - \frac32 H^2 \Omega_{\rm m}(a) D^{(2)} = -\frac32 H^2 \Omega_{\rm m}\left( D^{(1)} \right)^2.
 \end{align}
 In the matter dominated era, we have $D^{(2)}= -\frac37 \left[D^{(1)}\right]^2$.
-The correction induced by the long modes, which is expressed by $\epsilon^{(2)}(t, \vq)\equiv \psi_W^{(2)}(t, \vq) - \psi^{(2)}(t, \vq)$, 
+The correction induced by the long modes, which is expressed by $\epsilon^{(2)}(t, \vq)\equiv \psi_W^{(2)}(t, \vq) - \psi^{(2)}(t, \vq)$,
 follows
 \begin{align}
 \ddot \epsilon^{(2)}_{,ii} &+ 2H \dot \epsilon^{(2)}_{,ii} - \frac32 H^2 \Omega_{\rm m}(a) \epsilon_{,ii}^{(2)}=
