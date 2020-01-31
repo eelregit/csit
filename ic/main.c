@@ -771,10 +771,10 @@ void displacement_fields(void)
 		  
 #ifdef ONLY_ZA
 		  P[n].Pos[axes] += dis + eps;
-		  P[n].Vel[axes] = (dis + 2. * eps ) * vel_prefac;
+		  P[n].Vel[axes] = (dis + 2. * eps ) * vel_prefac/sqrt(1.-lambda[axes]);
 #else
 		  P[n].Pos[axes] += dis + eps - 3./7. * dis2 + eps2;
-		  P[n].Vel[axes] = (dis + 2*eps) * vel_prefac + ( - 3./7. * dis2 + eps2 ) * vel_prefac2 + eps2 * vel_prefac;
+		  P[n].Vel[axes] = (dis + 2*eps) * vel_prefac/sqrt(1.-lambda[axes]) + ( - 3./7. * dis2 + eps2 ) * vel_prefac2/sqrt(1.-lambda[axes]) + eps2 * vel_prefac/sqrt(1.-lambda[axes]);
 #endif
 
 		  P[n].Pos[axes] = periodic_wrap(P[n].Pos[axes]);
