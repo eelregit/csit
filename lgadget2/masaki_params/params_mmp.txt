@@ -1,0 +1,97 @@
+%  Example parameterfile for L-Gadget2
+
+%  File name parameters:
+
+InitCondFile             /work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp
+OutputDir                /work/kazuyuki.akitsu/output/nbody/masaki/
+
+EnergyFile        energy.txt
+InfoFile          info.txt
+TimingsFile       timings.txt
+CpuFile           cpu.txt
+
+RestartFile       restart_mmp
+SnapshotFileBase  masaki_mmp
+
+AniFile			/work/kazuyuki.akitsu/csit/lgadget2/Aniss_m0005m0005p001_z200_masaki
+
+% CPU-time limit
+
+TimeLimitCPU      156000
+ResubmitOn        0
+ResubmitCommand   xyz
+
+CpuTimeBetRestartFile  7200.0
+
+
+MaxMemSize        1800.0  % maximum allowed memory ceiling per CPU
+
+% Code options
+
+ICFormat              1       % only 1 is presently supported
+SnapFormat            1       % only 1 is presently supported
+
+NumFilesWrittenInParallel 16   % maximum number of files for which
+                              % simultaneous I/O is done
+
+
+%  Characteristics of run
+
+TimeBegin           0.02
+TimeMax	            1.0
+
+Omega0	              0.3156
+OmegaLambda           0.6844
+OmegaBaryon           0.04917
+HubbleParam           0.6727
+
+BoxSize                500.0
+
+Softening             0.015
+SofteningMaxPhys      0.015
+
+% Output frequency
+
+OutputListFilename  output_times.txt
+OutputListOn        1
+
+TimeBetSnapshot        0
+TimeOfFirstSnapshot    0
+ 
+TimeBetStatistics      0.1
+
+
+% Accuracy of time integration
+
+ErrTolIntAccuracy       0.05
+
+MaxSizeTimestep        0.025 
+MinSizeTimestep        0
+MaxRMSDisplacementFac  0.25
+
+
+% Tree algorithm and force accuracy
+
+ErrTolTheta            0.5
+TypeOfOpeningCriterion 1
+ErrTolForceAcc         0.005
+
+
+% Parameters that affect memory usage of the code
+
+PartAllocFactor       1.1
+TreeAllocFactor       0.7
+
+BufferSize            20  % in MByte
+
+% System of units
+
+UnitLength_in_cm         3.085678e24        ;  1.0 Mpc
+UnitMass_in_g            1.989e43           ;  1.0e10 solar masses
+UnitVelocity_in_cm_per_s 1e5                ;  1 km/sec
+GravityConstantInternal  0
+
+
+
+
+

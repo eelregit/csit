@@ -1,13 +1,14 @@
-OPT   +=  -DPMGRID=1024
+OPT   +=  -DPMGRID=512
 OPT   +=  -DWALLCLOCK   
+OPT   +=  -DONLY_PM
 
 #OPT   +=  -DFOF
-OPT   +=  -DTWOPOINT
-OPT   +=  -DPOWERSPEC
+#OPT   +=  -DTWOPOINT
+#OPT   +=  -DPOWERSPEC
 #OPT   +=  -DOUTPUT_LONGRANGE_POTENTIAL
 
-#OPT   +=  -DDOUBLEPRECISION      
-#OPT   +=  -DDOUBLEPRECISION_FFTW
+OPT   +=  -DDOUBLEPRECISION      
+OPT   +=  -DDOUBLEPRECISION_FFTW
 
 #OPT   +=  -DNOTREERND 
 #OPT   +=  -DNOSTOP_WHEN_BELOW_MINTIMESTEP
@@ -48,7 +49,8 @@ OPT   +=  -DPOWERSPEC
 #OPT   +=  -DRESCALEVINI # rescale v_ini in read_ic / read_ic_cluster
 #OPT   +=  -DTIMEDEPGRAV # resacles H and G according to DE model <- NOT IMPLEMENTED
 
-SYSTYPE="midway"
+SYSTYPE="ipmu-gw"
+#SYSTYPE="popeye"
 #SYSTYPE="orange"
 #SYSTYPE="ranger"
 #SYSTYPE="trestles"
@@ -59,9 +61,24 @@ SYSTYPE="midway"
 CC       =   mpicc        # sets the C-compiler (default)
 OPTIMIZE =   -g -O3 -Wall # optimization and warning flags (default)
 
-ifeq ($(SYSTYPE),"midway")
+ifeq ($(SYSTYPE),"ipmu-gw")
 CC       =  mpicc 
-OPTIMIZE =  -O3 
+MPICHLIB = -L/opt/openmpi/1.10.7-gcc/lib -lmpi
+OPTIMIZE =  -O3 -Wall
+GSL_INCL = -I/home/kazuyuki.akitsu/include/gsl/
+GSL_LIBS = -L/home/kazuyuki.akitsu/lib/
+FFTW_INCL = -I/home/kazuyuki.akitsu/include
+FFTW_LIBS = -L/home/kazuyuki.akitsu/lib
+endif
+
+ifeq ($(SYSTYPE),"popeye")
+CC	 = mpicc
+MPICHLIB = -L/lib64/openmpi/lib
+#MPICHLIB = -L/usr/mpi/gcc/openmpi-2.1.2-hfi/lib64
+FFTW_INCL = -I/usr/include/
+FFTW_LIBS = -L/usr/lib64/
+GSL_INCL = -I/usr/include/gsl/
+GSL_LIBS = -L/usr/lib64
 endif
 
 ifeq ($(SYSTYPE),"ranger")

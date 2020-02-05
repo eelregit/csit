@@ -1,0 +1,166 @@
+
+This is L-Gadget, version `Lean-Gadget 2.0'.
+
+Running on 112 processors.
+
+Compiled with PMGRID = 512
+
+found 4 times in output-list.
+
+Hubble (internal units) = 0.1
+G (internal units) = 43007.1
+UnitMass_in_g = 1.989e+43 
+UnitTime_in_s = 3.08568e+16 
+UnitVelocity_in_cm_per_s = 100000 
+UnitDensity_in_cgs = 6.76991e-22 
+UnitEnergy_in_cgs = 1.989e+53 
+
+LGadget Printing File: '/work/kazuyuki.akitsu/output/nbody/masaki/cpu.txt'
+outputcpu=/work/kazuyuki.akitsu/output/nbody/masaki/cpu.txt
+LGadget Printing File: '/work/kazuyuki.akitsu/output/nbody/masaki/info.txt'
+outputinfo=/work/kazuyuki.akitsu/output/nbody/masaki/info.txt
+LGadget Printing File: '/work/kazuyuki.akitsu/output/nbody/masaki/energy.txt'
+outputenergy=/work/kazuyuki.akitsu/output/nbody/masaki/energy.txt
+LGadget Printing File: '/work/kazuyuki.akitsu/output/nbody/masaki/timings.txt'
+outputtimings=/work/kazuyuki.akitsu/output/nbody/masaki/timings.txt
+--------------------------------------------------------------------------
+MPI_ABORT was invoked on rank 35 in communicator MPI_COMM_WORLD 
+with errorcode 1313.
+
+NOTE: invoking MPI_ABORT causes Open MPI to kill all MPI processes.
+You may or may not see output from other processes, depending on
+exactly when Open MPI kills them.
+--------------------------------------------------------------------------
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.9' on task=42 (contains 4980736 particles.)
+distributing this file to tasks 42-44
+
+too many particles NumPart, n_for_this_task, All.MaxPart: 0 1660246 1318209
+task 42: endrun called with an error level of 1313
+
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.12' on task=52 (contains 4980736 particles.)
+distributing this file to tasks 52-55
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.10' on task=45 (contains 4980736 particles.)
+distributing this file to tasks 45-48
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.6' on task=28 (contains 4980736 particles.)
+distributing this file to tasks 28-34
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.7' on task=35 (contains 4980736 particles.)
+distributing this file to tasks 35-37
+
+too many particles NumPart, n_for_this_task, All.MaxPart: 0 1660246 1318209
+task 35: endrun called with an error level of 1313
+
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.26' on task=108 (contains 4718592 particles.)
+distributing this file to tasks 108-111
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.21' on task=91 (contains 4980736 particles.)
+distributing this file to tasks 91-93
+
+too many particles NumPart, n_for_this_task, All.MaxPart: 0 1660246 1318209
+task 91: endrun called with an error level of 1313
+
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.20' on task=84 (contains 4980736 particles.)
+distributing this file to tasks 84-90
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.22' on task=94 (contains 4980736 particles.)
+distributing this file to tasks 94-97
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.23' on task=98 (contains 4980736 particles.)
+distributing this file to tasks 98-100
+
+too many particles NumPart, n_for_this_task, All.MaxPart: 0 1660246 1318209
+task 98: endrun called with an error level of 1313
+
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.24' on task=101 (contains 4980736 particles.)
+distributing this file to tasks 101-104
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.25' on task=105 (contains 4980736 particles.)
+distributing this file to tasks 105-107
+
+too many particles NumPart, n_for_this_task, All.MaxPart: 0 1660246 1318209
+task 105: endrun called with an error level of 1313
+
+
+Allocating memory for 1318209 particles
+
+Allocated 90.5142 MByte for particle storage.
+
+
+PartMass= 8.1579
+TotNumPart= 0134217728
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.0' on task=0 (contains 4980736 particles.)
+distributing this file to tasks 0-6
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.2' on task=10 (contains 4980736 particles.)
+distributing this file to tasks 10-13
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.3' on task=14 (contains 4980736 particles.)
+distributing this file to tasks 14-20
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.4' on task=21 (contains 4980736 particles.)
+distributing this file to tasks 21-23
+
+too many particles NumPart, n_for_this_task, All.MaxPart: 0 1660246 1318209
+task 21: endrun called with an error level of 1313
+
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.5' on task=24 (contains 4980736 particles.)
+distributing this file to tasks 24-27
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.1' on task=7 (contains 4980736 particles.)
+distributing this file to tasks 7-9
+
+too many particles NumPart, n_for_this_task, All.MaxPart: 0 1660246 1318209
+task 7: endrun called with an error level of 1313
+
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.18' on task=77 (contains 4980736 particles.)
+distributing this file to tasks 77-79
+
+too many particles NumPart, n_for_this_task, All.MaxPart: 0 1660246 1318209
+task 77: endrun called with an error level of 1313
+
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.8' on task=38 (contains 4980736 particles.)
+distributing this file to tasks 38-41
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.19' on task=80 (contains 4980736 particles.)
+distributing this file to tasks 80-83
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.11' on task=49 (contains 4980736 particles.)
+distributing this file to tasks 49-51
+
+too many particles NumPart, n_for_this_task, All.MaxPart: 0 1660246 1318209
+task 49: endrun called with an error level of 1313
+
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.13' on task=56 (contains 4980736 particles.)
+distributing this file to tasks 56-62
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.14' on task=63 (contains 4980736 particles.)
+distributing this file to tasks 63-65
+
+too many particles NumPart, n_for_this_task, All.MaxPart: 0 1660246 1318209
+task 63: endrun called with an error level of 1313
+
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.15' on task=66 (contains 4980736 particles.)
+distributing this file to tasks 66-69
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.16' on task=70 (contains 4980736 particles.)
+distributing this file to tasks 70-72
+
+too many particles NumPart, n_for_this_task, All.MaxPart: 0 1660246 1318209
+task 70: endrun called with an error level of 1313
+
+
+reading file `/work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp.17' on task=73 (contains 4980736 particles.)
+distributing this file to tasks 73-76
+

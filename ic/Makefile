@@ -19,25 +19,35 @@ INCL   = allvars.h proto.h  nrsrc/nrutil.h  Makefile
 #OPT   +=  -DNO64BITID    # switch this on if you want normal 32-bit IDs
 #OPT   +=  -DCORRECT_CIC  # only switch this on if particles start from a glass (as opposed to grid)
 
-OPT += -DONLY_ZA # swith this on if you want ZA initial conditions (2LPT otherwise)
-
+#OPT += -DONLY_ZA # swith this on if you want ZA initial conditions (2LPT otherwise)
 
 
 OPTIONS =  $(OPT)
 
+SYSTYPE="ipmu-gw"
+#SYSTYPE="popeye"
 
+ifeq ($(SYSTYPE),"ipmu-gw")
+#echo "Computing for ipmu-gw"
 FFTW_INCL = -I/home/kazuyuki.akitsu/include
 FFTW_LIBS = -L/home/kazuyuki.akitsu/lib
-
-GSL_LIBS=   -L/home/kazuyuki.akitsu/lib/
+GSL_LIBS =  -L/home/kazuyuki.akitsu/lib/
 GSL_INCL =  -I/home/kazuyuki.akitsu/include/gsl
-
-
 CC       = mpicc
 MPICHLIB = -L/opt/openmpi/1.10.7-gcc/lib -lmpi
-
 OPTIMIZE =   -O3 -Wall    # optimization and warning flags (default)
+endif
 
+ifeq ($(SYSTYPE),"popeye")
+#echo "Computing for popeye"
+FFTW_INCL = -I/usr/include/
+FFTW_LIBS = -L/usr/lib64/
+GSL_LIBS = -L/usr/lib64/
+GSL_INCL = -I/usr/include/gsl/
+CC	 = mpicc
+MPICHLIB = -L/lib64/openmpi/lib
+#MPICHLIB = -L/usr/mpi/gcc/openmpi-2.1.2-hfi/lib64
+endif
 
 FFTW_LIB =  $(FFTW_LIBS) -ldrfftw_mpi -ldfftw_mpi -ldrfftw -ldfftw
 

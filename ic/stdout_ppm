@@ -1,0 +1,500 @@
+found 10000 pairs of values in input spectrum table
+
+Normalization of spectrum in file:  Sigma8 = 0.862466
+Normalization adjusted to  Sigma8=0.831   (Normfac=1)
+
+Task=0 Local_nx=5
+Task=1 Local_nx=5
+Task=2 Local_nx=5
+Task=3 Local_nx=5
+Task=4 Local_nx=5
+Task=5 Local_nx=5
+Task=6 Local_nx=5
+Task=7 Local_nx=5
+Task=8 Local_nx=5
+Task=9 Local_nx=5
+Task=10 Local_nx=5
+Task=11 Local_nx=5
+Task=12 Local_nx=5
+Task=13 Local_nx=5
+Task=14 Local_nx=5
+Task=15 Local_nx=5
+Task=16 Local_nx=5
+Task=17 Local_nx=5
+Task=18 Local_nx=5
+Task=19 Local_nx=5
+Task=20 Local_nx=5
+Task=21 Local_nx=5
+Task=22 Local_nx=5
+Task=23 Local_nx=5
+Task=24 Local_nx=5
+Task=25 Local_nx=5
+Task=26 Local_nx=5
+Task=27 Local_nx=5
+Task=28 Local_nx=5
+Task=29 Local_nx=5
+Task=30 Local_nx=5
+Task=31 Local_nx=5
+Task=32 Local_nx=5
+Task=33 Local_nx=5
+Task=34 Local_nx=5
+Task=35 Local_nx=5
+Task=36 Local_nx=5
+Task=37 Local_nx=5
+Task=38 Local_nx=5
+Task=39 Local_nx=5
+Task=40 Local_nx=5
+Task=41 Local_nx=5
+Task=42 Local_nx=5
+Task=43 Local_nx=5
+Task=44 Local_nx=5
+Task=45 Local_nx=5
+Task=46 Local_nx=5
+Task=47 Local_nx=5
+Task=48 Local_nx=5
+Task=49 Local_nx=5
+Task=50 Local_nx=5
+Task=51 Local_nx=5
+Task=52 Local_nx=5
+Task=53 Local_nx=5
+Task=54 Local_nx=5
+Task=55 Local_nx=5
+Task=56 Local_nx=5
+Task=57 Local_nx=5
+Task=58 Local_nx=5
+Task=59 Local_nx=5
+Task=60 Local_nx=5
+Task=61 Local_nx=5
+Task=62 Local_nx=5
+Task=63 Local_nx=5
+Task=64 Local_nx=5
+Task=65 Local_nx=5
+Task=66 Local_nx=5
+Task=67 Local_nx=5
+Task=68 Local_nx=5
+Task=69 Local_nx=5
+Task=70 Local_nx=5
+Task=71 Local_nx=5
+Task=72 Local_nx=5
+Task=73 Local_nx=5
+Task=74 Local_nx=5
+Task=75 Local_nx=5
+Task=76 Local_nx=5
+Task=77 Local_nx=5
+Task=78 Local_nx=5
+Task=79 Local_nx=5
+Task=80 Local_nx=5
+Task=81 Local_nx=5
+Task=82 Local_nx=5
+Task=83 Local_nx=5
+Task=84 Local_nx=5
+Task=85 Local_nx=5
+Task=86 Local_nx=5
+Task=87 Local_nx=5
+Task=88 Local_nx=5
+Task=89 Local_nx=5
+Task=90 Local_nx=5
+Task=91 Local_nx=5
+Task=92 Local_nx=5
+Task=93 Local_nx=5
+Task=94 Local_nx=5
+Task=95 Local_nx=5
+Task=96 Local_nx=5
+Task=97 Local_nx=5
+Task=98 Local_nx=5
+Task=99 Local_nx=5
+Task=100 Local_nx=5
+Task=101 Local_nx=5
+Task=102 Local_nx=2
+Task=103 Local_nx=0
+Task=104 Local_nx=0
+Task=105 Local_nx=0
+Task=106 Local_nx=0
+Task=107 Local_nx=0
+Task=108 Local_nx=0
+Task=109 Local_nx=0
+Task=110 Local_nx=0
+Task=111 Local_nx=0
+
+allocated 10.0391 Mbyte on Task 0
+
+reading Lagrangian glass file...
+reading '/work/kazuyuki.akitsu/csit/ic/masaki_params/glass1_le' with 1 particles
+
+Nglass= 1
+
+1310720 particles on task=0  (slabs=5)
+1310720 particles on task=1  (slabs=5)
+1310720 particles on task=2  (slabs=5)
+1310720 particles on task=3  (slabs=5)
+1310720 particles on task=4  (slabs=5)
+1310720 particles on task=5  (slabs=5)
+1310720 particles on task=6  (slabs=5)
+1310720 particles on task=7  (slabs=5)
+1310720 particles on task=8  (slabs=5)
+1310720 particles on task=9  (slabs=5)
+1310720 particles on task=10  (slabs=5)
+1310720 particles on task=11  (slabs=5)
+1310720 particles on task=12  (slabs=5)
+1310720 particles on task=13  (slabs=5)
+1310720 particles on task=14  (slabs=5)
+1310720 particles on task=15  (slabs=5)
+1310720 particles on task=16  (slabs=5)
+1310720 particles on task=17  (slabs=5)
+1310720 particles on task=18  (slabs=5)
+1310720 particles on task=19  (slabs=5)
+1310720 particles on task=20  (slabs=5)
+1310720 particles on task=21  (slabs=5)
+1310720 particles on task=22  (slabs=5)
+1310720 particles on task=23  (slabs=5)
+1310720 particles on task=24  (slabs=5)
+1310720 particles on task=25  (slabs=5)
+1310720 particles on task=26  (slabs=5)
+1310720 particles on task=27  (slabs=5)
+1310720 particles on task=28  (slabs=5)
+1310720 particles on task=29  (slabs=5)
+1310720 particles on task=30  (slabs=5)
+1310720 particles on task=31  (slabs=5)
+1310720 particles on task=32  (slabs=5)
+1310720 particles on task=33  (slabs=5)
+1310720 particles on task=34  (slabs=5)
+1310720 particles on task=35  (slabs=5)
+1310720 particles on task=36  (slabs=5)
+1310720 particles on task=37  (slabs=5)
+1310720 particles on task=38  (slabs=5)
+1310720 particles on task=39  (slabs=5)
+1310720 particles on task=40  (slabs=5)
+1310720 particles on task=41  (slabs=5)
+1310720 particles on task=42  (slabs=5)
+1310720 particles on task=43  (slabs=5)
+1310720 particles on task=44  (slabs=5)
+1310720 particles on task=45  (slabs=5)
+1310720 particles on task=46  (slabs=5)
+1310720 particles on task=47  (slabs=5)
+1310720 particles on task=48  (slabs=5)
+1310720 particles on task=49  (slabs=5)
+1310720 particles on task=50  (slabs=5)
+1310720 particles on task=51  (slabs=5)
+1310720 particles on task=52  (slabs=5)
+1310720 particles on task=53  (slabs=5)
+1310720 particles on task=54  (slabs=5)
+1310720 particles on task=55  (slabs=5)
+1310720 particles on task=56  (slabs=5)
+1310720 particles on task=57  (slabs=5)
+1310720 particles on task=58  (slabs=5)
+1310720 particles on task=59  (slabs=5)
+1310720 particles on task=60  (slabs=5)
+1310720 particles on task=61  (slabs=5)
+1310720 particles on task=62  (slabs=5)
+1310720 particles on task=63  (slabs=5)
+1310720 particles on task=64  (slabs=5)
+1310720 particles on task=65  (slabs=5)
+1310720 particles on task=66  (slabs=5)
+1310720 particles on task=67  (slabs=5)
+1310720 particles on task=68  (slabs=5)
+1310720 particles on task=69  (slabs=5)
+1310720 particles on task=70  (slabs=5)
+1310720 particles on task=71  (slabs=5)
+1310720 particles on task=72  (slabs=5)
+1310720 particles on task=73  (slabs=5)
+1310720 particles on task=74  (slabs=5)
+1310720 particles on task=75  (slabs=5)
+1310720 particles on task=76  (slabs=5)
+1310720 particles on task=77  (slabs=5)
+1310720 particles on task=78  (slabs=5)
+1310720 particles on task=79  (slabs=5)
+1310720 particles on task=80  (slabs=5)
+1310720 particles on task=81  (slabs=5)
+1310720 particles on task=82  (slabs=5)
+1310720 particles on task=83  (slabs=5)
+1310720 particles on task=84  (slabs=5)
+1310720 particles on task=85  (slabs=5)
+1310720 particles on task=86  (slabs=5)
+1310720 particles on task=87  (slabs=5)
+1310720 particles on task=88  (slabs=5)
+1310720 particles on task=89  (slabs=5)
+1310720 particles on task=90  (slabs=5)
+1310720 particles on task=91  (slabs=5)
+1310720 particles on task=92  (slabs=5)
+1310720 particles on task=93  (slabs=5)
+1310720 particles on task=94  (slabs=5)
+1310720 particles on task=95  (slabs=5)
+1310720 particles on task=96  (slabs=5)
+1310720 particles on task=97  (slabs=5)
+1310720 particles on task=98  (slabs=5)
+1310720 particles on task=99  (slabs=5)
+1310720 particles on task=100  (slabs=5)
+1310720 particles on task=101  (slabs=5)
+524288 particles on task=102  (slabs=2)
+0 particles on task=103  (slabs=0)
+0 particles on task=104  (slabs=0)
+0 particles on task=105  (slabs=0)
+0 particles on task=106  (slabs=0)
+0 particles on task=107  (slabs=0)
+0 particles on task=108  (slabs=0)
+0 particles on task=109  (slabs=0)
+0 particles on task=110  (slabs=0)
+0 particles on task=111  (slabs=0)
+
+Total number of particles  = 0134217728
+
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+Tidal Field @ z=0 : (0.005000, 0.005000, -0.010000) 
+
+start computing displacement fields...
+vel_prefac= 2808.91, vel_prefac2= 5617.82,  hubble_a=19862.2 fom=0.99999 
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+allocated 36.1406 Mbyte on Task 0
+
+allocated 36.1406 Mbyte on Task 0
+
+starting axes=3...
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+
+lambda[0] = 0.000127, lambda[1] = 0.000127, lambda[2] = -0.000254
+Done Zeldovich.
+
+allocated 12.0469 Mbyte on Task 0
+
+allocated 12.0469 Mbyte on Task 0
+
+allocated 12.0469 Mbyte on Task 0
+
+allocated 12.0469 Mbyte on Task 0
+
+allocated 12.0469 Mbyte on Task 0
+
+allocated 12.0469 Mbyte on Task 0
+
+allocated 12.0469 Mbyte on Task 0
+
+allocated 12.0469 Mbyte on Task 0
+
+allocated 12.0469 Mbyte on Task 0
+
+allocated 12.0469 Mbyte on Task 0
+
+allocated 12.0469 Mbyte on Task 0
+
+allocated 12.0469 Mbyte on Task 0
