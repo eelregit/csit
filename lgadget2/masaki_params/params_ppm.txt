@@ -2,8 +2,8 @@
 
 %  File name parameters:
 
-InitCondFile             /work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_ppm
-OutputDir                /work/kazuyuki.akitsu/output/nbody/masaki/
+InitCondFile    /home/yinli/simons-scratch/csit/ic/masaki_param/ic_masaki_ppm
+OutputDir                /home/yinli/simons-scratch/csit/nbody/masaki_param/
 
 EnergyFile        energy.txt
 InfoFile          info.txt
@@ -13,18 +13,18 @@ CpuFile           cpu.txt
 RestartFile       restart_ppm
 SnapshotFileBase  masaki_ppm
 
-AniFile			/work/kazuyuki.akitsu/csit/lgadget2/Aniss_p0005p0005m001_z200_masaki
+AniFile			/home/yinli/csit/lgadget2/Aniss_p0005p0005m001_z200_masaki
 
 % CPU-time limit
 
-TimeLimitCPU      156000
+TimeLimitCPU      1209600
 ResubmitOn        0
 ResubmitCommand   xyz
 
 CpuTimeBetRestartFile  7200.0
 
 
-MaxMemSize        1800.0  % maximum allowed memory ceiling per CPU
+MaxMemSize        2000.0  % maximum allowed memory ceiling per CPU
 
 % Code options
 
@@ -57,7 +57,7 @@ OutputListOn        1
 
 TimeBetSnapshot        0
 TimeOfFirstSnapshot    0
- 
+
 TimeBetStatistics      0.1
 
 
@@ -65,7 +65,7 @@ TimeBetStatistics      0.1
 
 ErrTolIntAccuracy       0.05
 
-MaxSizeTimestep        0.025 
+MaxSizeTimestep        0.025
 MinSizeTimestep        0
 MaxRMSDisplacementFac  0.25
 
@@ -79,8 +79,8 @@ ErrTolForceAcc         0.005
 
 % Parameters that affect memory usage of the code
 
-PartAllocFactor       1.1
-TreeAllocFactor       0.7
+PartAllocFactor       2.0
+TreeAllocFactor       1.5
 
 BufferSize            20  % in MByte
 

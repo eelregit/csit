@@ -1,5 +1,5 @@
 
-Nmesh           512        % This is the size of the FFT grid used to 
+Nmesh           512        % This is the size of the FFT grid used to
                            % compute the displacement field. One
                            % should have Nmesh >= Nsample.
 
@@ -10,14 +10,14 @@ Nsample         512        % sets the maximum k that the code uses,
                            % Normally, one chooses Nsample such that
                            % Ntot =  Nsample^3, where Ntot is the
                            % total number of particles
- 
+
 
 Box             500.0   % Periodic box size of simulation
 
 FileBase         ic_masaki_iso               % Base-filename of output files
-OutputDir        /work/kazuyuki.akitsu/output/ic/masaki/mini2/  % Directory for output
+OutputDir        /home/yinli/simons-scratch/csit/ic/masaki_param/  % Directory for output
 
-GlassFile        /work/kazuyuki.akitsu/csit/ic/masaki_params/glass1_le
+GlassFile        /home/yinli/csit/ic/masaki_params/glass1_le
 GlassTileFac    512
 
 Lambda_x	0.0 %Tidal Field @ z=0
@@ -40,7 +40,7 @@ SphereMode       0         % if "1" only modes with |k| < k_Nyquist are
                            % used (i.e. a sphere in k-space), otherwise modes with
                            % |k_x|,|k_y|,|k_z| < k_Nyquist are used
                            % (i.e. a cube in k-space)
-          
+
 
 WhichSpectrum    2         % "1" selects Eisenstein & Hu spectrum,
 		           % "2" selects a tabulated power spectrum in
@@ -48,25 +48,25 @@ WhichSpectrum    2         % "1" selects Eisenstein & Hu spectrum,
                            % otherwise, Efstathiou parametrization is used
 
 
-FileWithInputSpectrum   /work/kazuyuki.akitsu/csit/ic/masaki_params/masaki_log10Delta.dat % filename of tabulated input
+FileWithInputSpectrum   /home/yinli/csit/ic/masaki_params/masaki_log10Delta.dat % filename of tabulated input
                                             % spectrum (if used)
 InputSpectrum_UnitLength_in_cm  3.085678e24 % defines length unit of tabulated
-                                            % input spectrum in cm/h. 
+                                            % input spectrum in cm/h.
                                             % Note: This can be chosen different from UnitLength_in_cm
-    
 
-ShapeGamma       0.21     % only needed for Efstathiou power spectrum 
+
+ShapeGamma       0.21     % only needed for Efstathiou power spectrum
 PrimordialIndex  0.96       % may be used to tilt the primordial index
 
-		  
+
 Seed             660174    %  Seed for IC-generator
 
 
-NumFilesWrittenInParallel 1  % limits the number of files that are
+NumFilesWrittenInParallel 240  % limits the number of files that are
                              % written in parallel when outputting
 
 
-UnitLength_in_cm          3.085678e24   % defines length unit of output (in cm/h) 
+UnitLength_in_cm          3.085678e24   % defines length unit of output (in cm/h)
 UnitMass_in_g             1.989e43      % defines mass unit of output (in g/cm)
 UnitVelocity_in_cm_per_s  1e5           % defines velocity unit of output (in cm/sec)
 

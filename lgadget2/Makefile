@@ -1,5 +1,5 @@
 OPT   +=  -DPMGRID=512
-OPT   +=  -DWALLCLOCK   
+OPT   +=  -DWALLCLOCK
 OPT   +=  -DONLY_PM
 
 #OPT   +=  -DFOF
@@ -7,23 +7,23 @@ OPT   +=  -DONLY_PM
 #OPT   +=  -DPOWERSPEC
 #OPT   +=  -DOUTPUT_LONGRANGE_POTENTIAL
 
-OPT   +=  -DDOUBLEPRECISION      
+OPT   +=  -DDOUBLEPRECISION
 OPT   +=  -DDOUBLEPRECISION_FFTW
 
-#OPT   +=  -DNOTREERND 
+#OPT   +=  -DNOTREERND
 #OPT   +=  -DNOSTOP_WHEN_BELOW_MINTIMESTEP
-#OPT   +=  -DT3E    
-#OPT   +=  -DNOTYPEPREFIX_FFTW        
+#OPT   +=  -DT3E
+#OPT   +=  -DNOTYPEPREFIX_FFTW
 #OPT   +=  -DMAKEGLASS=1000000    # if a value is assigned to MAKEGLASS, a glass is generated
 		 	          # with this number of particles, otherwise a file is read
 
-#OPT   +=  -DASMTH=1.25         #  Can be used to override default value of 1.25 
+#OPT   +=  -DASMTH=1.25         #  Can be used to override default value of 1.25
 #OPT   +=  -DRCUT=4.5          # Can be used to override default value of 4.5
 
-#OPT   +=  -DGROUP_MIN_LEN=20  # Can be used to override default minimum particle number of 32 in groups 
+#OPT   +=  -DGROUP_MIN_LEN=20  # Can be used to override default minimum particle number of 32 in groups
 #OPT   +=  -DLINKLENGTH=0.2    # Can be used to override default linking length of 0.2
 
-#OPT   +=  -DDOMAINLEVELS=5    # For Millennium run: Override default value of 4 with 5 
+#OPT   +=  -DDOMAINLEVELS=5    # For Millennium run: Override default value of 4 with 5
 #OPT   +=  -DHASHBITS=8        # For Millennium run: Override default value of 6 with 8
 #OPT   +=  -DFRACTION_TP=20.0  # for Millennium run: Override with 20.0
 #OPT   +=  -DHPM
@@ -49,8 +49,8 @@ OPT   +=  -DDOUBLEPRECISION_FFTW
 #OPT   +=  -DRESCALEVINI # rescale v_ini in read_ic / read_ic_cluster
 #OPT   +=  -DTIMEDEPGRAV # resacles H and G according to DE model <- NOT IMPLEMENTED
 
-SYSTYPE="ipmu-gw"
-#SYSTYPE="popeye"
+#SYSTYPE="ipmu-gw"
+SYSTYPE="popeye"
 #SYSTYPE="orange"
 #SYSTYPE="ranger"
 #SYSTYPE="trestles"
@@ -62,7 +62,7 @@ CC       =   mpicc        # sets the C-compiler (default)
 OPTIMIZE =   -g -O3 -Wall # optimization and warning flags (default)
 
 ifeq ($(SYSTYPE),"ipmu-gw")
-CC       =  mpicc 
+CC       =  mpicc
 MPICHLIB = -L/opt/openmpi/1.10.7-gcc/lib -lmpi
 OPTIMIZE =  -O3 -Wall
 GSL_INCL = -I/home/kazuyuki.akitsu/include/gsl/
@@ -75,16 +75,16 @@ ifeq ($(SYSTYPE),"popeye")
 CC	 = mpicc
 MPICHLIB = -L/lib64/openmpi/lib
 #MPICHLIB = -L/usr/mpi/gcc/openmpi-2.1.2-hfi/lib64
-FFTW_INCL = -I/usr/include/
-FFTW_LIBS = -L/usr/lib64/
+FFTW_INCL = -I/home/yinli/include/
+FFTW_LIBS = -L/home/yinli/lib/
 GSL_INCL = -I/usr/include/gsl/
 GSL_LIBS = -L/usr/lib64
 endif
 
 ifeq ($(SYSTYPE),"ranger")
 #echo "Compiling for Ranger"
-CC       =  mpicc 
-OPTIMIZE =  -O3 
+CC       =  mpicc
+OPTIMIZE =  -O3
 GSL_INCL =  -I${TACC_GSL_INC}
 GSL_LIBS =  -L${TACC_GSL_LIB}
 FFTW_INCL=  -I${TACC_FFTW2_INC}
@@ -104,7 +104,7 @@ endif
 
 ifeq ($(SYSTYPE),"orange")
 #echo "Compiling for orange"
-CC	 =  mpicc -fno-strict-aliasing 
+CC	 =  mpicc -fno-strict-aliasing
 OPTIMIZE =  -Wall -O3
 GSL_INCL =  -I/afs/slac.stanford.edu/g/ki/software/gsl/include
 GSL_LIBS =  -L/afs/slac.stanford.edu/g/ki/software/gsl/lib
@@ -112,9 +112,9 @@ FFTW_INCL=  -I/afs/slac.stanford.edu/g/ki/software/fftw/2.1.5-mpi/include
 FFTW_LIBS=  -L/afs/slac.stanford.edu/g/ki/software/fftw/2.1.5-mpi/lib
 #HDF5INCL =  -I/afs/slac.stanford.edu/g/ki/software/hdf5/amd64_linux26/include
 #HDF5LIB  =  -L/afs/slac.stanford.edu/g/ki/software/hdf5/amd64_linux26/lib
-HDF5INCL =  
-HDF5LIB  =  
-MPICHLIB = 
+HDF5INCL =
+HDF5LIB  =
+MPICHLIB =
 endif
 
 ifeq ($(SYSTYPE),"flux")
@@ -135,30 +135,30 @@ MPICHLIB =
 endif
 
 ifeq ($(SYSTYPE),"fulla-gcc")
-CC       =  /usr/local/mpich2-gcc/bin/mpicc -fno-strict-aliasing 
+CC       =  /usr/local/mpich2-gcc/bin/mpicc -fno-strict-aliasing
 OPTIMIZE =  -O3 -Wall
 GSL_INCL =  -I/home/beckermr/include
-GSL_LIBS =  -L/home/beckermr/lib 
-FFTW_INCL= 
-FFTW_LIBS= 
+GSL_LIBS =  -L/home/beckermr/lib
+FFTW_INCL=
+FFTW_LIBS=
 MPICHLIB =
-HDF5INCL =  
+HDF5INCL =
 HDF5LIB  =
 endif
 
 ifeq ($(SYSTYPE),"mandor-gcc")
-CC       = /usr/local/bin/mpicc 
+CC       = /usr/local/bin/mpicc
 OPTIMIZE = -g -O3 -Wall -fno-strict-aliasing #-DMEMWATCH -DMEMWATCH_STDIO
 GSL_INCL = -I/home/beckermr/include
 GSL_LIBS = -L/home/beckermr/lib
 endif
 
-CFLAGS =   $(OPTIMIZE) $(OPT) $(GSL_INCL) $(FFTW_INCL) 
+CFLAGS =   $(OPTIMIZE) $(OPT) $(GSL_INCL) $(FFTW_INCL)
 
 ifeq (MEMWATCH,$(findstring MEMWATCH,$(CFLAGS)))    # using memwatch
   MEMWATCH = memwatch.o
 else
-  MEMWATCH = 
+  MEMWATCH =
 endif
 
 EXEC   = L-Gadget2
@@ -174,7 +174,7 @@ INCL   = allvars.h  proto.h  forcetree.h  domain.h fof.h  Makefile
 ifeq (NOTYPEPREFIX_FFTW,$(findstring NOTYPEPREFIX_FFTW,$(OPT)))    # fftw installed with type prefix?
   FFTW_LIB = $(FFTW_LIBS) -lrfftw_mpi -lfftw_mpi -lrfftw -lfftw
 else
-ifeq (DOUBLEPRECISION_FFTW,$(findstring DOUBLEPRECISION_FFTW,$(OPT))) 
+ifeq (DOUBLEPRECISION_FFTW,$(findstring DOUBLEPRECISION_FFTW,$(OPT)))
   FFTW_LIB = $(FFTW_LIBS) -ldrfftw_mpi -ldfftw_mpi -ldrfftw -ldfftw
 else
   FFTW_LIB = $(FFTW_LIBS) -lsrfftw_mpi -lsfftw_mpi -lsrfftw -lsfftw
@@ -189,15 +189,15 @@ LIBS   =   -R/opt/local/lib/sparcv9  -lmpi   $(GSL_LIBS) -lgsl -lgslcblas -lm  $
 endif
 
 ifeq ($(SYSTYPE),"Regatta")
-ifeq (HPM,$(findstring HPM,$(OPT)))  
+ifeq (HPM,$(findstring HPM,$(OPT)))
 LIBS   =  -L/afs/rzg/@sys/lib -lhpm -lpmapi   $(GSL_LIBS) -lgsl -lgslcblas -lm $(FFTW_LIB)
 endif
 endif
 
-$(EXEC): $(OBJS) 
-	$(CC) $(OPTIMIZE) $(OBJS) $(LIBS)   -o  $(EXEC)  
+$(EXEC): $(OBJS)
+	$(CC) $(OPTIMIZE) $(OBJS) $(LIBS)   -o  $(EXEC)
 
-$(OBJS): $(INCL) 
+$(OBJS): $(INCL)
 
 
 clean:

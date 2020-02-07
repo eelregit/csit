@@ -7,7 +7,7 @@ INCL   = allvars.h proto.h  nrsrc/nrutil.h  Makefile
 
 
 
-#OPT   +=  -DPRODUCEGAS   # Set this to automatically produce gas particles 
+#OPT   +=  -DPRODUCEGAS   # Set this to automatically produce gas particles
                          # for a single DM species in the input file by interleaved by a half a grid spacing
 
 
@@ -24,8 +24,8 @@ INCL   = allvars.h proto.h  nrsrc/nrutil.h  Makefile
 
 OPTIONS =  $(OPT)
 
-SYSTYPE="ipmu-gw"
-#SYSTYPE="popeye"
+#SYSTYPE="ipmu-gw"
+SYSTYPE="popeye"
 
 ifeq ($(SYSTYPE),"ipmu-gw")
 #echo "Computing for ipmu-gw"
@@ -40,13 +40,13 @@ endif
 
 ifeq ($(SYSTYPE),"popeye")
 #echo "Computing for popeye"
-FFTW_INCL = -I/usr/include/
-FFTW_LIBS = -L/usr/lib64/
+FFTW_INCL = -I/home/yinli/include/
+FFTW_LIBS = -L/home/yinli/lib/
 GSL_LIBS = -L/usr/lib64/
 GSL_INCL = -I/usr/include/gsl/
 CC	 = mpicc
-MPICHLIB = -L/lib64/openmpi/lib
-#MPICHLIB = -L/usr/mpi/gcc/openmpi-2.1.2-hfi/lib64
+#MPICHLIB = -L/lib64/openmpi/lib
+MPICHLIB = -L/usr/mpi/gcc/openmpi-2.1.2-hfi/lib64
 endif
 
 FFTW_LIB =  $(FFTW_LIBS) -ldrfftw_mpi -ldfftw_mpi -ldrfftw -ldfftw
@@ -55,10 +55,10 @@ LIBS   =   -lm  $(MPICHLIB)  $(FFTW_LIB)  $(GSL_LIBS)  -lgsl -lgslcblas
 
 CFLAGS =   $(OPTIONS)  $(OPTIMIZE)  $(FFTW_INCL) $(GSL_INCL)
 
-$(EXEC): $(OBJS) 
-	$(CC) $(OPTIMIZE) $(OBJS) $(LIBS)   -o  $(EXEC)  
+$(EXEC): $(OBJS)
+	$(CC) $(OPTIMIZE) $(OBJS) $(LIBS)   -o  $(EXEC)
 
-$(OBJS): $(INCL) 
+$(OBJS): $(INCL)
 
 
 .PHONY : clean
