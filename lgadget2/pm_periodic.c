@@ -1352,7 +1352,7 @@ void rayleigh_save(void)
 void foldonitself(void)
 {
   int i, j, level, sendTask, recvTask, istart, nbuf, n, rest, iter = 0;
-  int slab_x, slab_xx, slab_y, slab_yy, slab_z, slab_zz;
+  long int slab_x, slab_xx, slab_y, slab_yy, slab_z, slab_zz;
   int *nsend_local, *nsend_offset, *nsend, count, buf_capacity;
   double to_slab_fac_folded, dx, dy, dz;
   double tstart0, tstart, tend, t0, t1;
