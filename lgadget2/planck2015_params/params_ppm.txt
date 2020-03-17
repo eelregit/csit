@@ -2,36 +2,36 @@
 
 %  File name parameters:
 
-InitCondFile             /work/kazuyuki.akitsu/output/ic/masaki/ic_masaki_mmp
-OutputDir                /work/kazuyuki.akitsu/output/nbody/masaki/
+InitCondFile    /mnt/sdceph/users/yinli/csit/ic/planck2015/1000/1991/ppm/ic
+OutputDir   /mnt/sdceph/users/yinli/csit/nbody/planck2015/1000/treepm2048/1991/ppm/
 
 EnergyFile        energy.txt
 InfoFile          info.txt
 TimingsFile       timings.txt
 CpuFile           cpu.txt
 
-RestartFile       restart_mmp
-SnapshotFileBase  masaki_mmp
+RestartFile       restart
+SnapshotFileBase  snap
 
-AniFile			/work/kazuyuki.akitsu/csit/lgadget2/Aniss_m0005m0005p001_z200_masaki
+AniFile			/home/yinli/csit/lgadget2/Aniss/Aniss_planck2015_p0005p0005m001_z200
 
 % CPU-time limit
 
-TimeLimitCPU      156000
+TimeLimitCPU      120960
 ResubmitOn        0
 ResubmitCommand   xyz
 
 CpuTimeBetRestartFile  7200.0
 
 
-MaxMemSize        1800.0  % maximum allowed memory ceiling per CPU
+MaxMemSize        10000.0  % maximum allowed memory ceiling per CPU
 
 % Code options
 
 ICFormat              1       % only 1 is presently supported
 SnapFormat            1       % only 1 is presently supported
 
-NumFilesWrittenInParallel 16   % maximum number of files for which
+NumFilesWrittenInParallel 8   % maximum number of files for which
                               % simultaneous I/O is done
 
 
@@ -40,12 +40,12 @@ NumFilesWrittenInParallel 16   % maximum number of files for which
 TimeBegin           0.02
 TimeMax	            1.0
 
-Omega0	              0.3156
-OmegaLambda           0.6844
-OmegaBaryon           0.04917
-HubbleParam           0.6727
+Omega0	              0.3089
+OmegaLambda           0.6911
+OmegaBaryon           0.04860
+HubbleParam           0.6774
 
-BoxSize                500.0
+BoxSize         1000.0
 
 Softening             0.015
 SofteningMaxPhys      0.015
@@ -57,7 +57,7 @@ OutputListOn        1
 
 TimeBetSnapshot        0
 TimeOfFirstSnapshot    0
- 
+
 TimeBetStatistics      0.1
 
 
@@ -65,7 +65,7 @@ TimeBetStatistics      0.1
 
 ErrTolIntAccuracy       0.05
 
-MaxSizeTimestep        0.025 
+MaxSizeTimestep        0.025
 MinSizeTimestep        0
 MaxRMSDisplacementFac  0.25
 
@@ -79,10 +79,10 @@ ErrTolForceAcc         0.005
 
 % Parameters that affect memory usage of the code
 
-PartAllocFactor       1.1
-TreeAllocFactor       0.7
+PartAllocFactor       2.0
+TreeAllocFactor       1.5
 
-BufferSize            20  % in MByte
+BufferSize            50  % in MByte
 
 % System of units
 
