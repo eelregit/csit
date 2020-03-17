@@ -336,7 +336,7 @@ double F_Omega(double a)
 
   omega_a = Omega / (Omega + a * (1 - Omega - OmegaLambda) + a * a * a * OmegaLambda);
 
-  return pow(omega_a, 0.6);
+  return pow(omega_a, 5./9.);
 }
 
 
@@ -346,7 +346,7 @@ double F2_Omega(double a)
 
   omega_a = Omega / (Omega + a * (1 - Omega - OmegaLambda) + a * a * a * OmegaLambda);
 
-  return 2 * pow(omega_a, 4./7.);
+  return 2 * pow(omega_a, 6./11.);
 }
 
 
