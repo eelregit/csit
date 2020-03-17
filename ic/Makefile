@@ -40,13 +40,12 @@ endif
 
 ifeq ($(SYSTYPE),"popeye")
 #echo "Computing for popeye"
-FFTW_INCL = -I/home/yinli/include/
-FFTW_LIBS = -L/home/yinli/lib/
-GSL_LIBS = -L/usr/lib64/
-GSL_INCL = -I/usr/include/gsl/
+FFTW_INCL = -I${FFTW2_BASE}/include/
+FFTW_LIBS = -L${FFTW2_BASE}/lib/
+GSL_LIBS = -L${GSL_BASE}/lib
+GSL_INCL = -I${GSL_BASE}/gsl/
 CC	 = mpicc
-#MPICHLIB = -L/lib64/openmpi/lib
-MPICHLIB = -L/usr/mpi/gcc/openmpi-2.1.2-hfi/lib64
+MPICHLIB = -L${OPENMPI_BASE}/lib
 endif
 
 FFTW_LIB =  $(FFTW_LIBS) -ldrfftw_mpi -ldfftw_mpi -ldrfftw -ldfftw

@@ -1,6 +1,8 @@
-OPT   +=  -DPMGRID=512
+OPT   +=  -DPMGRID=2048
 OPT   +=  -DWALLCLOCK
-OPT   +=  -DONLY_PM
+#OPT   +=  -DONLY_PM
+
+OPT   +=  -DSYSMALLOC
 
 #OPT   +=  -DFOF
 #OPT   +=  -DTWOPOINT
@@ -17,8 +19,8 @@ OPT   +=  -DDOUBLEPRECISION_FFTW
 #OPT   +=  -DMAKEGLASS=1000000    # if a value is assigned to MAKEGLASS, a glass is generated
 		 	          # with this number of particles, otherwise a file is read
 
-#OPT   +=  -DASMTH=1.25         #  Can be used to override default value of 1.25
-#OPT   +=  -DRCUT=4.5          # Can be used to override default value of 4.5
+#OPT    +=  -DASMTH=1.25       #  Can be used to override default value of 1.25
+#OPT    +=  -DRCUT=4.5         # Can be used to override default value of 4.5
 
 #OPT   +=  -DGROUP_MIN_LEN=20  # Can be used to override default minimum particle number of 32 in groups
 #OPT   +=  -DLINKLENGTH=0.2    # Can be used to override default linking length of 0.2
@@ -71,14 +73,15 @@ FFTW_INCL = -I/home/kazuyuki.akitsu/include
 FFTW_LIBS = -L/home/kazuyuki.akitsu/lib
 endif
 
+# use module: `module load gcc openmpi lib/fftw2/2.1.5-openmpi1 lib/gsl`
 ifeq ($(SYSTYPE),"popeye")
-CC	 = mpicc
-MPICHLIB = -L/lib64/openmpi/lib
-#MPICHLIB = -L/usr/mpi/gcc/openmpi-2.1.2-hfi/lib64
-FFTW_INCL = -I/home/yinli/include/
-FFTW_LIBS = -L/home/yinli/lib/
-GSL_INCL = -I/usr/include/gsl/
-GSL_LIBS = -L/usr/lib64
+CC = mpicc
+OPTIMIZE = -O3 -Wall
+MPICHLIB = -L${OPENMPI_BASE}/lib
+FFTW_INCL = -I${FFTW2_BASE}/include
+FFTW_LIBS = -L${FFTW2_BASE}/lib
+GSL_INCL = -I${GSL_BASE}/include
+GSL_LIBS = -L${GSL_BASE}/lib
 endif
 
 ifeq ($(SYSTYPE),"ranger")
