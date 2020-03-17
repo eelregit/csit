@@ -1,14 +1,21 @@
 #!/bin/bash
 
-#SBATCH --partition=general
-#SBATCH --nodes=6
-#SBATCH --ntasks=288
-#SBATCH --time=4-00:00:00
-#SBATCH --mem-per-cpu=8GB
-#SBATCH --output=stdout_iso
-#SBATCH --workdir=/home/yinli/csit/ic/
-#SBATCH --mail-user=kazuyuki.akitsu@ipmu.jp
-#SBATCH --mail-type=END
 #SBATCH --job-name=ic
+#SBATCH --output=%x-%j.out
+#SBATCH --mail-type=END,FAIL
+#SBATCH --mail-user=kazuyuki.akitsu@ipmu.jp
 
-/usr/mpi/gcc/openmpi-2.1.2-hfi/bin/mpirun -np 288 ./2LPTic ./masaki_params/masaki_iso.param
+#SBATCH --partition=general
+
+#SBATCH --exclusive
+#SBATCH --nodes=5
+#SBATCH --ntasks=240
+#SBATCH --time=2-00:00:00
+
+module load gcc openmpi2 lib/fftw2/2.1.5-openmpi2 lib/gsl
+
+hostname; pwd; date
+
+srun ./2LPTic ./planck2015_params/iso.param
+
+date
