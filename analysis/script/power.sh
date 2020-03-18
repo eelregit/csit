@@ -9,13 +9,15 @@
 
 #SBATCH --exclusive
 #SBATCH --nodes=2
-#SBATCH --ntasks=96
+#SBATCH --ntasks-per-node=48
 #SBATCH --time=3-00:00:00
 
 #SBATCH --chdir=/home/yinli/csit/analysis/
 
 hostname; pwd; date
 
-srun -n $SLURM_NTASKS python ./power.py
+source $HOME/anaconda/bin/activate nbodykit
+
+srun python ./power.py
 
 date
