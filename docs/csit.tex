@@ -596,8 +596,52 @@ Power spectrum responses
 
 Convergence tests: mass res, force res, force split.
 
+\section{Halo tidal bias}
+\label{sec:bias}
+\begin{align}
+\delta_{\rm h} = b_1 \delta + \frac{b_2}{2}\delta^2 + \frac{b_{s^2}}{2}(s_{ij})^2,
+\end{align}
+where $(s_{ij})^2 \equiv \sum_{ij}s_{ij}s_{ij}$.
+\subsection{recap of $b_1$ and $b_2$ as response bias in separate universe simulations}
+\begin{align}
+n_{\rm phys}(\ln{M}) = \frac{N(\ln{M})}{V_{\rm phys}} = \frac{N(\ln{M})}{a_W^3 V_{\rm com}} =\frac{n_{\rm com}(\ln{M})}{a_W^3},
+\end{align}
+where $n(\ln{M})$ and $N(\ln{M})$ are the differential number density of halos per logarithemic mass interval and 
+the differential number of halos per logarithemic mass interval, respectively.
+\begin{align}
+b_{1}(M) =& \frac{\d \ln{n_{\rm phys}}(\ln{M})}{\d \delta_{\rm b}}
+=\frac{1}{n_{\rm phys}(\ln{M})a_W^3}\left.\frac{\partial n_{\rm com}(\ln{M})}{\partial \delta_{\rm b}}\right|_{V_{\rm com}}
++ \frac{n_{\rm com}(\ln{M})}{n_{\rm phys}(\ln{M})}\frac{\partial}{\partial \delta_{\rm b}}\left(\frac{1}{a_W^3} \right)
+\\
+=& \frac{\partial \ln{n}_{\rm com}(\ln{M})}{\partial \delta_{\rm b}} - \frac{\partial \ln{a_W^3}}{\partial \delta_{\rm b}}.
+\end{align}
+Using $a_W\simeq a(1-\delta_{\rm b}/3)$, which leads to $\partial\ln{a_W^3} /\partial\delta_{\rm b} = -1$ and defining $b_1^{\rm L} \equiv \partial \ln{n}_{\rm com}(\ln{M})/\partial \delta_{\rm b} $, we have
+\begin{align}
+b_1(M) = b^{\rm L}_1(M) + 1.
+\end{align}
 
+\begin{align}
+b_2(M) = \frac{1}{n_{\rm phys}(\ln{M})}\frac{\d^2 n_{\rm phys}(\ln{M})}{\d \delta^2_{\rm b}}
+\end{align}
 
+\subsection{tidal bias : $b_{s^2}$}
+
+\begin{align}
+\frac{b_{s^2}(M)}{2} \equiv \frac{\d^2 \delta_{\rm h}}{\d s_{ij}^2} 
+    = \frac{\d^2 \ln{ n_{\ln{M} } }}{\d s_{ij}^2} 
+\end{align}
+
+Since in our anisotropic separate universe simulations we have homogeneous tidal field whose configuration is 
+\begin{align}
+s_{ij} = \tau_{ij} = \mathrm{diag}(-\epsilon/2,-\epsilon/2,\epsilon),
+\end{align}
+$(s_{ij})^2$ is given by $3\epsilon^2/2$.
+Note that the inverse configration $\tau_{ij} = \mathrm{diag}(\epsilon/2,\epsilon/2,-\epsilon)$ also gives $(s_{ij})^2 = 3\epsilon^2/2$.
+Thus 
+\begin{align}
+b_{s^2}^{\rm L}(M) = \left.\frac{\partial^2 \ln{ n_{\ln{M} } } }{\partial s_{ij}^2}\right|_{V_{\rm com}}=
+\frac{\ln{ n_{\ln{M} }(\tau_{ij}) } -\ln{ n_{\ln{M} }(\tau_{ij}=0) }  }{\frac{3}{4}\epsilon^2}
+\end{align}
 
 \section{Discussion}
 \label{sec:discuss}
