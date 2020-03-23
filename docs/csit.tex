@@ -609,19 +609,35 @@ n_{\rm phys}(\ln{M}) = \frac{N(\ln{M})}{V_{\rm phys}} = \frac{N(\ln{M})}{a_W^3 V
 where $n(\ln{M})$ and $N(\ln{M})$ are the differential number density of halos per logarithemic mass interval and 
 the differential number of halos per logarithemic mass interval, respectively.
 \begin{align}
-b_{1}(M) =& \frac{\d \ln{n_{\rm phys}}(\ln{M})}{\d \delta_{\rm b}}
-=\frac{1}{n_{\rm phys}(\ln{M})a_W^3}\left.\frac{\partial n_{\rm com}(\ln{M})}{\partial \delta_{\rm b}}\right|_{V_{\rm com}}
-+ \frac{n_{\rm com}(\ln{M})}{n_{\rm phys}(\ln{M})}\frac{\partial}{\partial \delta_{\rm b}}\left(\frac{1}{a_W^3} \right)
+b_{1}(M) =& \frac{\d \ln{n_{\rm phys}}(\ln{M})}{\d \Delta_0}
+=\frac{1}{n_{\rm phys}(\ln{M})a_W^3}\left.\frac{\partial n_{\rm com}(\ln{M})}{\partial\Delta_0}\right|_{V_{\rm phys}}
++ \frac{n_{\rm com}(\ln{M})}{n_{\rm phys}(\ln{M})}\frac{\partial}{\partial \Delta_0}\left(\frac{1}{a_W^3} \right)
 \\
-=& \frac{\partial \ln{n}_{\rm com}(\ln{M})}{\partial \delta_{\rm b}} - \frac{\partial \ln{a_W^3}}{\partial \delta_{\rm b}}.
+=& \frac{\partial \ln{n}_{\rm com}(\ln{M})}{\partial \Delta_0} - \frac{\partial \ln{a_W^3}}{\partial \Delta_0}.
 \end{align}
-Using $a_W\simeq a(1-\delta_{\rm b}/3)$, which leads to $\partial\ln{a_W^3} /\partial\delta_{\rm b} = -1$ and defining $b_1^{\rm L} \equiv \partial \ln{n}_{\rm com}(\ln{M})/\partial \delta_{\rm b} $, we have
+Since the mass conservation implies 
+\begin{align}
+a^3_{W} = \frac{a^3}{1+\Delta_0},
+\end{align}
+which leads to $\partial\ln{a_W^3} /\partial\Delta_0 = -1$.
+Defining $b_1^{\rm L} \equiv \partial \ln{n}_{\rm com}(\ln{M})/\partial \Delta_0 $, we obtain
 \begin{align}
 b_1(M) = b^{\rm L}_1(M) + 1.
 \end{align}
-
+The second order bias is defined as
 \begin{align}
-b_2(M) = \frac{1}{n_{\rm phys}(\ln{M})}\frac{\d^2 n_{\rm phys}(\ln{M})}{\d \delta^2_{\rm b}}
+b_2(M) = \frac{1}{n_{\rm phys}(\ln{M})}\frac{\d^2 n_{\rm phys}(\ln{M})}{\d \Delta_0^2}.
+\end{align}
+At second order, 
+\begin{align}
+a_W^3 =& a^3\left[1-\Delta_0+\Delta_0^2+ \cdots\right]
+\nonumber\\
+=& a^3\left[1 - \left( \Delta_0^{(1)} + \Delta_0^{(2)} \right) + \left(\Delta^{(1)}_0 \right)^2 \right]
++\mathcal{O}\left[\left(\Delta_0^{(1)}\right)^3\right]
+\nonumber\\
+\simeq&a^3\left[1 - \left( \Delta_0^{(1)} + \frac{17}{21}\left(\Delta^{(1)}_0 \right)^2 \right) + \left(\Delta^{(1)}_0 \right)^2  \right]
+\nonumber\\
+=&a^3\left[1 -  \Delta_0^{(1)} + \frac{4}{21}\left(\Delta^{(1)}_0 \right)^2    \right].
 \end{align}
 
 \subsection{tidal bias : $b_{s^2}$}
