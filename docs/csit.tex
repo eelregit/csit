@@ -130,6 +130,7 @@ where $\rhobarm$ is the mean density of matter, $\Delta_0$ is the
 local mean overdensity relative to $\rhobarm$
 \begin{equation}
     1 + \Delta_0 \equiv \frac{a^3}{\det a_{ij}},
+    \label{eq:D0=det}
 \end{equation}
 and $\delta$ denotes the overdensity with respect to the local background
 density $\rhobarm (1 + \Delta_0)$.
@@ -145,11 +146,11 @@ Let's define $\Delta_i$ as the fractional perturbation to $a_i$
 \end{equation}
 Therefore
 \begin{equation}
-    H_i = H \Bigl( 1 + \frac{\Delta_i'}{1 + \Delta_i} \Bigr)
-    \simeq H ( 1 + \Delta_i' ),
-    \label{Hi}
+    H_i = H + \frac{\dot{\Delta}_i}{1+\Delta_i}
+    \simeq H +\dot{\Delta}_i,
+    \label{eq:Hi}
 \end{equation}
-where $' \equiv \d/\d\ln a$, $H$ is the global expansion rate.
+where $H$ is the global expansion rate.
 The approximation holds at sufficiently high redshift when $\Delta_i \ll 1$
 even if it becomes nonlinear later.
 
@@ -158,12 +159,14 @@ In order to determine the evolution of $\Delta_i$ in the presence of the large-s
 $\tau_{ij} \equiv (\partial_i \partial_j \nabla^{-2} - \frac13\delta_{ij}) \delta_\mathrm{long}$}
 we consider the effective background potential as
 \begin{align}
-    \phi = \frac{2}{3}\pi G(\bar{\rho}+3\bar{\cal P}) r_i^2
-            +\frac{2}{3}\pi G\bar{\rho}_m\tau_i r_i^2,
+    \Phi = \frac{2}{3}\pi G(\bar{\rho}+3\bar{\cal P}) r_i^2
+            +2 \pi G\bar{\rho}_m(1+\Delta_0)\tau_i r_i^2,
             \label{eq:ani_phi_background}
 \end{align}
 \YL{Maybe we shouldn't have 3 in the denominator of the second term.}
 where the second term corresponds to the potential sourced by the long-wavelength tidal mode.
+Note that we include the mean density modulation, $(1+\Delta_0)$,
+which is determined through Eq.~\eqref{eq:D0=det}.
 One can easily verify substituting the first term into Eq.~(\ref{Friedmann})
 gives rise to the usual Friedmann equation.
 Plugging Eq.~\eqref{eq:ani_phi_background} into Eq.~\eqref{Friedmann}
@@ -171,22 +174,44 @@ and using the usual Friedmann equation,
 we derive
 \begin{align}
     \ddot \Delta_i + 2H\dot \Delta_i
-    = -\frac{4}{3}\pi G \bar{\rho}_m\tau_i (1+\Delta_i).
+    = -4\pi G \bar{\rho}_m (1+\Delta_0)\tau_i (1+\Delta_i).
+    \label{eq:Deltai_eq}
 \end{align}
+This is analogous equation for the modified scale factors to Eq.~(10) in Ref.~\cite{Wagner_etal:2014},
+while they consider the isotropic modulation.
 \YL{Similarly we shouldn't have 3 in the denominator here.}
-Thus given that $\tau_i = (D(t)/D_0)\tau_{i0}$ we can compute the anisotropic scale factor
-by solving this equation.
-At linear order, we get
-\YL{Let's elaborate here.}
+Linerizing Eq.~\eqref{eq:Deltai_eq} yields
 \begin{align}
-    \Delta_i = -\tau_i.
-    \label{eq:Di_taui}
+ \ddot \Delta_i + 2H\dot \Delta_i
+ = -\frac{3}{2}H^2\Omega_{\rm m}\tau_i,
 \end{align}
+where we used the Friedmann equation and $\Delta_0 = {\cal O}(\Delta_i^2)$.
+Given that $\tau_i = (D(t)/D_0)\tau_{i0}$,
+this equation is exactly the same differential equation for the linear growth factor
+except for the sign of the right-hand-side.
+Thus, at linear order we get
+\begin{align}
+\Delta_i(t) = -\tau_i(t) \propto D(t).
+\end{align}
+For later convinience, we compute the second order solution in the Einstein de-Sitter universe.
+The second order equation is given by
+\begin{align}
+ \ddot \Delta^{(2)}_i + 2H\dot \Delta^{(2)}_i
+ = \frac{3}{2}H^2\Omega_{\rm m}\left(\Delta^{(1)}_i\right)^2,
+ \label{eq:Deltai_2nd_eq}
+\end{align}
+where we set $\tau_i = -\Delta_i^{(1)} $, which is valid at this order.
+The solution for Eq.\eqref{eq:Deltai_2nd_eq} is found to be
+\begin{align}
+\Delta_i^{(2)} = \frac{1}{2}\left[ \Delta_i^{(1)} \right]^2.
+\end{align}
+For anisotropic simulations we compute the anisotropic scale factor
+by solving Eq.\eqref{eq:Deltai_eq} numerically.
 
 Defining the conjugate momenta of $x_{i}$ as $P_{i}\equiv a_i^2 m \dot x_{i}$,
 the equation of motion for the peculiar part takes a simple form of
 \begin{align}
-    \dot P_{i} = - \frac{\partial \Phi}{\partial x^i},
+    \dot P_{i} = - \frac{\partial \phi}{\partial x^i},
     \label{eq:mod_EoM}
 \end{align}
 for the unit mass.
@@ -604,41 +629,80 @@ Convergence tests: mass res, force res, force split.
 where $(s_{ij})^2 \equiv \sum_{ij}s_{ij}s_{ij}$.
 \subsection{recap of $b_1$ and $b_2$ as response bias in separate universe simulations}
 \begin{align}
-n_{\rm phys}(\ln{M}) = \frac{N(\ln{M})}{V_{\rm phys}} = \frac{N(\ln{M})}{a_W^3 V_{\rm com}} =\frac{n_{\rm com}(\ln{M})}{a_W^3},
+n_{\ln{M}} = \frac{N(\ln{M})}{V_W},
 \end{align}
-where $n(\ln{M})$ and $N(\ln{M})$ are the differential number density of halos per logarithemic mass interval and 
+where $n_{\ln{M}}$ and $N(\ln{M})$ are the differential number density of halos per logarithemic mass interval and 
 the differential number of halos per logarithemic mass interval, respectively.
+$V_W$ is the comoving volume of each separate universe, which is related to the comoving volume of the  fidutial universe $V$, such that $V = (1+\Delta_0) V_W$ implied by the mass conservation.
+The first order Eulerian bias is defined through
 \begin{align}
-b_{1}(M) =& \frac{\d \ln{n_{\rm phys}}(\ln{M})}{\d \Delta_0}
-=\frac{1}{n_{\rm phys}(\ln{M})a_W^3}\left.\frac{\partial n_{\rm com}(\ln{M})}{\partial\Delta_0}\right|_{V_{\rm phys}}
-+ \frac{n_{\rm com}(\ln{M})}{n_{\rm phys}(\ln{M})}\frac{\partial}{\partial \Delta_0}\left(\frac{1}{a_W^3} \right)
+b_{1}(M) =& \frac{1}{n_{\ln{M}}}
+\frac{\d n_{\ln{M}}}{\d \Delta_0}
+=\frac{1}{n_{\ln{M}}} \left.\frac{\partial n_{\ln{M}}}{\partial\Delta_0}\right|_{V_W}
++ \frac{1}{n_{\ln{M}}}\left.\frac{\partial n_{\ln{M}}}{\partial \Delta_0}\right|_{N}
 \\
-=& \frac{\partial \ln{n}_{\rm com}(\ln{M})}{\partial \Delta_0} - \frac{\partial \ln{a_W^3}}{\partial \Delta_0}.
+=& \frac{1}{N(\ln{M})}
+\left.\frac{\partial N(\ln{M})}{\partial \Delta^{(1)}_0}\right|_{V_W}
++\frac{\partial}{\partial \Delta_0}\left(1+\Delta_0\right),
+\label{eq:b1_relation}
 \end{align}
-Since the mass conservation implies 
+where we used $\Delta_0 = \Delta_0^{(1)}$ at first order.
+We identify the first term in Eq.~(\ref{eq:b1_relation}) as 
+the first order Lagrangian bias $b_1^{\rm L}(M)$. 
+Since the second term clearly gives 1, we have
 \begin{align}
-a^3_{W} = \frac{a^3}{1+\Delta_0},
+b_1(M) = b_1^{\rm L}(M) + 1.
 \end{align}
-which leads to $\partial\ln{a_W^3} /\partial\Delta_0 = -1$.
-Defining $b_1^{\rm L} \equiv \partial \ln{n}_{\rm com}(\ln{M})/\partial \Delta_0 $, we obtain
+At second order, we should take into account 
+the nonlinear evolution of $\Delta_0$,
+which can be described by the spherical collapse,
 \begin{align}
-b_1(M) = b^{\rm L}_1(M) + 1.
+\Delta_0 =& \Delta_0^{(1)} + \frac{17}{21}\left(\Delta_0^{(1)}\right)^2 + {\cal O}\left[
+\left(\Delta^{(1)}_0\right)^3\right],
+\\
+\Delta_0^{(1)} =& \Delta_0 - \frac{17}{21}\left(\Delta_0\right)^2 
++ {\cal O}\left[ \left(\Delta_0\right)^3\right].
 \end{align}
-The second order bias is defined as
+Note that this nonlinear evolution is naturally realized in the isotropic separate universe simulation tequnichs.
+We derive 
 \begin{align}
-b_2(M) = \frac{1}{n_{\rm phys}(\ln{M})}\frac{\d^2 n_{\rm phys}(\ln{M})}{\d \Delta_0^2}.
+\frac{\d}{\d \Delta_0} 
+=&
+\frac{\d \Delta_0^{(1)} }{\d \Delta_0}\frac{\d }{\d \Delta_0^{(1)}}
+=\left( 1 - \frac{34}{21}\Delta_0 \right)\frac{\d }{\d \Delta_0^{(1)}},
+\\
+\left. \frac{\d^2}{\d \Delta_0^2}\right|_{\Delta_0=0}
+=& \frac{\d^2}{\left(\d \Delta_0^{(1)}\right)^2}
+-\frac{34}{21}\frac{\d }{\d \Delta_0^{(1)}}.
 \end{align}
-At second order, 
+The second order Eulerian bias is defined as
 \begin{align}
-a_W^3 =& a^3\left[1-\Delta_0+\Delta_0^2+ \cdots\right]
+b_2(M) = \frac{1}{n_{\ln{M}}}\frac{\d^2 n_{\ln{M}}}{\d \Delta_0^2}.
+\end{align}
+Then, similary to the first order case, by using
+$\d/\d\Delta_0^{(1)}=
+\left.\partial/\partial\Delta_0^{(1)}\right|_{V_W} 
++\left.\partial/\partial\Delta_0^{(1)}\right|_{N}$, 
+we get
+\begin{align}
+b_2(M)
+=&\frac{1}{n_{\ln{M}}}
+\left[ \left.\frac{\partial^2 n_{\ln{M}} }{\left(\partial \Delta_0^{(1)}\right)^2}\right|_{V_W} 
++ 2 \left.\frac{\partial}{\partial \Delta_0^{(1)}}\right|_{V_W}
+\left.\frac{\partial}{\partial \Delta_0^{(1)}}\right|_{N}n_{\ln{M}}
++ \left.\frac{\partial^2 n_{\ln{M}}  }{\left(\partial \Delta_0^{(1)}\right)^2}\right|_{N} \right]
+-\frac{34}{21}
+\frac{1}{n_{\ln{M}}}
+\frac{\d n_{\ln{M}}}{\d \Delta_0^{(1)} }
 \nonumber\\
-=& a^3\left[1 - \left( \Delta_0^{(1)} + \Delta_0^{(2)} \right) + \left(\Delta^{(1)}_0 \right)^2 \right]
-+\mathcal{O}\left[\left(\Delta_0^{(1)}\right)^3\right]
+=&\frac{1}{n_{\ln{M}}}\left.\frac{\partial^2 n_{\ln{M}} }{\left(\partial \Delta_0^{(1)}\right)^2}\right|_{V_W} 
++2b_1^{\rm L}(M) + \frac{34}{21} 
+- \frac{34}{21}\left( b_1^{\rm L}(M) + 1 \right)
 \nonumber\\
-\simeq&a^3\left[1 - \left( \Delta_0^{(1)} + \frac{17}{21}\left(\Delta^{(1)}_0 \right)^2 \right) + \left(\Delta^{(1)}_0 \right)^2  \right]
-\nonumber\\
-=&a^3\left[1 -  \Delta_0^{(1)} + \frac{4}{21}\left(\Delta^{(1)}_0 \right)^2    \right].
+=&b_2^{\rm L}(M) + \frac{8}{21}b_1^{\rm L}(M),
 \end{align}
+where we identify the first term in the second line as the second order Lagrangian bias.
+In fact, this term can be directly measured from separate universe simulations in the fixed comoving volume.
 
 \subsection{tidal bias : $b_{s^2}$}
 
@@ -652,7 +716,7 @@ Since in our anisotropic separate universe simulations we have homogeneous tidal
 s_{ij} = \tau_{ij} = \mathrm{diag}(-\epsilon/2,-\epsilon/2,\epsilon),
 \end{align}
 $(s_{ij})^2$ is given by $3\epsilon^2/2$.
-Note that the inverse configration $\tau_{ij} = \mathrm{diag}(\epsilon/2,\epsilon/2,-\epsilon)$ also gives $(s_{ij})^2 = 3\epsilon^2/2$.
+Note that the minus configration $\tau_{ij} = \mathrm{diag}(\epsilon/2,\epsilon/2,-\epsilon)$ also gives $(s_{ij})^2 = 3\epsilon^2/2$.
 Thus 
 \begin{align}
 b_{s^2}^{\rm L}(M) = \left.\frac{\partial^2 \ln{ n_{\ln{M} } } }{\partial s_{ij}^2}\right|_{V_{\rm com}}=
