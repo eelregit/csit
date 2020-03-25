@@ -8,7 +8,7 @@
 #SBATCH --partition=general
 
 #SBATCH --exclusive
-#SBATCH --nodes=5
+#SBATCH --nodes=2
 #SBATCH --ntasks-per-node=48
 #SBATCH --time=3-00:00:00
 
@@ -16,8 +16,20 @@
 
 hostname; pwd; date
 
-source $HOME/anaconda/bin/activate
+echo "### conda environment ###"
+source $HOME/anaconda/bin/activate nbodykit
+conda info
 
-srun python ./fof.py
+echo "### module environment ###"
+module purge
+module load slurm
+#module load gcc openmpi
+module load gcc openmpi2
+#module load modules-nix nix/gcc/8.3.0 nix/openmpi3
+#module load modules-nix nix/openmpi3
+#module load modules-nix nix/gcc nix/openmpi4
+module list
+
+srun python3 fof.py
 
 date

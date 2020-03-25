@@ -8,7 +8,7 @@
 #SBATCH --partition=general
 
 #SBATCH --exclusive
-#SBATCH --nodes=1
+#SBATCH --nodes=5
 #SBATCH --ntasks-per-node=48
 #SBATCH --time=3-00:00:00
 
@@ -16,8 +16,20 @@
 
 hostname; pwd; date
 
+echo "### conda environment ###"
 source $HOME/anaconda/bin/activate nbodykit
+conda info
 
-srun python ./power_ic.py
+echo "### module environment ###"
+module purge
+module load slurm
+#module load gcc openmpi
+module load gcc openmpi2
+#module load modules-nix nix/gcc/8.3.0 nix/openmpi3
+#module load modules-nix nix/openmpi3
+#module load modules-nix nix/gcc nix/openmpi4
+module list
+
+srun python3 pow_ic.py
 
 date
