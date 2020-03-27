@@ -36,6 +36,8 @@
 
 \newcommand{\HL}[1]{\textcolor{red}{#1}} % highlight
 \newcommand{\YL}[1]{\textcolor{Bittersweet}{(YL: #1)}}
+\newcommand{\KA}[1]{\textcolor{Blue}{(KA: #1)}}
+
 
 
 \title{Cosmological simulation in tides}
@@ -159,26 +161,27 @@ In order to determine the evolution of $\Delta_i$ in the presence of the large-s
 $\tau_{ij} \equiv (\partial_i \partial_j \nabla^{-2} - \frac13\delta_{ij}) \delta_\mathrm{long}$}
 we consider the effective background potential as
 \begin{align}
-    \Phi = \frac{2}{3}\pi G(\bar{\rho}+3\bar{\cal P}) r_i^2
-            +2 \pi G\bar{\rho}_m(1+\Delta_0)\tau_i r_i^2,
+    \Phi = \frac{2}{3}\pi G\bar{\rho}_{\rm m}(1+\Delta_0) r_i^2 - \frac{\Lambda}{6}r_i^2
+            +2 \pi G\bar{\rho}_{\rm m}\tau_i r_i^2,
             \label{eq:ani_phi_background}
 \end{align}
 \YL{Maybe we shouldn't have 3 in the denominator of the second term.}
 where the second term corresponds to the potential sourced by the long-wavelength tidal mode.
 Note that we include the mean density modulation, $(1+\Delta_0)$,
 which is determined through Eq.~\eqref{eq:D0=det}.
-One can easily verify substituting the first term into Eq.~(\ref{Friedmann})
-gives rise to the usual Friedmann equation.
+One can easily verify substituting the first two term without $(1+\Delta_0)$
+into Eq.~(\ref{Friedmann}) gives rise to the usual Friedmann equation.
 Plugging Eq.~\eqref{eq:ani_phi_background} into Eq.~\eqref{Friedmann}
 and using the usual Friedmann equation,
 we derive
 \begin{align}
     \ddot \Delta_i + 2H\dot \Delta_i
-    = -4\pi G \bar{\rho}_m (1+\Delta_0)\tau_i (1+\Delta_i).
+    = -4\pi G \bar{\rho}_m\left(\tau_i + \frac{1}{3}\Delta_0\right) (1+\Delta_i).
     \label{eq:Deltai_eq}
 \end{align}
 This is analogous equation for the modified scale factors to Eq.~(10) in Ref.~\cite{Wagner_etal:2014},
 while they consider the isotropic modulation.
+Indeed, setting $\tau_i=0$ reproduces Eq.~(10) in Ref.~\cite{Wagner_etal:2014}.
 \YL{Similarly we shouldn't have 3 in the denominator here.}
 Linerizing Eq.~\eqref{eq:Deltai_eq} yields
 \begin{align}
@@ -193,19 +196,19 @@ Thus, at linear order we get
 \begin{align}
 \Delta_i(t) = -\tau_i(t) \propto D(t).
 \end{align}
-For later convinience, we compute the second order solution in the Einstein de-Sitter universe.
-The second order equation is given by
-\begin{align}
- \ddot \Delta^{(2)}_i + 2H\dot \Delta^{(2)}_i
- = \frac{3}{2}H^2\Omega_{\rm m}\left(\Delta^{(1)}_i\right)^2,
- \label{eq:Deltai_2nd_eq}
-\end{align}
-where we set $\tau_i = -\Delta_i^{(1)} $, which is valid at this order.
-The solution for Eq.\eqref{eq:Deltai_2nd_eq} is found to be
-\begin{align}
-\Delta_i^{(2)} = \frac{1}{2}\left[ \Delta_i^{(1)} \right]^2.
-\end{align}
-For anisotropic simulations we compute the anisotropic scale factor
+%For later convinience, we compute the second order solution in the Einstein de-Sitter universe.
+%The second order equation is given by
+%\begin{align}
+% \ddot \Delta^{(2)}_i + 2H\dot \Delta^{(2)}_i
+% = \frac{3}{2}H^2\Omega_{\rm m}\left(\Delta^{(1)}_i\right)^2,
+% \label{eq:Deltai_2nd_eq}
+%\end{align}
+%where we set $\tau_i = -\Delta_i^{(1)} $, which is valid at this order.
+%The solution for Eq.\eqref{eq:Deltai_2nd_eq} is found to be
+%\begin{align}
+%\Delta_i^{(2)} = \frac{1}{2}\left[ \Delta_i^{(1)} \right]^2.
+%\end{align}
+Finally, for anisotropic simulations we compute the anisotropic scale factor
 by solving Eq.\eqref{eq:Deltai_eq} numerically.
 
 Defining the conjugate momenta of $x_{i}$ as $P_{i}\equiv a_i^2 m \dot x_{i}$,
@@ -250,7 +253,7 @@ whose determinant is related to overdensity by
     \simeq - \Psi_{i,i}^{(1)},
     \label{J}
 \end{equation}
-where $\Psi_{i,j} \equiv \partial\Psi_i / \partial q_j$, and we've only kept
+where $\Psi_{i,j} \equiv \partial\Psi_i / \partial q_j$, and we have only kept
 the leading order term in the second equality.
 Substitute \eqref{disp} into \eqref{pecvel} to derive
 \begin{equation}
@@ -273,8 +276,8 @@ space
     \nabla_\vq^2 \psi^{(1)} \simeq \delta^{(1)},
 \end{equation}
 where $\delta^{(1)}$ is the linear density field in Lagrangian space.
-Rewrite \eqref{disp_evo} with $\psi$ in Fourier space, and change its time
-variable to $\ln a$
+Rewrite \eqref{disp_evo} with $\psi$ in Fourier space, 
+%and change its time variable to $\ln a$
 \begin{equation}
     \psi^{(1)\prime\prime} + \Bigl( 2 \frac{H_i \hat p_i^2} H + \frac{H'} H \Bigr) \psi^{(1)\prime}
     - \frac32 \Omega_\mathrm{m}(a) (1 + \Delta_0) \psi^{(1)} = 0,
@@ -404,18 +407,18 @@ Although the modified second order growth factor, $D^{(2)}_W$, due to the long m
 \subsection{Power spectrum responses}
 \label{sub:resp}
 
-We recycle the symbol $\vp$ here to Eulerian space to denote the wavevector in
-local comoving coordinates, as it coincides with the Lagrangian space
+We recycle the symbol $\vp$ here to Eulerian\KA{Lagrangian?} space to denote the wavevector in
+local comoving coordinates, as it coincides with the Lagrangian\KA{Eulerian?}  space
 wavevector in the large scale limit.
 
-Multipole expansion
+We consider the multipole expansions
 \begin{align}
     - \frac{\partial\ln P}{\partial\Delta_i} \bigg|_\vk
     &\equiv R^\Euler_0(k) + \L_2(\hat k_i) R^\Euler_2(k), \nonumber\\
     - \frac{\partial\ln P_W}{\partial\Delta_i} \bigg|_\vp
     &\equiv R^\Lagrange_0(p) + \L_2(\hat p_i) R^\Lagrange_2(p),
 \end{align}
-holding the other two $\Delta_j$'s ($j \neq i$) fixed.
+where holding the other two $\Delta_j$'s ($j \neq i$) fixed.
 $\L_2$ is the second order Legendre polynomial.
 Similar to the decomposition of halo biases, we name the Eulerian and
 Lagrangian responses, and distinguish them with superscripts.
@@ -623,11 +626,8 @@ Convergence tests: mass res, force res, force split.
 
 \section{Halo tidal bias}
 \label{sec:bias}
-\begin{align}
-\delta_{\rm h} = b_1 \delta + \frac{b_2}{2}\delta^2 + \frac{b_{s^2}}{2}(s_{ij})^2,
-\end{align}
-where $(s_{ij})^2 \equiv \sum_{ij}s_{ij}s_{ij}$.
 \subsection{recap of $b_1$ and $b_2$ as response bias in separate universe simulations}
+
 \begin{align}
 n_{\ln{M}} = \frac{N(\ln{M})}{V_W},
 \end{align}
@@ -680,9 +680,9 @@ The second order Eulerian bias is defined as
 b_2(M) = \frac{1}{n_{\ln{M}}}\frac{\d^2 n_{\ln{M}}}{\d \Delta_0^2}.
 \end{align}
 Then, similary to the first order case, by using
-$\d/\d\Delta_0^{(1)}=
+$ \d/\d\Delta_0^{(1)}=
 \left.\partial/\partial\Delta_0^{(1)}\right|_{V_W} 
-+\left.\partial/\partial\Delta_0^{(1)}\right|_{N}$, 
++\left.\partial/\partial\Delta_0^{(1)}\right|_{N}$,
 we get
 \begin{align}
 b_2(M)
@@ -704,12 +704,79 @@ b_2(M)
 where we identify the first term in the second line as the second order Lagrangian bias.
 In fact, this term can be directly measured from separate universe simulations in the fixed comoving volume.
 
-\subsection{tidal bias : $b_{s^2}$}
+\begin{align}
+n_{\ln{M}}(\Delta_{0}) \equiv
+\frac{N_{\ln{M}}(\Delta_{0})}{V(\Delta_{0})}
+\end{align}
 
 \begin{align}
-\frac{b_{s^2}(M)}{2} \equiv \frac{\d^2 \delta_{\rm h}}{\d s_{ij}^2} 
-    = \frac{\d^2 \ln{ n_{\ln{M} } }}{\d s_{ij}^2} 
+b^{\rm E}_{1}
+= \frac{1}{n_{\ln{M}}(\Delta_0=0)}
+\frac{n_{\ln{M}}(\Delta_0=\epsilon)
+-
+n_{\ln{M}}(\Delta_0=-\epsilon)
+}{2\Delta_0}
 \end{align}
+
+
+\begin{align}
+b^{\rm L}_{1}
+= \frac{1}{N_{\ln{M}}(\Delta_0=0)}
+\frac{N_{\ln{M}}(\Delta_0=\epsilon)
+-
+N_{\ln{M}}(\Delta_0=-\epsilon)
+}{2\Delta_0}
+\end{align}
+
+
+\begin{align}
+b^{\rm E}_{2}
+= \frac{1}{n_{\ln{M}}(\Delta_0=0)}
+\frac{n_{\ln{M}}(\Delta_0=\epsilon)
++
+n_{\ln{M}}(\Delta_0=-\epsilon)
+-2n_{\ln{M}}(\Delta_0=0)}{\Delta^2_0}
+\end{align}
+
+\begin{align}
+b^{\rm L}_{2}
+= \frac{1}{N_{\ln{M}}(\Delta_0=0)}
+\frac{N_{\ln{M}}(\Delta_0=\epsilon)
++
+N_{\ln{M}}(\Delta_0=-\epsilon)
+-2N_{\ln{M}}(\Delta_0=0)}{\Delta^2_0}
+\end{align}
+
+
+\subsection{tidal bias : $b_{s^2}$}
+
+The tidal bias can also be interpreted as the response of the halo number density
+to the long-wavelength tidal field.
+
+\begin{align}
+n_{\ln{M}}(\Delta_{\rm p}) \equiv
+\frac{N_{\ln{M}}(\Delta_{\rm p})}{V(\Delta_{\rm p})}
+\end{align}
+
+\begin{align}
+b^{\rm E}_{s^2}
+= \frac{1}{n_{\ln{M}}(\Delta_{\rm p}=0)}
+\frac{n_{\ln{M}}(\Delta_{\rm p}=+2\epsilon)
++
+n_{\ln{M}}(\Delta_{\rm p}=-2\epsilon)
+-2n_{\ln{M}}(\Delta_{\rm p}=0)}{3\Delta^2_{\rm p}/8}
+\end{align}
+
+
+\begin{align}
+b^{\rm L}_{s^2}
+= \frac{1}{N_{\ln{M}}(\Delta_{\rm p}=0)}
+\frac{N_{\ln{M}}(\Delta_{\rm p}=+2\epsilon)
++
+N_{\ln{M}}(\Delta_{\rm p}=-2\epsilon)
+-2N_{\ln{M}}(\Delta_{\rm p}=0)}{3\Delta^2_{\rm p}/8}
+\end{align}
+
 
 Since in our anisotropic separate universe simulations we have homogeneous tidal field whose configuration is 
 \begin{align}
