@@ -157,15 +157,12 @@ The approximation holds at sufficiently high redshift when $\Delta_i \ll 1$
 even if it becomes nonlinear later.
 
 In order to determine the evolution of $\Delta_i$ in the presence of the large-scale tides $\tau_{ij}={\rm diag}(\tau_1,\tau_2,\tau_3)$,
-\YL{$\tau_{ij} \equiv \partial_i \partial_j \nabla^{-2} \delta_\mathrm{long}$, alternatively the traceless version
-$\tau_{ij} \equiv (\partial_i \partial_j \nabla^{-2} - \frac13\delta_{ij}) \delta_\mathrm{long}$}
 we consider the effective background potential as
 \begin{align}
     \Phi = \frac{2}{3}\pi G\bar{\rho}_{\rm m}(1+\Delta_0) r_i^2 - \frac{\Lambda}{6}r_i^2
             +2 \pi G\bar{\rho}_{\rm m}\tau_i r_i^2,
             \label{eq:ani_phi_background}
 \end{align}
-\YL{Maybe we shouldn't have 3 in the denominator of the second term.}
 where the second term corresponds to the potential sourced by the long-wavelength tidal mode.
 Note that we include the mean density modulation, $(1+\Delta_0)$,
 which is determined through Eq.~\eqref{eq:D0=det}.
@@ -182,7 +179,6 @@ we derive
 This is analogous equation for the modified scale factors to Eq.~(10) in Ref.~\cite{Wagner_etal:2014},
 while they consider the isotropic modulation.
 Indeed, setting $\tau_i=0$ reproduces Eq.~(10) in Ref.~\cite{Wagner_etal:2014}.
-\YL{Similarly we shouldn't have 3 in the denominator here.}
 Linerizing Eq.~\eqref{eq:Deltai_eq} yields
 \begin{align}
  \ddot \Delta_i + 2H\dot \Delta_i
@@ -198,6 +194,28 @@ Thus, at linear order we get
 \end{align}
 \KA{
 The second order solution should be $\Delta^{(2)}_0 = \frac{2}{7}\sum_i\tau_i^2$ and I checked it numerically, but I cannot derive it by now.
+}
+\YL{
+At second order
+\begin{equation}
+    \ddot\Delta_i^{(2)} + 2H \dot\Delta_i^{(2)}
+    = 4\pi G \bar\rho_m \Bigl( {\Delta_i^{(1)}}^2 - \frac13 \Delta_0^{(2)''} \Bigr)
+\end{equation}
+Use
+\begin{equation}
+    \Delta_0^{(2)} = - \sum_i \Delta_i^{(2)}
+    + \sum_{i<j} \Delta_i^{(1)} \Delta_j^{(1)} + \sum_i {\Delta_i^{(1)}}^2
+    = - \sum_i \Delta_i^{(2)} + \frac12 \sum_i {\Delta_i^{(1)}}^2
+\end{equation}
+Sum over $i$ of the first equation and then plug in the second one, we can show that
+at matter-dominated era
+\begin{equation}
+    \sum_i \Delta_i^{(2)} = \frac3{14} \sum_i {\Delta_i^{(1)}}^2
+\end{equation}
+therefore
+\begin{equation}
+    \Delta_0^{(2)} = \frac27 \sum_i \Delta_i^{(2)}
+\end{equation}
 }
 %For later convinience, we compute the second order solution in the Einstein de-Sitter universe.
 %The second order equation is given by
