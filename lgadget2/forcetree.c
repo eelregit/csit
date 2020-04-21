@@ -614,10 +614,9 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
   double eff_dist;
   double rcut, asmthfac, rcut2, dist;
   double boxsize, boxhalf;
-  double anifac = sqrt(All.TimeAni[0]*All.TimeAni[1]*All.TimeAni[2] / All.Time);
-  double anifacx = All.TimeAni[0] / anifac;
-  double anifacy = All.TimeAni[1] / anifac;
-  double anifacz = All.TimeAni[2] / anifac;
+  double anifacx = All.TimeAni[0] / All.Time;
+  double anifacy = All.TimeAni[1] / All.Time;
+  double anifacz = All.TimeAni[2] / All.Time;
 
   boxsize = All.BoxSize;
   boxhalf = 0.5 * All.BoxSize;
@@ -803,9 +802,9 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	{
 	  fac *= shortrange_table[tabindex];
 
-	  acc_x += dx * fac * All.Time*All.Time/(All.TimeAni[1]*All.TimeAni[2]);
-	  acc_y += dy * fac * All.Time*All.Time/(All.TimeAni[2]*All.TimeAni[0]);
-	  acc_z += dz * fac * All.Time*All.Time/(All.TimeAni[0]*All.TimeAni[1]);
+	  acc_x += dx * fac;
+	  acc_y += dy * fac;
+	  acc_z += dz * fac;
 
 	  ninteractions++;
 	}
