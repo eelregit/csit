@@ -124,9 +124,9 @@ void pmforce_periodic(void)
   size_t bytes_tot = 0, bytes;
   MPI_Status status;
   double anifac = (All.Time*All.Time*All.Time) / (All.TimeAni[0]*All.TimeAni[1]*All.TimeAni[2]);
-  double anifacx = (All.Time*All.time) / (All.TimeAni[0]*All.TimeAni[0]);
-  double anifacy = (All.Time*All.time) / (All.TimeAni[1]*All.TimeAni[1]);
-  double anifacz = (All.Time*All.time) / (All.TimeAni[2]*All.TimeAni[2]);
+  double anifacx = (All.Time*All.Time) / (All.TimeAni[0]*All.TimeAni[0]);
+  double anifacy = (All.Time*All.Time) / (All.TimeAni[1]*All.TimeAni[1]);
+  double anifacz = (All.Time*All.Time) / (All.TimeAni[2]*All.TimeAni[2]);
 
   if(ThisTask == 0)
     {
