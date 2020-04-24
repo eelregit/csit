@@ -802,9 +802,9 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	{
 	  fac *= shortrange_table[tabindex];
 
-	  acc_x += dx * fac * All.TimeAni[0] / All.Time;
-	  acc_y += dy * fac * All.TimeAni[1] / All.Time;
-	  acc_z += dz * fac * All.TimeAni[2] / All.Time;
+	  acc_x += dx * fac * anifacx;
+	  acc_y += dy * fac * anifacy;
+	  acc_z += dz * fac * anifacz;
 
 	  ninteractions++;
 	}
