@@ -421,25 +421,13 @@ Although the modified second order growth factor, $D^{(2)}_W$, due to the long m
 \subsection{Power spectrum responses}
 \label{sub:resp}
 
-
-Alternatively one can parametrize the remaining 3 degrees of freedom of the
-background strain by its isotropic dilation and shears \cite{BondMyers96I},
-with the former being approximately the negative mean overdensity
-\begin{align}
-    -\Delta_0 &\simeq \Delta_1 + \Delta_2 + \Delta_3, \nonumber\\
-    \Delta_\mathrm{e} &\equiv \frac{\Delta_1 - \Delta_2}2, \nonumber\\
-    \Delta_\mathrm{p} &\equiv \Delta_3 - \frac{\Delta_1 + \Delta_2}2.
-\end{align}
-The subscripts of the two shear modes stand for ellipticity and
-prolaticity\footnote{We do not impose ordering on $\vDelta$ to compress the
-parameter space (cf.\ \cite{BondMyers96I}).}.
-
-
+In this section, we intoduce the power spectrum responses to the long-wavelength modes,
+which describe how the local quantities differ from the global ones.
 We recycle the symbol $\vp$ here to Eulerian\KA{Lagrangian?} space to denote the wavevector in
 local comoving coordinates, as it coincides with the Lagrangian\KA{Eulerian?}  space
 wavevector in the large scale limit.
 
-We consider the multipole expansions
+We consider the multipole expansions of the power spectrum responses as follows,
 \begin{align}
     - \frac{\partial\ln P}{\partial\Delta_i} \bigg|_\vk
     &\equiv R^\Euler_0(k) + \L_2(\hat k_i) R^\Euler_2(k), \nonumber\\
@@ -457,20 +445,20 @@ initial conditions in the Lagrangian space.
 The two are related by the conversion with the global and local scale factors
 \begin{equation}
     p_i = \frac{a_i}a k_i = (1 + \Delta_i) k_i,
+    \label{eq:k_p_relation}
 \end{equation}
 so that $\vk = \vp$ when $\vDelta = \bm0$.
 Consider the change of reference density and the conservation of variance when
 transforming between Fourier-space volume elements
 \begin{equation}
-    P \,\d^3\vk = (1 + \Delta_0)^2 P_W \,\d^3\vp,
+    P (\vk;\vDelta)\,\d^3\vk = (1 + \Delta_0)^2 P_W(\vp;\vDelta) \,\d^3\vp,
 \end{equation}
-so
+which leads to
 \begin{equation}
-    P = (1 + \Delta_0) P_W
+    P (\vk;\vDelta)= (1 + \Delta_0) P_W(\vp;\vDelta).
+    \label{eq:P_PW_relation}
 \end{equation}
-
-$P_W(\vp, \vDelta)$
-
+Using Eqs.\eqref{eq:k_p_relation} \eqref{eq:P_PW_relation}, we find
 \begin{align}
     - \frac{\partial\ln P}{\partial\Delta_i} \bigg|_\vk
     = 1 - \frac{\partial\ln P_W}{\partial\Delta_i} \bigg|_\vk
@@ -484,22 +472,14 @@ $P_W(\vp, \vDelta)$
     - \frac13 \frac{\d\ln P}{\d\ln k}
     - \L_2(\hat k_i) \frac23 \frac{\d\ln P}{\d\ln k},
 \end{align}
-where $\hat k_i = k_i / k$.
-Therefore
+with $\hat k_i = k_i / k$.
+Therefore, the Eularian response and Lagrangian response are related through
 \begin{align}
     R^\Euler_0 &= 1 + R^\Lagrange_0 - \frac13 \frac{\d\ln P}{\d\ln k},
     \nonumber\\
     R^\Euler_2 &= R^\Lagrange_2 - \frac23 \frac{\d\ln P}{\d\ln k}.
 \end{align}
-
-For either response
-\begin{align}
-    R_0 &= R_0, \nonumber\\
-    R_\mathrm{e}
-    &= - \bigl(\L_2(\hat p_1) - \L_2(\hat p_2)\bigr) R_2, \nonumber\\
-    R_\mathrm{p} &= - \L_2(\hat p_3) R_2.
-\end{align}
-In the linear regime $P_W \propto D_W^2$ and
+In the linear regime we have $P_W \propto D_W^2$ and we have derived the modified growth factor $D_W$ in the previous subsection,
 \begin{equation}
     D_W = D \Bigl( 1 + \frac{13}{21} \Delta_0
     - \frac8{21} \L_2(\hat p_i) \Delta_i \Bigr),
@@ -519,8 +499,31 @@ in the previous works for example \cite{LiSchmittfullSeljak17}\footnote{In
 dimensionless power spectrum, thus the constant terms become $47/21 \to 68/21$
 and $16/21 \to 58/21$ there.}.
 
+So far, we used $\Delta_1$, $\Delta_2$, and $\Delta_3$ to parametrize the remaining 3 degrees of freedom of the
+background strain.
+Alternatively one can parametrize it
+ by its isotropic dilation and shears \cite{BondMyers96I},
+with the former being approximately the negative mean overdensity
+\begin{align}
+    -\Delta_0 &\simeq \Delta_1 + \Delta_2 + \Delta_3, \nonumber\\
+    \Delta_\mathrm{e} &\equiv \frac{\Delta_1 - \Delta_2}2, \nonumber\\
+    \Delta_\mathrm{p} &\equiv \Delta_3 - \frac{\Delta_1 + \Delta_2}2.
+\end{align}
+The subscripts of the two shear modes stand for ellipticity and
+prolaticity\footnote{We do not impose ordering on $\vDelta$ to compress the
+parameter space (cf.\ \cite{BondMyers96I}).}.
+
+For either response we have
+\begin{align}
+    R_0 &= R_0, \nonumber\\
+    R_\mathrm{e}
+    &= - \bigl(\L_2(\hat p_1) - \L_2(\hat p_2)\bigr) R_2, \nonumber\\
+    R_\mathrm{p} &= - \L_2(\hat p_3) R_2.
+\end{align}
+
 \HL{Should there be $R_\ell$ with $\ell>2$? Taylor expansion suggests
 no. But deep in nonlinear structures?}
+\KA{I think there appears $R_{\ell >2}$ if considering 2nd order response. See 1703.09212.}
 
 
 
@@ -666,12 +669,36 @@ On the other hand, the drift operator should be modified due to the modified can
 
 \section{Results}
 \label{sec:results}
+In this section, we describes the parameters of simulations we run and show the results on the power spectrum responses and the halo tidal bias.
 
-
-Power spectrum responses
-
-
+\subsection{Simulation setups}
 Convergence tests: mass res, force res, force split.
+
+We choose the background strain to satisfy
+$\Delta^{(1)}_0=0$ and $\Delta_{\rm e}=0$, so that the remaining degree of freedom is only $\Delta_{\rm p} = 3\Delta_3/2$.
+
+\subsection{Power spectrum responses from simulations}
+In our settings, we can directly measure $R^{\rm L}_{\rm p}$ response, which is given by
+\begin{align}
+-\frac{\partial\ln P_W}{\partial\Delta_{\rm p}} \bigg|_\vp
+    &\equiv R^{\rm L}_{\rm p}
+    = - \L_2(\hat p_3) R^\Lagrange_2(p).
+\end{align}
+In order to extract this response, it is natural to consider the quadrupole of the power spectrum since
+\begin{align}
+P^{\ell=2}_W(p;\Delta_{\rm p}) \equiv 
+5\int_{-1}^{1} \frac{\d\,\hat p_3}{2} P_W(\vp;\Delta_{\rm p}) \L_2(\hat p_3)
+=P(p)R_2^{\rm L}(p)\Delta_{\rm p},
+\end{align}
+due to the orthogonarity of the Legendre polynomials.
+Therefore, the estimator for $R_2^{\rm L}(p)$ can be constructed as 
+\begin{align}
+R_2^{\rm L}(p) = \frac{P_W^{\ell=2}(p;\Delta_p=+\epsilon) - P_W^{\ell=2}(p;\Delta_p=-\epsilon)}{2\epsilon P(p)}.
+\end{align}
+
+
+\subsection{Halo tidal bias}
+
 
 \section{Halo tidal bias}
 \label{sec:bias}
