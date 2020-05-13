@@ -494,9 +494,9 @@ void displacement_fields(void)
 	    -2./9.*lambda[0]*(digrad[0][coord]*digrad[0][coord] + digrad[1][coord]*digrad[1][coord] + digrad[2][coord]*digrad[2][coord] )
 	    -2./9.*lambda[1]*(digrad[1][coord]*digrad[1][coord] + digrad[3][coord]*digrad[3][coord] + digrad[4][coord]*digrad[4][coord] )
 	    -2./9.*lambda[2]*(digrad[2][coord]*digrad[2][coord] + digrad[4][coord]*digrad[4][coord] + digrad[5][coord]*digrad[5][coord] )
-	    +trace*(
-	    	-3./2.*(digrad[0][coord] + digrad[3][coord] + digrad[5][coord])
-	    	+1./2.*(digrad[0][coord] + digrad[3][coord] + digrad[5][coord] + 2.*(digrad[1][coord] + digrad[2][coord] + digrad[4][coord])) )
+	    +trace/6.*(
+	    	-1./2.*(digrad[0][coord] + digrad[3][coord] + digrad[5][coord])
+	    	-1./2.*(digrad[0][coord] + digrad[3][coord] + digrad[5][coord] + 2.*(digrad[1][coord] + digrad[2][coord] + digrad[4][coord])) )
 	    +1./18.*(digrad[0][coord]*(7.*epgrad[0][coord]-3.*epgrad[3][coord]-3.*epgrad[5][coord]) /* psi_xx, psi_yy, psi_zz part*/
 	    		+digrad[3][coord]*(-3.*epgrad[0][coord]+7.*epgrad[3][coord]-3.*epgrad[5][coord])
 	    		+digrad[5][coord]*(-3.*epgrad[0][coord]-3.*epgrad[3][coord]+7.*epgrad[5][coord]) )
