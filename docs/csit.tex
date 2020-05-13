@@ -249,9 +249,8 @@ In the presence of long modes, we solve the anisotropic perturbations to the
 Lagrangian displacement with the second order Lagrangian perturbation theory,
 which we will use later to generate the initial conditions.
 
-Let us start with the Zel'dovich approximation (or linear Lagrangian
-perturbation theory)~\cite{Zeldovich:1969}.
-The displacement field $\Psi({\vq})$ is a mapping from a particle's Lagrangian
+The Lagrangian perturbation theory follows the evolution of the displacement field $\Psi(\vq)$,
+which is a mapping from a particle's Lagrangian
 position $q_i$ to its Eulerian position $x_i$:
 \begin{equation}
     x_i = q_i + \Psi_i({\vq}),
@@ -259,67 +258,90 @@ position $q_i$ to its Eulerian position $x_i$:
 \end{equation}
 whose determinant is related to overdensity by
 \begin{equation}
-    \delta = \Bigl| \frac{\partial{\vx}}{\partial{\vq}} \Bigr|^{-1} - 1
-    \simeq - \Psi_{i,i}^{(1)},
+    \delta = \Bigl| \frac{\partial{\vx}}{\partial{\vq}} \Bigr|^{-1} - 1.
     \label{eq:J}
 \end{equation}
-where $\Psi_{i,j} \equiv \partial\Psi_i / \partial q_j$, and we have only kept
-the leading order term in the second equality.
-Substitute Eq.~\eqref{eq:disp} into Eq.~\eqref{eq:pecvel} to derive
+To derive the master equation of the Lagrangian perturbation theory,  we substitute Eq.~\eqref{eq:disp} into Eq.~\eqref{eq:pecvel}, yeilding 
 \begin{equation}
     \ddot \Psi_i^{(1)} + 2 H_i \dot \Psi_i^{(1)} = - \frac1{a_i}
     \frac{\partial\Phi}{\partial r_i}.
 \end{equation}
-Take gradient of $x_i$ on both sides and then sum over $i$
+Taking the gradient of $x_i$ on both sides and then summing over $i$,
+we obtain the equation for $\Psi$,
+\begin{align}
+    \Bigl| \frac{\partial{\vx}}{\partial{\vq}} \Bigr| 
+    \sum_{ij}
+    \left[\delta_{ij} + \Psi_{i,j}  \right]^{-1}
+    \left[ \ddot{\Psi}_{i,j} + 2H_i\dot{\Psi}_{i,j} \right]
+    =\frac{3}{2}H^2\Omega_{\rm m}(1+\Delta_0)
+    \delta,
+    \label{eq:master}
+\end{align}
+where we have used using Eqs.~\eqref{eq:poisson_local}, \eqref{eq:J} and $\Psi_{i,j} \equiv \partial\Psi_i / \partial q_j$.
+
+
+Let us start with the Zel'dovich approximation (or linear Lagrangian
+perturbation theory)~\cite{Zeldovich:1969}.
+Keeping only the leading order term in Eq.~\eqref{eq:master} leads to 
 \begin{equation}
-    \ddot \Psi_{i,i}^{(1)} + 2 H_i \dot \Psi_{i,i}^{(1)} \simeq - \nabla_{\vr}^2 \Phi
-    \simeq \frac{3}{2}H^2 \Omega_{\rm m}(a)  (1 + \Delta_0)\Psi_{i,i}^{(1)},
+    \sum_i\ddot \Psi_{i,i}^{(1)} + 2 \sum_i H_i \dot \Psi_{i,i}^{(1)} \simeq - \nabla_{\vr}^2 \phi
+    \simeq \frac{3}{2}H^2 \Omega_{\rm m}(a)  (1 + \Delta_0)\sum_i\Psi_{i,i}^{(1)},
  %   \frac{3\Omega_\mathrm{m} H_0^2}{2 a^3} (1 + \Delta_0),
-    \label{eq:disp_evo}
+    \label{eq:disp_1st}
 \end{equation}
-in which we have used Eqs.~\eqref{eq:poisson_local}, \eqref{eq:J}, and the fact that at leading
-order $\partial\Psi_i^{(1)} / \partial x_i \simeq \Psi_{i,i}^{(1)}$
+in which we have used $\Bigl| \frac{\partial{\vx}}{\partial{\vq}} \Bigr|^{-1} \simeq 1 + \sum_i\Psi_{i,i}$,
+ and the fact that at leading order $\partial\Psi_i^{(1)} / \partial x_i \simeq \Psi_{i,i}^{(1)}$
 and $\Omega_{\rm m}(a) =  \Omega_{\rm m}H_0^2/a^3H^2$.
 In the linear order the vorticity in $\Psi_{i,j}^{(1)}$ decays, so the displacement
-is a potential flow $\Psi_i^{(1)} = - \partial\psi^{(1)}/ \partial q_i \equiv -\psi_{,i}^{(1)}$
-with the displacement potential $\psi^{(1)}$ sourced by the overdensity in Lagrangian
+is a potential flow $\Psi_i^{(1)} = - \partial\psi_W^{(1)}/ \partial q_i \equiv -\psi_{W,i}^{(1)}$
+with the displacement potential $\psi_W^{(1)}$ sourced by the overdensity in Lagrangian
 space:
 \begin{equation}
-    \nabla_{\vq}^2 \psi^{(1)} \simeq \delta^{(1)}.
+    \nabla_{\vq}^2 \psi_W^{(1)} \simeq \delta^{(1)}.
 \end{equation}
-Rewriting Eq.~\eqref{eq:disp_evo} with $\psi$ in Fourier space yields
-\begin{equation}
-   \ddot \psi^{(1)} + 2 H_i \hat p_i^2   \dot\psi^{(1)}
-    - \frac32 \Omega_\mathrm{m}(a) (1 + \Delta_0) \psi^{(1)} = 0,
-    \label{pot_evo}
-\end{equation}
-where $\hat p_i$ denotes the unit vector of the wavevector
-in the Lagrangian space.
-%, and $\Omega_\mathrm{m}(a) \equiv \Omega_\mathrm{m}
-%H_0^2 / a^3 H^2$.
-The above equation describes the linear growth of the displacement field, on
-which the effect of the long modes manifests in the quadrupolarly
-direction-dependent Hubble drag and the coefficients that depend on the growth
-history of the long modes $\Delta_i$(t).
-
-Apparently without the long modes the evolution described by Eq.~\eqref{pot_evo} reduces to
-that of the usual linear growth function $D(t)$,
-\begin{align}
-    \ddot{D}^{(1)} + 2H\dot{D}^{(1)} -\frac{3}{2}\Omega_{\rm m}(a)D^{(1)}{(t)}=0.
-    \label{eq:linear_growth_function}
-\end{align}
-In the presence of the long modes, the growth function $D^{(1)}_W(a, \hat{p})$
-receives corrections of order ${\cal O}(\Delta_i)$.
 The subscript $W$ here
 denotes locally averaged quantities
 defined in a \emph{window} with non-vanishing long modes.
-Let $\epsilon^{(1)}(a, \hat{\vp}) \equiv D^{(1)}_W - D^{(1)}$. It follows
+In terms of $\psi_W^{(1)}$, Eq.~\eqref{eq:disp_1st} is 
+\begin{align}
+  \sum_i \ddot \psi^{(1)}_{W,ii} + 2\sum_i H_i  \dot\psi^{(1)}_{W,ii}
+   - \frac32  \Omega_\mathrm{m}(a) (1 + \Delta_0)\sum_i \psi^{(1)}_{W,ii} = 0.
+   \label{eq:psiW_1st}
+\end{align}
+
+Apparently without the long modes the evolution described by Eq.~\eqref{eq:psiW_1st} reduces to
+that of the 1st order ZA displacement potential $\psi^{(1)}$,
+\begin{align}
+    \ddot{\psi}^{(1)} + 2H\dot{\psi}^{(1)} - \frac{3}{2}H^2\Omega_{\rm m}\psi^{(1)} &= 0,
+    \label{eq:psi_1st},
+\end{align}
+which has the same structure for the time dependence as the linear linear growth function $D(t)$.
+In the presence of the long modes, the displacement potential $\psi^{(1)}_W$
+receives corrections of order ${\cal O}(\Delta_i)$.
+We denote this correction as $\epsilon^{(1)}$ so that the solution of Eq.~\eqref{eq:psiW_1st} can be written as 
+\begin{align}
+\psi_{W}^{(1)} = \psi^{(1)} + \epsilon^{(1)},
+\end{align}
+with $\epsilon^{(1)}$ being $\mathcal{O}(\Delta_i)$.
+Then $\epsilon^{(1)}$ satisfies
+\begin{align}
+    \sum_i \ddot{\epsilon}^{(1)}_{,ii} + 2H\sum_i \dot{\epsilon}^{(1)}_{,ii} - \frac{3}{2}H^2\Omega_{\rm m}\sum_i \epsilon^{(1)}_{,ii} &= -2\sum_i \dot{\psi}_{,ii}^{(1)}\dot{\Delta}_i 
+    + \frac{3}{2}H^2\Omega_{\rm m}\sum_i \psi_{,ii}^{(1)}\Delta_0.
+    \label{eq:eps_1st}
+\end{align}
+This equation is easily solved in Fourier space.
+Rewriting Eq.~\eqref{eq:eps_1st} in Fourier space yields
 \begin{equation}
     \ddot \epsilon^{(1)} +2H \dot \epsilon^{(1)}
     - \frac32 \Omega_{\rm m}(a) \epsilon^{(1)}
     \simeq
-    - 2\dot D^{(1)} \hat p_i^2 \dot \Delta_i + \frac32 \Omega_{\rm m}(a) D^{(1)} \Delta_0.
+    - 2\dot D^{(1)} \hat p_i^2 \dot \Delta_i + \frac32 H^2 \Omega_{\rm m}(a) \psi^{(1)} \Delta_0.
 \end{equation}
+where $\hat p_i$ denotes the unit vector of the wavevector
+in the Lagrangian space.
+The above equation clearly shows that the effect of the long modes manifests in the quadrupolarly
+direction-dependent Hubble drag whose coefficients depend on the growth
+history of the long modes $\Delta_i(t)$.
 To solve this equation we can first decompose it as
 \begin{equation}
     \epsilon^{(1)}(a, \hat{\vp}) = \hat p_i^2 \epsilon^{(1)}_i(a),
@@ -329,38 +351,29 @@ with each component $\epsilon^{(1)}_i(a)$ solves
 \begin{equation}
     \ddot \epsilon_i^{(1)} + 2H \dot \epsilon_i^{(1)}
     - \frac32 \Omega_{\rm m}(a)\epsilon_i^{(1)}
-    = - 2 \dot D^{(1)} \dot \Delta_i + \frac32 \Omega_{\rm m}(a) D^{(1)} \Delta_0.
+    = - 2 \dot D^{(1)} \dot \Delta_i + \frac32 H^2\Omega_{\rm m}(a) \psi^{(1)} \Delta_0.
     \label{eq:ei}
 \end{equation}
 For the simplest scenarios we assume that the universe has been matter
 dominated ($H = 2/3t$ and $\Omega_{\rm m}(a) = 1$) for long enough and
 that the long modes are well sub-horizon ($\Delta_0, \Delta_i \propto D^{(1)}$), so
-that at the Zel'dovich approximation we can set up the initial conditions of the linear growth equations
-Eqs.~\eqref{eq:linear_growth_function} and \eqref{eq:ei} as
+that at the Zel'dovich approximation we find
 \begin{align}
     \epsilon^{(1)}_i &=
-    -\frac47 \Delta_i(a_\mathrm{ini}) D^{(1)}(a_\mathrm{ini}) + \frac37 \Delta_0(a_\mathrm{ini}) D^{(1)}(a_\mathrm{ini}),
-    \nonumber\\
-    \frac{\d \epsilon^{(1)}_i}{\d t} &= 2 H(a_{\rm ini})f_1(a_{\rm ini})\epsilon^{(1)}_i,
-    \label{eq:ICs_ZA}
+    -\frac47 \Delta_i D^{(1)} + \frac37 \Delta_0 D^{(1)}, 
 \end{align}
-with $f_1\equiv \d \ln D^{(1)}/\d \ln a \simeq $
-at $a_\mathrm{ini}$ deep in the matter-dominated era.
-
-eq.~\eqref{eq:ICs_ZA} can be directly compared to the results derived with standard
+leading to 
+\begin{align}
+D_W(t, \hat\vp) = D(t)\left[1 + \frac{3}{7}\Delta_0 - \frac{4}{7}\sum_i \Delta_i\hat{p}_i^2 \right],
+\label{eq:DW}
+\end{align}
+where $D_W(t,\hat\vp)$ is the modified linear growth factor.
+Eq.~\eqref{eq:DW} can be directly compared to the results derived with standard
 perturbation theory in an Einstein de-Sitter universe.
 For isotropic perturbation, $\Delta_i = - \Delta_0 / 3$, so $D^{(1)}_W = D^{(1)} (1 + 13
-\Delta_0 / 21)$.
+\Delta_0 / 21)$ and for pure tides, $\Delta_0=0$ and $\Delta_i = -\tau_i$, so $D^{(1)}_W = D^{(1)} (1 + 4 \tau_i / 7)$.
 
-At second order, we have to come back to the master equation for the Lagrangian perturbation theory
-in the anisotropic background, which is given by
-\begin{align}
-    \Bigl| \frac{\partial\vx}{\partial\vq} \Bigr|^{-1}
-    \left[ \delta_{ij} + \Psi_{i,j} \right]^{-1}
-    \left[ \ddot{\Psi}_{i,j} + 2H_i\dot{\Psi}_{i,j} \right]
-    =\frac32 H^2\Omega_{\rm m}(a)(1+\Delta_0)\delta.
-\end{align}
-Keeping up to the second order terms, we find
+At second order, Keeping up to the second order terms, we have
 \begin{align}
 &\Bigl| \frac{\partial\vx}{\partial\vq} \Bigr|^{-1}  \simeq
     1 + \Psi_{i,i}^{(1)} + \Psi_{i,i}^{(2)} + \frac12 \left[\left(\Psi_{i,i}^{(1)} \right)^2 - \Psi_{i,j}^{(1)}\Psi_{j,i}^{(1)} \right]
@@ -379,12 +392,12 @@ leading to the second-order equation
 \end{align}
 Similar to the linear order, we introduce the second order displacement potential
 through $\Psi_i^{(2)} = \partial\psi_W^{(2)}/\partial q_i \equiv \psi^{(2)}_{W,i}$.
-In the absence of the long modes, the equation for $\psi^{(2)}$ reduces
+In the absence of the long modes, the equation for $\psi^{(2)}$ reduces to
 \begin{align}
 \ddot \psi^{(2)}_{,ii} + 2H\dot \psi^{(2)}_{,ii}-\frac32 H^2 \Omega_{\rm m}(a)\psi^{(2)}_{,ii}
- = -\frac32 H^2 \Omega_{\rm m}\left[\frac12 \left( \psi^{(1)}_{,ii} \right)^2 -\frac12 \psi^{(1)}_{,ij}\psi^{(1)}_{,ji} \right],
+ = -\frac32 H^2 \Omega_{\rm m}(a)\left[\frac12 \left( \psi^{(1)}_{,ii} \right)^2 -\frac12 \psi^{(1)}_{,ij}\psi^{(1)}_{,ji} \right],
 \end{align}
-where we used the linear equation \eqref{pot_evo} without long modes.
+where we used the linear equation \eqref{eq:psi_1st}.
 In this usual case, we denote the time-dependent part of $\psi^{(2)}$ as $D^{(2)}(t)$, which obeys
 \begin{align}
 \ddot D^{(2)} + 2H \dot D^{(2)} - \frac32 H^2 \Omega_{\rm m}(a) D^{(2)} = -\frac32 H^2 \Omega_{\rm m}\left( D^{(1)} \right)^2.
@@ -398,20 +411,19 @@ follows
 &-2\dot\psi^{(2)}_{,ii} \dot\Delta_i + 2\dot\Delta_i\dot\psi_{,ij}^{(1)}\psi_{,ji}^{(1)}
 -\frac32 H^2 \Omega_{\rm m}(a) \epsilon^{(1)}_{,jj}\psi^{(1)}_{,ii} + \psi^{(1)}_{,ij} \left[ \ddot\epsilon_{,ij}^{(1)} + 2H\dot\epsilon_{,ij}^{(1)} \right]
 \nonumber\\
-&+\frac32 H^2 \Omega_{\rm m}(a)\Delta_0\left[ \psi_{,ii}^{(2)} + \frac12\left( \psi^{(1)}_{,ii}\right)^2- \frac12\psi^{(1)}_{,ij}\psi^{(1)}_{,ji} \right],
+&+\frac32 H^2 \Omega_{\rm m}(a)\Delta_0\left[ \psi_{,ii}^{(2)} - \frac12\left( \psi^{(1)}_{,ii}\right)^2- \frac12\psi^{(1)}_{,ij}\psi^{(1)}_{,ji} \right],
 \label{eq:2nd_epsilon}
 \end{align}
-where $\epsilon^{(1)}(t,\vq) = \int_\vp \epsilon^{(1)}(a, \vp)e^{i\vp\cdot\vq}$
-and we neglect $\mathcal{O}(\Delta_i^2)$ terms.
+where we have neglected $\mathcal{O}(\Delta_i^2)$ terms.
 Notice that $\epsilon^{(1)}$ is $\mathcal{O}(\Delta_i)$.
-For the matter dominated era, in which we have $H=2/3t$ and $\Omega_{\rm m}(a)=1$,
+For the matter dominated era,
 %$\Delta_0, \Delta_i, \psi^{(1)} \propto D^{(1)}$ and $\psi^{(2)},\epsilon^{(1)}\propto D^{(2)}$
 the solution for Eq.\eqref{eq:2nd_epsilon} is given by
 \begin{align}
 \epsilon^{(2)}_{,ii}(t, \vq)
 =&\frac14 \left[-\frac{16}{9}\psi^{(2)}_{,ii}(t,\vq) + \frac89\psi^{(1)}_{,ij}(t,\vq)\psi^{(1)}_{,ji}(t,\vq) \right]\Delta_i
 \nonumber\\
-&+\frac16 \left[\psi_{,ii}^{(2)} + \frac12\left( \psi^{(1)}_{,ii}\right)^2- \frac12\psi^{(1)}_{,ij}\psi^{(1)}_{,ji}   \right]\Delta_0
+&+\frac16 \left[\psi_{,ii}^{(2)} - \frac12\left( \psi^{(1)}_{,ii}\right)^2- \frac12\psi^{(1)}_{,ij}\psi^{(1)}_{,ji}   \right]\Delta_0
 \nonumber\\
 &+\frac14\left[-\frac23\psi^{(1)}_{,ii}(t,\vq)\epsilon_{,jj}^{(1)}(t,\vq) + \frac{20}{9}\psi^{(1)}_{,ij}(t,\vq)\epsilon_{,ij}^{(1)}(t,\vq)  \right].
 \end{align}
@@ -538,8 +550,20 @@ to perform the cosmological simulation in an anisotropic expanding universe.
 \label{sub:ics}
 
 \KA{Almost written in Sec.2.2?}
-
-
+We can set up the initial condition by using the results in Sec.\ref{sub:lpt}.
+We modified \textit{2LPTic} to include the anisotropic expansion.
+that at the Zel'dovich approximation we find
+we can set up the initial conditions of the linear growth equations
+Eqs.~\eqref{eq:linear_growth_function} and \eqref{eq:ei} as
+\begin{align}
+    \epsilon^{(1)}_i &=
+    -\frac47 \Delta_i(a_\mathrm{ini}) D^{(1)}(a_\mathrm{ini}) + \frac37 \Delta_0(a_\mathrm{ini}) D^{(1)}(a_\mathrm{ini}),
+    \nonumber\\
+    \frac{\d \epsilon^{(1)}_i}{\d t} &= 2 H(a_{\rm ini})f_1(a_{\rm ini})\epsilon^{(1)}_i,
+    \label{eq:ICs_ZA}
+\end{align}
+with $f_1\equiv \d \ln D^{(1)}/\d \ln a \simeq [\Omega_m(a)]^{5/9}$
+at $a_\mathrm{ini}$ deep in the matter-dominated era.
 \subsection{Forces}
 \label{sub:treepm}
 
