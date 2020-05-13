@@ -16,6 +16,22 @@ comm = CurrentMPIComm.get()
 print(f'rank: {comm.rank} / {comm.size}', flush=True)
 setup_logging()
 
+def dh(kind):
+    if kind=='iso':
+        return 1.
+    elif kind=='ppp0004':
+        return 0.674727/0.6774
+    elif kind=='mmm0004':
+        return 0.680063/0.6774
+    elif kind=='ppp003':
+        return 0.657085/0.6774
+    elif kind=='mmm003':
+        return 0.697123/0.6774
+    elif kind=='ppp007':
+        return 0.628978/0.6774
+    elif kind=='mmm007':
+        return 0.722584/0.6774
+
 def compute_power(kind, seed):
     num_mesh = 8196
     if comm.rank == 0:
@@ -23,7 +39,7 @@ def compute_power(kind, seed):
         print(kind)
         print('reading snapshot files...')
 #    part_cat = Gadget1Catalog('/mnt/sdceph/users/yinli/csit/planck2015/%d/np1024/%s/%s/nbody/treepm2048/snapdir_005/snap_005.*' % (box, seed, kind))
-    part_cat = Gadget1Catalog('/mnt/sdceph/users/yinli/csit/planck2015/%d/%s/%s/ASMTH6/nbody/snapdir_005/snap_005.*' % (box, seed, kind))
+    part_cat = Gadget1Catalog('/mnt/sdceph/users/yinli/csit/planck2015/%d/%s/%s/SU/nbody/snapdir_005/snap_005.*' % (box, seed, kind))
 
     if comm.rank == 0:
         print(part_cat)
@@ -31,11 +47,11 @@ def compute_power(kind, seed):
     mesh = part_cat.to_mesh(resampler='pcs', Nmesh=num_mesh, BoxSize=box, compensated=True, position='Position', interlaced=True)
     if comm.rank == 0:
         print('starting FFT...')
-    FFT = FFTPower(mesh, mode='2d', dk=0.015, Nmu=200, los=[0,0,1], poles=[0,2,4])
+    FFT = FFTPower(mesh, mode='2d', dk=0.015/dh(kind), Nmu=200, los=[0,0,1], poles=[0,2,4])
     if comm.rank == 0:
         print('done FFT')
 #    FFT.save('/mnt/sdceph/users/yinli/csit/planck2015/%d/np1024/%s/%s/power/z0_pm4096_fftpower.json' % (box, seed, kind))
-    FFT.save('/mnt/sdceph/users/yinli/csit/planck2015/%d/%s/%s/ASMTH6/power/z0_fftpower.json' % (box, seed, kind))
+    FFT.save('/mnt/sdceph/users/yinli/csit/planck2015/%d/%s/%s/SU/power/z0_fftpower.json' % (box, seed, kind))
     poles = FFT.poles
     mono = poles['power_0'].real
     quad = poles['power_2'].real
@@ -44,9 +60,9 @@ def compute_power(kind, seed):
     p2 = np.array([poles['k'][1:], quad[1:]])
     p4 = np.array([poles['k'][1:], hexa[1:]])
 #    np.savetxt('/mnt/sdceph/users/yinli/csit/planck2015/%d/np1024/%s/%s/power/z0_treepm2048_p0.dat' % (box, seed, kind), p0)
-    np.savetxt('/mnt/sdceph/users/yinli/csit/planck2015/%d/%s/%s/ASMTH6/power/z0_p0.dat' % (box, seed, kind), p0)
-    np.savetxt('/mnt/sdceph/users/yinli/csit/planck2015/%d/%s/%s/ASMTH6/power/z0_p2.dat' % (box, seed, kind), p2)
-    np.savetxt('/mnt/sdceph/users/yinli/csit/planck2015/%d/%s/%s/ASMTH6/power/z0_p4.dat' % (box, seed, kind), p4)
+    np.savetxt('/mnt/sdceph/users/yinli/csit/planck2015/%d/%s/%s/SU/power/z0_p0.dat' % (box, seed, kind), p0)
+    np.savetxt('/mnt/sdceph/users/yinli/csit/planck2015/%d/%s/%s/SU/power/z0_p2.dat' % (box, seed, kind), p2)
+    np.savetxt('/mnt/sdceph/users/yinli/csit/planck2015/%d/%s/%s/SU/power/z0_p4.dat' % (box, seed, kind), p4)
 
 if __name__ == "__main__":
     for seed_num in seedlist:
