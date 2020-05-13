@@ -36,6 +36,8 @@
 
 \newcommand{\HL}[1]{\textcolor{red}{#1}} % highlight
 \newcommand{\YL}[1]{\textcolor{Bittersweet}{(YL: #1)}}
+\newcommand{\KA}[1]{\textcolor{Blue}{(KA: #1)}}
+
 
 
 \title{Cosmological simulation in tides}
@@ -86,7 +88,7 @@ tidal mode on a dark matter particle can be absorbed by a coordinate
 transformation
 \begin{equation}
     r_i = a_{ij} x_j,
-    \label{pos}
+    \label{eq:pos}
 \end{equation}
 where $r_i$ is the physical coordinates of the dark matter particle, and
 $a_{ij}$ is a symmetric matrix that absorbs the large-scale strain so that the
@@ -98,7 +100,7 @@ From \eqref{pos} we can immediately separate the physical velocity $u_i$ into
 the expansion of a local background and a peculiar component.
 \begin{equation}
     u_i \equiv \dot r_i = H_{ij} r_j + v_i,
-    \label{vel}
+    \label{eq:vel}
 \end{equation}
 where the overdot denotes time derivative, $H_{ij} \equiv \dot a_{ik}
 [a^{-1}]_{kj}$ describes a local anisotropic Hubble expansion, and $v_i\equiv
@@ -107,7 +109,7 @@ a_{ij}\dot x_j$ is the peculiar velocity.
 The dark matter particle follows the Newtonian equation of motion
 \begin{equation}
     \dot u_i = - \frac{\partial}{\partial r_i} (\Phi + \phi).
-    \label{acc}
+    \label{eq:acc}
 \end{equation}
 Plugging \eqref{vel} into \eqref{acc}, the acceleration also splits into
 a local background expansion and a peculiar piece,
@@ -115,16 +117,16 @@ which are respectively driven by an effective background potential $\Phi$ and
 a peculiar potential $\phi$
 \begin{align}
     \ddot a_{ik} [a^{-1}]_{kj} r_j &= - \partial\Phi / \partial r_i,
-    \label{Friedmann} \\
+    \label{eq:Friedmann} \\
     H_{ij} v_j + \dot v_i &= - \partial\phi / \partial r_i.
-    \label{pecvel}
+    \label{eq:pecvel}
 \end{align}
-One can identify \eqref{Friedmann} with a modified Friedmann equation.
+One can identify \eqref{eq:Friedmann} with a modified Friedmann equation.
 The background potential $\Phi$ absorb the large-scale stress due to the long
 modes, so that the peculiar potential is sourced only by the local structures
 \begin{equation}
     \nabla_\vr^2 \phi = 4\pi G \rhobarm (1 + \Delta_0) \delta,
-    \label{poisson}
+    \label{eq:poisson_local}
 \end{equation}
 where $\rhobarm$ is the mean density of matter, $\Delta_0$ is the
 local mean overdensity relative to $\rhobarm$
@@ -155,31 +157,28 @@ The approximation holds at sufficiently high redshift when $\Delta_i \ll 1$
 even if it becomes nonlinear later.
 
 In order to determine the evolution of $\Delta_i$ in the presence of the large-scale tides $\tau_{ij}={\rm diag}(\tau_1,\tau_2,\tau_3)$,
-\YL{$\tau_{ij} \equiv \partial_i \partial_j \nabla^{-2} \delta_\mathrm{long}$, alternatively the traceless version
-$\tau_{ij} \equiv (\partial_i \partial_j \nabla^{-2} - \frac13\delta_{ij}) \delta_\mathrm{long}$}
 we consider the effective background potential as
 \begin{align}
-    \Phi = \frac{2}{3}\pi G(\bar{\rho}+3\bar{\cal P}) r_i^2
-            +2 \pi G\bar{\rho}_m(1+\Delta_0)\tau_i r_i^2,
+    \Phi = \frac{2}{3}\pi G\bar{\rho}_{\rm m}(1+\Delta_0) r_i^2 - \frac{\Lambda}{6}r_i^2
+            +2 \pi G\bar{\rho}_{\rm m}\tau_i r_i^2,
             \label{eq:ani_phi_background}
 \end{align}
-\YL{Maybe we shouldn't have 3 in the denominator of the second term.}
 where the second term corresponds to the potential sourced by the long-wavelength tidal mode.
 Note that we include the mean density modulation, $(1+\Delta_0)$,
 which is determined through Eq.~\eqref{eq:D0=det}.
-One can easily verify substituting the first term into Eq.~(\ref{Friedmann})
-gives rise to the usual Friedmann equation.
-Plugging Eq.~\eqref{eq:ani_phi_background} into Eq.~\eqref{Friedmann}
+One can easily verify substituting the first two term without $(1+\Delta_0)$
+into Eq.~(\ref{eq:Friedmann}) gives rise to the usual Friedmann equation.
+Plugging Eq.~\eqref{eq:ani_phi_background} into Eq.~\eqref{eq:Friedmann}
 and using the usual Friedmann equation,
 we derive
 \begin{align}
     \ddot \Delta_i + 2H\dot \Delta_i
-    = -4\pi G \bar{\rho}_m (1+\Delta_0)\tau_i (1+\Delta_i).
+    = -4\pi G \bar{\rho}_m\left(\tau_i + \frac{1}{3}\Delta_0\right) (1+\Delta_i).
     \label{eq:Deltai_eq}
 \end{align}
 This is analogous equation for the modified scale factors to Eq.~(10) in Ref.~\cite{Wagner_etal:2014},
 while they consider the isotropic modulation.
-\YL{Similarly we shouldn't have 3 in the denominator here.}
+Indeed, setting $\tau_i=0$ reproduces Eq.~(10) in Ref.~\cite{Wagner_etal:2014}.
 Linerizing Eq.~\eqref{eq:Deltai_eq} yields
 \begin{align}
  \ddot \Delta_i + 2H\dot \Delta_i
@@ -193,18 +192,43 @@ Thus, at linear order we get
 \begin{align}
 \Delta_i(t) = -\tau_i(t) \propto D(t).
 \end{align}
-For later convinience, we compute the second order solution in the Einstein de-Sitter universe.
-The second order equation is given by
-\begin{align}
- \ddot \Delta^{(2)}_i + 2H\dot \Delta^{(2)}_i
- = \frac{3}{2}H^2\Omega_{\rm m}\left(\Delta^{(1)}_i\right)^2,
- \label{eq:Deltai_2nd_eq}
-\end{align}
-where we set $\tau_i = -\Delta_i^{(1)} $, which is valid at this order.
-The solution for Eq.\eqref{eq:Deltai_2nd_eq} is found to be
-\begin{align}
-\Delta_i^{(2)} = \frac{1}{2}\left[ \Delta_i^{(1)} \right]^2.
-\end{align}
+\KA{
+The second order solution should be $\Delta^{(2)}_0 = \frac{2}{7}\sum_i\tau_i^2$ and I checked it numerically, but I cannot derive it by now.
+}
+\YL{
+At second order
+\begin{equation}
+    \ddot\Delta_i^{(2)} + 2H \dot\Delta_i^{(2)}
+    = 4\pi G \bar\rho_m \Bigl( {\Delta_i^{(1)}}^2 - \frac13 \Delta_0^{(2)} \Bigr)
+\end{equation}
+Use
+\begin{equation}
+    \Delta_0^{(2)} = - \sum_i \Delta_i^{(2)}
+    + \sum_{i<j} \Delta_i^{(1)} \Delta_j^{(1)} + \sum_i {\Delta_i^{(1)}}^2
+    = - \sum_i \Delta_i^{(2)} + \frac12 \sum_i {\Delta_i^{(1)}}^2
+\end{equation}
+Sum over $i$ of the first equation and then plug in the second one, we can show that
+at matter-dominated era
+\begin{equation}
+    \sum_i \Delta_i^{(2)} = \frac3{14} \sum_i {\Delta_i^{(1)}}^2
+\end{equation}
+therefore
+\begin{equation}
+    \Delta_0^{(2)} = \frac27 \sum_i {\Delta_i^{(1)}}^2
+\end{equation}
+}
+%For later convinience, we compute the second order solution in the Einstein de-Sitter universe.
+%The second order equation is given by
+%\begin{align}
+% \ddot \Delta^{(2)}_i + 2H\dot \Delta^{(2)}_i
+% = \frac{3}{2}H^2\Omega_{\rm m}\left(\Delta^{(1)}_i\right)^2,
+% \label{eq:Deltai_2nd_eq}
+%\end{align}
+%where we set $\tau_i = -\Delta_i^{(1)} $, which is valid at this order.
+%The solution for Eq.\eqref{eq:Deltai_2nd_eq} is found to be
+%\begin{align}
+%\Delta_i^{(2)} = \frac{1}{2}\left[ \Delta_i^{(1)} \right]^2.
+%\end{align}
 For anisotropic simulations we compute the anisotropic scale factor
 by solving Eq.\eqref{eq:Deltai_eq} numerically.
 
@@ -222,116 +246,108 @@ for the unit mass.
 \label{sub:lpt}
 
 In the presence of long modes, we solve the anisotropic perturbations to the
-Lagrangian displacement with the Zel'dovich approximation (or linear Lagrangian
-perturbation theory), which we will use later to generate the initial
-conditions.
+Lagrangian displacement with the second order Lagrangian perturbation theory,
+which we will use later to generate the initial conditions.
 
-Alternatively one can parametrize the remaining 3 degrees of freedom of the
-background strain by its isotropic dilation and shears \cite{BondMyers96I},
-with the former being approximately the negative mean overdensity
-\begin{align}
-    -\Delta_0 &\simeq \Delta_1 + \Delta_2 + \Delta_3, \nonumber\\
-    \Delta_\mathrm{e} &\equiv \frac{\Delta_1 - \Delta_2}2, \nonumber\\
-    \Delta_\mathrm{p} &\equiv \Delta_3 - \frac{\Delta_1 + \Delta_2}2.
-\end{align}
-The subscripts of the two shear modes stand for ellipticity and
-prolaticity\footnote{We do not impose ordering on $\vDelta$ to compress the
-parameter space (cf.\ \cite{BondMyers96I}).}.
-
-The displacement field $\Psi(\vq)$ is a mapping from a particle's Lagrangian
-position $q_i$ to its Eulerian position $x_i$
+Let us start with the Zel'dovich approximation (or linear Lagrangian
+perturbation theory)~\cite{Zeldovich:1969}.
+The displacement field $\Psi({\vq})$ is a mapping from a particle's Lagrangian
+position $q_i$ to its Eulerian position $x_i$:
 \begin{equation}
-    x_i = q_i + \Psi_i(\vq),
-    \label{disp}
+    x_i = q_i + \Psi_i({\vq}),
+    \label{eq:disp}
 \end{equation}
 whose determinant is related to overdensity by
 \begin{equation}
-    \delta = \Bigl| \frac{\partial\vx}{\partial\vq} \Bigr|^{-1} - 1
+    \delta = \Bigl| \frac{\partial{\vx}}{\partial{\vq}} \Bigr|^{-1} - 1
     \simeq - \Psi_{i,i}^{(1)},
-    \label{J}
+    \label{eq:J}
 \end{equation}
-where $\Psi_{i,j} \equiv \partial\Psi_i / \partial q_j$, and we've only kept
+where $\Psi_{i,j} \equiv \partial\Psi_i / \partial q_j$, and we have only kept
 the leading order term in the second equality.
-Substitute \eqref{disp} into \eqref{pecvel} to derive
+Substitute Eq.~\eqref{eq:disp} into Eq.~\eqref{eq:pecvel} to derive
 \begin{equation}
     \ddot \Psi_i^{(1)} + 2 H_i \dot \Psi_i^{(1)} = - \frac1{a_i}
-    \frac{\partial\phi}{\partial r_i}.
+    \frac{\partial\Phi}{\partial r_i}.
 \end{equation}
 Take gradient of $x_i$ on both sides and then sum over $i$
 \begin{equation}
-    \ddot \Psi_{i,i}^{(1)} + 2 H_i \dot \Psi_{i,i}^{(1)} \simeq - \nabla_\vr^2 \phi
-    \simeq \frac{3\Omega_\mathrm{m} H_0^2}{2 a^3} (1 + \Delta_0) \Psi_{i,i}^{(1)},
-    \label{disp_evo}
+    \ddot \Psi_{i,i}^{(1)} + 2 H_i \dot \Psi_{i,i}^{(1)} \simeq - \nabla_{\vr}^2 \Phi
+    \simeq \frac{3}{2}H^2 \Omega_{\rm m}(a)  (1 + \Delta_0)\Psi_{i,i}^{(1)},
+ %   \frac{3\Omega_\mathrm{m} H_0^2}{2 a^3} (1 + \Delta_0),
+    \label{eq:disp_evo}
 \end{equation}
-in which we have used \eqref{poisson}, \eqref{J}, and the fact that at leading
-order $\partial\Psi_i^{(1)} / \partial x_i \simeq \Psi_{i,i}^{(1)}$.
+in which we have used Eqs.~\eqref{eq:poisson_local}, \eqref{eq:J}, and the fact that at leading
+order $\partial\Psi_i^{(1)} / \partial x_i \simeq \Psi_{i,i}^{(1)}$
+and $\Omega_{\rm m}(a) =  \Omega_{\rm m}H_0^2/a^3H^2$.
 In the linear order the vorticity in $\Psi_{i,j}^{(1)}$ decays, so the displacement
 is a potential flow $\Psi_i^{(1)} = - \partial\psi^{(1)}/ \partial q_i \equiv -\psi_{,i}^{(1)}$
 with the displacement potential $\psi^{(1)}$ sourced by the overdensity in Lagrangian
-space
+space:
 \begin{equation}
-    \nabla_\vq^2 \psi^{(1)} \simeq \delta^{(1)},
+    \nabla_{\vq}^2 \psi^{(1)} \simeq \delta^{(1)}.
 \end{equation}
-where $\delta^{(1)}$ is the linear density field in Lagrangian space.
-Rewrite \eqref{disp_evo} with $\psi$ in Fourier space, and change its time
-variable to $\ln a$
+Rewriting Eq.~\eqref{eq:disp_evo} with $\psi$ in Fourier space yields
 \begin{equation}
-    \psi^{(1)\prime\prime} + \Bigl( 2 \frac{H_i \hat p_i^2} H + \frac{H'} H \Bigr) \psi^{(1)\prime}
+   \ddot \psi^{(1)} + 2 H_i \hat p_i^2   \dot\psi^{(1)}
     - \frac32 \Omega_\mathrm{m}(a) (1 + \Delta_0) \psi^{(1)} = 0,
     \label{pot_evo}
 \end{equation}
-where $\hat p_i$ denotes the unit vector or direction cosine of the wavevector
-in the Lagrangian space, and $\Omega_\mathrm{m}(a) \equiv \Omega_\mathrm{m}
-H_0^2 / a^3 H^2$.
+where $\hat p_i$ denotes the unit vector of the wavevector
+in the Lagrangian space.
+%, and $\Omega_\mathrm{m}(a) \equiv \Omega_\mathrm{m}
+%H_0^2 / a^3 H^2$.
 The above equation describes the linear growth of the displacement field, on
 which the effect of the long modes manifests in the quadrupolarly
 direction-dependent Hubble drag and the coefficients that depend on the growth
-history of the long modes $\Delta_i(a)$.
+history of the long modes $\Delta_i$(t).
 
-Apparently without the long modes the evolution in \eqref{pot_evo} reduces to
-that of the usual linear growth function $D(a)$
-\begin{equation}
-    D^{(1)\prime\prime} + \Bigl( 2 + \frac{H'} H \Bigr) D^{(1)\prime}
-    - \frac32 \Omega_\mathrm{m}(a) D^{(1)} = 0,
-    \label{D}
-\end{equation}
-In the presence of the long modes, the growth function $D^{(1)}_W(a, \hat\vp)$
-receives corrections of order $\order(\Delta_i)$.
-The subscript $W$ here and throughout denotes locally averaged quantities
+Apparently without the long modes the evolution described by Eq.~\eqref{pot_evo} reduces to
+that of the usual linear growth function $D(t)$,
+\begin{align}
+    \ddot{D}^{(1)} + 2H\dot{D}^{(1)} -\frac{3}{2}\Omega_{\rm m}(a)D^{(1)}{(t)}=0.
+    \label{eq:linear_growth_function}
+\end{align}
+In the presence of the long modes, the growth function $D^{(1)}_W(a, \hat{p})$
+receives corrections of order ${\cal O}(\Delta_i)$.
+The subscript $W$ here
+denotes locally averaged quantities
 defined in a \emph{window} with non-vanishing long modes.
-Let $\epsilon^{(1)}(a, \hat\vp) \equiv D^{(1)}_W - D^{(1)}$. It follows
+Let $\epsilon^{(1)}(a, \hat{\vp}) \equiv D^{(1)}_W - D^{(1)}$. It follows
 \begin{equation}
-    \epsilon^{(1)\prime\prime} + \Bigl( 2 + \frac{H'} H \Bigr) \epsilon^{(1)\prime}
-    - \frac32 \Omega_\mathrm{m}(a) \epsilon^{(1)}
+    \ddot \epsilon^{(1)} +2H \dot \epsilon^{(1)}
+    - \frac32 \Omega_{\rm m}(a) \epsilon^{(1)}
     \simeq
-    - 2 D^{(1)\prime} \hat p_i^2 \Delta_i' + \frac32 \Omega_\mathrm{m}(a) D^{(1)} \Delta_0.
+    - 2\dot D^{(1)} \hat p_i^2 \dot \Delta_i + \frac32 \Omega_{\rm m}(a) D^{(1)} \Delta_0.
 \end{equation}
 To solve this equation we can first decompose it as
 \begin{equation}
-    \epsilon^{(1)}(a, \hat\vp) = \hat p_i^2 \epsilon^{(1)}_i(a),
+    \epsilon^{(1)}(a, \hat{\vp}) = \hat p_i^2 \epsilon^{(1)}_i(a),
     \label{e}
 \end{equation}
 with each component $\epsilon^{(1)}_i(a)$ solves
 \begin{equation}
-    \epsilon_i^{(1)\prime\prime} + \Bigl( 2 + \frac{H'} H \Bigr) \epsilon_i^{(1)\prime}
-    - \frac32 \Omega_\mathrm{m}(a) \epsilon_i^{(1)}
-    = - 2 D^{(1)\prime} \Delta_i' + \frac32 \Omega_\mathrm{m}(a) D^{(1)} \Delta_0.
-    \label{ei}
+    \ddot \epsilon_i^{(1)} + 2H \dot \epsilon_i^{(1)}
+    - \frac32 \Omega_{\rm m}(a)\epsilon_i^{(1)}
+    = - 2 \dot D^{(1)} \dot \Delta_i + \frac32 \Omega_{\rm m}(a) D^{(1)} \Delta_0.
+    \label{eq:ei}
 \end{equation}
 For the simplest scenarios we assume that the universe has been matter
-dominated ($H'/H = -3/2$ and $\Omega_\mathrm{m}(a) = 1$) for long enough and
-that the long modes are well sub-horizon ($\Delta_0, \Delta_i \propto D$), so
-that we can set up the initial conditions of the linear growth equations
-\eqref{D} and \eqref{ei} as
+dominated ($H = 2/3t$ and $\Omega_{\rm m}(a) = 1$) for long enough and
+that the long modes are well sub-horizon ($\Delta_0, \Delta_i \propto D^{(1)}$), so
+that at the Zel'dovich approximation we can set up the initial conditions of the linear growth equations
+Eqs.~\eqref{eq:linear_growth_function} and \eqref{eq:ei} as
 \begin{align}
-    D^{(1)} &= D^{(1)\prime} = a_\mathrm{ini}, \nonumber\\
-    \epsilon^{(1)}_i &= \frac12 \epsilon^{(1)\prime}_i
-    = -\frac47 \Delta_i D^{(1)} + \frac37 \Delta_0 D^{(1)},
-    \label{ICs}
+    \epsilon^{(1)}_i &=
+    -\frac47 \Delta_i(a_\mathrm{ini}) D^{(1)}(a_\mathrm{ini}) + \frac37 \Delta_0(a_\mathrm{ini}) D^{(1)}(a_\mathrm{ini}),
+    \nonumber\\
+    \frac{\d \epsilon^{(1)}_i}{\d t} &= 2 H(a_{\rm ini})f_1(a_{\rm ini})\epsilon^{(1)}_i,
+    \label{eq:ICs_ZA}
 \end{align}
-at $a_\mathrm{ini}$ deep in the matter dominated era.
+with $f_1\equiv \d \ln D^{(1)}/\d \ln a \simeq $
+at $a_\mathrm{ini}$ deep in the matter-dominated era.
 
-\eqref{ICs} can be directly compared to the results derived with standard
+eq.~\eqref{eq:ICs_ZA} can be directly compared to the results derived with standard
 perturbation theory in an Einstein de-Sitter universe.
 For isotropic perturbation, $\Delta_i = - \Delta_0 / 3$, so $D^{(1)}_W = D^{(1)} (1 + 13
 \Delta_0 / 21)$.
@@ -351,13 +367,14 @@ Keeping up to the second order terms, we find
     \\
 &\left[ \delta_{ij} + \Psi_{i,j} \right]^{-1} \simeq \delta_{ij} - \Psi_{i,j}^{(1)},
 \end{align}
-leading to the second order equation
+leading to the second-order equation
 \begin{align}
 \ddot \Psi^{(2)}_{i,i} &+ 2H_i\dot \Psi^{(2)}_{i,i} -\frac32 H^2\Omega_{\rm m}(a)(1+\Delta_0)\Psi_{i,i}^{(2)}
     \nonumber\\
     &= -\Psi_{i,i}^{(1)}\left[\ddot \Psi^{(1)}_{j,j} + 2H_i\dot \Psi_{j,j}^{(1)} \right]
     + \Psi_{i,j}^{(1)}\left[\ddot \Psi^{(1)}_{i,j} + 2H_i\dot \Psi_{i,j}^{(1)} \right]
-    + \frac32 H^2 \Omega_{\rm m}(a) (1+\Delta_0)
+    \nonumber\\
+    &\hspace{1cm}+ \frac32 H^2 \Omega_{\rm m}(a) (1+\Delta_0) 
     \left[\frac12\left(\Psi_{i,i}^{(1)}\right)^2 - \frac12\Psi_{i,j}^{(1)}\Psi_{j,i}^{(1)}  \right].
 \end{align}
 Similar to the linear order, we introduce the second order displacement potential
@@ -404,18 +421,20 @@ Although the modified second order growth factor, $D^{(2)}_W$, due to the long m
 \subsection{Power spectrum responses}
 \label{sub:resp}
 
-We recycle the symbol $\vp$ here to Eulerian space to denote the wavevector in
-local comoving coordinates, as it coincides with the Lagrangian space
+In this section, we intoduce the power spectrum responses to the long-wavelength modes,
+which describe how the local quantities differ from the global ones.
+We recycle the symbol $\vp$ here to Eulerian\KA{Lagrangian?} space to denote the wavevector in
+local comoving coordinates, as it coincides with the Lagrangian\KA{Eulerian?}  space
 wavevector in the large scale limit.
 
-Multipole expansion
+We consider the multipole expansions of the power spectrum responses as follows,
 \begin{align}
     - \frac{\partial\ln P}{\partial\Delta_i} \bigg|_\vk
     &\equiv R^\Euler_0(k) + \L_2(\hat k_i) R^\Euler_2(k), \nonumber\\
     - \frac{\partial\ln P_W}{\partial\Delta_i} \bigg|_\vp
     &\equiv R^\Lagrange_0(p) + \L_2(\hat p_i) R^\Lagrange_2(p),
 \end{align}
-holding the other two $\Delta_j$'s ($j \neq i$) fixed.
+where holding the other two $\Delta_j$'s ($j \neq i$) fixed.
 $\L_2$ is the second order Legendre polynomial.
 Similar to the decomposition of halo biases, we name the Eulerian and
 Lagrangian responses, and distinguish them with superscripts.
@@ -426,20 +445,20 @@ initial conditions in the Lagrangian space.
 The two are related by the conversion with the global and local scale factors
 \begin{equation}
     p_i = \frac{a_i}a k_i = (1 + \Delta_i) k_i,
+    \label{eq:k_p_relation}
 \end{equation}
 so that $\vk = \vp$ when $\vDelta = \bm0$.
 Consider the change of reference density and the conservation of variance when
 transforming between Fourier-space volume elements
 \begin{equation}
-    P \,\d^3\vk = (1 + \Delta_0)^2 P_W \,\d^3\vp,
+    P (\vk;\vDelta)\,\d^3\vk = (1 + \Delta_0)^2 P_W(\vp;\vDelta) \,\d^3\vp,
 \end{equation}
-so
+which leads to
 \begin{equation}
-    P = (1 + \Delta_0) P_W
+    P (\vk;\vDelta)= (1 + \Delta_0) P_W(\vp;\vDelta).
+    \label{eq:P_PW_relation}
 \end{equation}
-
-$P_W(\vp, \vDelta)$
-
+Using Eqs.\eqref{eq:k_p_relation} \eqref{eq:P_PW_relation}, we find
 \begin{align}
     - \frac{\partial\ln P}{\partial\Delta_i} \bigg|_\vk
     = 1 - \frac{\partial\ln P_W}{\partial\Delta_i} \bigg|_\vk
@@ -453,22 +472,14 @@ $P_W(\vp, \vDelta)$
     - \frac13 \frac{\d\ln P}{\d\ln k}
     - \L_2(\hat k_i) \frac23 \frac{\d\ln P}{\d\ln k},
 \end{align}
-where $\hat k_i = k_i / k$.
-Therefore
+with $\hat k_i = k_i / k$.
+Therefore, the Eularian response and Lagrangian response are related through
 \begin{align}
     R^\Euler_0 &= 1 + R^\Lagrange_0 - \frac13 \frac{\d\ln P}{\d\ln k},
     \nonumber\\
     R^\Euler_2 &= R^\Lagrange_2 - \frac23 \frac{\d\ln P}{\d\ln k}.
 \end{align}
-
-For either response
-\begin{align}
-    R_0 &= R_0, \nonumber\\
-    R_\mathrm{e}
-    &= - \bigl(\L_2(\hat p_1) - \L_2(\hat p_2)\bigr) R_2, \nonumber\\
-    R_\mathrm{p} &= - \L_2(\hat p_3) R_2.
-\end{align}
-In the linear regime $P_W \propto D_W^2$ and
+In the linear regime we have $P_W \propto D_W^2$ and we have derived the modified growth factor $D_W$ in the previous subsection,
 \begin{equation}
     D_W = D \Bigl( 1 + \frac{13}{21} \Delta_0
     - \frac8{21} \L_2(\hat p_i) \Delta_i \Bigr),
@@ -488,19 +499,45 @@ in the previous works for example \cite{LiSchmittfullSeljak17}\footnote{In
 dimensionless power spectrum, thus the constant terms become $47/21 \to 68/21$
 and $16/21 \to 58/21$ there.}.
 
+So far, we used $\Delta_1$, $\Delta_2$, and $\Delta_3$ to parametrize the remaining 3 degrees of freedom of the
+background strain.
+Alternatively one can parametrize it
+ by its isotropic dilation and shears \cite{BondMyers96I},
+with the former being approximately the negative mean overdensity
+\begin{align}
+    -\Delta_0 &\simeq \Delta_1 + \Delta_2 + \Delta_3, \nonumber\\
+    \Delta_\mathrm{e} &\equiv \frac{\Delta_1 - \Delta_2}2, \nonumber\\
+    \Delta_\mathrm{p} &\equiv \Delta_3 - \frac{\Delta_1 + \Delta_2}2.
+\end{align}
+The subscripts of the two shear modes stand for ellipticity and
+prolaticity\footnote{We do not impose ordering on $\vDelta$ to compress the
+parameter space (cf.\ \cite{BondMyers96I}).}.
+
+For either response we have
+\begin{align}
+    R_0 &= R_0, \nonumber\\
+    R_\mathrm{e}
+    &= - \bigl(\L_2(\hat p_1) - \L_2(\hat p_2)\bigr) R_2, \nonumber\\
+    R_\mathrm{p} &= - \L_2(\hat p_3) R_2.
+\end{align}
+
 \HL{Should there be $R_\ell$ with $\ell>2$? Taylor expansion suggests
 no. But deep in nonlinear structures?}
+\KA{I think there appears $R_{\ell >2}$ if considering 2nd order response. See 1703.09212.}
 
 
 
 \section{Numerical implementation}
 \label{sec:num}
-
+In this section, we describe how to modify
+the comsmological $N$-body simulation code \texttt{L-Gadget2}~\cite{Springel:2005},
+to perform the cosmological simulation in an anisotropic expanding universe.
 
 
 \subsection{Initial conditions}
 \label{sub:ics}
 
+\KA{Almost written in Sec.2.2?}
 
 
 \subsection{Forces}
@@ -519,38 +556,48 @@ BaglaRay03}
     \erfc \Bigl( \frac{|\vx-\vx_n|}{2 \xs} \Bigr)
 \end{align}
 where $\xs$ is the comoving scale of force splitting,
+$\vx_n$ denotes the position of the $n$-th particle,
 and
 \begin{equation}
     \rhobarm \bigl( 1 + \delta(\vx) \bigr)
-    = \frac{m}{a^3} \sum_n \deltaD(\vx-\vx_n)
+    = \frac{m}{a^3} \sum_n \deltaD(\vx-\vx_n).
 \end{equation}
-And the acceleration due to the tree force
+Since the Fourier transform of $e^{- k^2 x_s^2} / k^2$ is ${\rm erf}(x / x_s) / 4\pi x$,
+one can verify the force splitting with the convolution theorem.
+The acceleration due to the tree force is
 \begin{equation}
     - \nabla_\vx \phi^\Tree = - \frac{G m}a \sum_n
     \frac{\vx - \vx_n}{|\vx - \vx_n|^3}
     \biggl[ \erfc \Bigl( \frac{|\vx - \vx_n|}{2 \xs} \Bigr)
             + \frac{|\vx - \vx_n|}{\xs \sqrt\pi}
-            \exp \Bigl( - \frac{|\vx - \vx_n|^2}{4 \xs^2} \Bigr) \biggr]
+            \exp \Bigl( - \frac{|\vx - \vx_n|^2}{4 \xs^2} \Bigr) \biggr].
 \end{equation}
 
-The modified Poisson equation
+Now let us consider how this conventional TreePM algorithm is modified
+in an anisotropically expamding universe.
+
+The modified Poisson equation Eq.~\eqref{eq:poisson_local},
 \begin{equation}
-    (1+\Delta_i)^{-2} \frac{\partial^2}{\partial x_i^2} \phi
+    (1+\Delta_i)^{-2} \frac{\partial^2}{\partial x_i^2} \phi^{\rm PM}
     = 4\pi G \rhobarm a^2 (1 + \Delta_0) \delta.
 \end{equation}
-Compare to the usual case, we modify the TreePM algorithm
+leads us to modify the TreePM potentials as
+%Compare to the usual case, we modify the TreePM algorithm
 \begin{align}
     \phi^\PM(\vp) &= - 4\pi G \rhobarm a^2 (1 + \Delta_0)
         \frac{\delta(\vp)}{k^2} e^{- k^2 \xs^2}, \\
     \phi^\Tree(\vx) &= - \frac{G m}a \sum_n \frac{a}{|\vr - \vr_n|}
-    \erfc \Bigl( \frac{|\vr - \vr_n|}{2 a \xs} \Bigr),
+    \erfc \Bigl( \frac{|\vr - \vr_n|}{2 a \xs} \Bigr).
 \end{align}
-and recall that $k_i = p_i / (1 + \Delta_i)$ is the global comoving wavevector
+Recall that $k_i = p_i / (1 + \Delta_i)$ is the global comoving wavevector
 and $r_i = a_i x_i$ is the physical position.
 Note that to not introduce anisotropic artificial features, we split the force
 isotropically in physical scales, i.e.\ anisotropically in local comoving
 scales.
-And the tree acceleration now is
+Given that the PM grid is now anisotropic in physical scale, having $\xs$
+bigger than the grid size helps to suppress any effect due to such anisotropic
+smoothing at grid scale.
+The tree acceleration now is
 \begin{equation}
     - \frac{\partial\phi^\Tree}{\partial x_i} = - \frac{G m}a \sum_n
     \frac{a a_i [\vr - \vr_n]_i}{|\vr - \vr_n|^3}
@@ -558,19 +605,12 @@ And the tree acceleration now is
             + \frac{|\vr - \vr_n|}{a \xs \sqrt\pi}
             \exp \Bigl( - \frac{|\vr - \vr_n|^2}{4 a^2 \xs^2} \Bigr) \biggr],
 \end{equation}
-
 We adopt the same spline kernel in \texttt{L-Gadget2} to soften the force
 with replacement $\vx \to \vr / a$.
 
 
 
-The Fourier transform of $e^{- k^2 x_s^2} / k^2$ is $\erf(x / x_s) / 4\pi x$.
-One can verify the force splitting with convolution theorem.
 
-
-Given that the PM grid is now anisotropic in physical scale, having $\xs$
-bigger than the grid size helps to suppress any effect due to such anisotropic
-smoothing at grid scale.
 
 
 
@@ -586,48 +626,84 @@ operators
         + \frac{\vP}{m} \int_t^{t+\Delta t} \frac{\d t}{a^2}
 \end{align}
 are derived from canonical transformation.
-$\vP \equiv a^2 m \dot \vx$ is the canonical momentum of the Hamiltonian
+$\vP = a^2 m \dot \vx$ is the canonical momentum of the Hamiltonian
 \begin{equation}
     H = \sum_n \frac{\vP_n^2}{2 m a^2}
     + \sum_{n \neq n'} \frac{m^2 \varphi(\vx_n - \vx_{n'})}{2a},
 \end{equation}
-in which $\varphi$ is the potential of a unit-mass particle at $a=1$
+in which $\varphi$ is the potential of a unit-mass particle at $a=1$:
 \begin{equation}
-    \nabla_\vx^2 \varphi = 4\pi G \Bigl(\deltaD(\vx-\vx') - \frac1{L^3} \Bigr)
+    \nabla_\vx^2 \varphi = 4\pi G \Bigl(\deltaD(\vx-\vx') - \frac1{L^3} \Bigr).
 \end{equation}
 
 For the anisotropic system,
-
-The Hamiltonian leading to the modified EoM is
+%we have the modified canonical momentum $P_i\equiv a_i^2 m \dot x_i$.
+the Hamiltonian leading to the modified EoM Eq.~\eqref{eq:mod_EoM} is
+%\begin{equation}
+%    H = \sum_n \sum_{i=1}^3 \frac{P_{n,i}^2}{2 m a_i^2}
+%    + \sum_{n \neq n'} \frac{G m^2}{2 |\vr_n - \vr_{n'}|}
+%\end{equation}
 \begin{equation}
-    H = \sum_n \sum_{i=1}^3 \frac{P_{ni}^2}{2 m a_i^2}
-    + \sum_{n \neq n'} \frac{G m^2}{2 |\vr_n - \vr_{n'}|}
+    H = \sum_n \sum_{i=1}^3 \frac{P_{n,i}^2}{2 m a_i^2}
+    + \sum_{n \neq n'} \frac{m^2 \varphi({\bf x}_n - {\bf x}_{n'})}{2a},
 \end{equation}
-where $P_{ni}\equiv a_i^2 m \dot x_{ni}$ are the conjugate momenta of $x_{ni}$.
-We use the same the kick and drift operators, which should serve as a good approximation
-to the symplectic time integration,
-as the time dependence in the Hamiltonian has been mostly captured by the global scale
-factor $a$.
+where $P_{n,i}\equiv a_i^2 m \dot x_{n,i}$ are the conjugate momenta of $x_{ni}$.
+Thus we have
+\begin{align}
+    \mathrm{Kick} &: \quad \frac{\vP}m \to \frac{\vP}m
+        - \nabla_{\bf x} \varphi \int_t^{t+\Delta t} \frac{d t}a,  \\
+    \mathrm{Drift} &: \quad x_i \to x_i
+        + \frac{P_i}{m} \int_t^{t+\Delta t} \frac{d t}{a_i^2}.
+\end{align}
+Note that since we have already considered effects of the anisotropic expansion 
+on force (or potential) calculations in the previous subsection, we can use the same kick operators.
+On the other hand, the drift operator should be modified due to the modified canonical momentum.
+
+%We use the same the kick and drift operators, which should serve as a good approximation
+%to the symplectic time integration,
+%as the time dependence in the Hamiltonian has been mostly captured by the global scale
+%factor $a$.
 
 
 
 
 \section{Results}
 \label{sec:results}
+In this section, we describes the parameters of simulations we run and show the results on the power spectrum responses and the halo tidal bias.
 
-
-Power spectrum responses
-
-
+\subsection{Simulation setups}
 Convergence tests: mass res, force res, force split.
+
+We choose the background strain to satisfy
+$\Delta^{(1)}_0=0$ and $\Delta_{\rm e}=0$, so that the remaining degree of freedom is only $\Delta_{\rm p} = 3\Delta_3/2$.
+
+\subsection{Power spectrum responses from simulations}
+In our settings, we can directly measure $R^{\rm L}_{\rm p}$ response, which is given by
+\begin{align}
+-\frac{\partial\ln P_W}{\partial\Delta_{\rm p}} \bigg|_\vp
+    &\equiv R^{\rm L}_{\rm p}
+    = - \L_2(\hat p_3) R^\Lagrange_2(p).
+\end{align}
+In order to extract this response, it is natural to consider the quadrupole of the power spectrum since
+\begin{align}
+P^{\ell=2}_W(p;\Delta_{\rm p}) \equiv 
+5\int_{-1}^{1} \frac{\d\,\hat p_3}{2} P_W(\vp;\Delta_{\rm p}) \L_2(\hat p_3)
+=P(p)R_2^{\rm L}(p)\Delta_{\rm p},
+\end{align}
+due to the orthogonarity of the Legendre polynomials.
+Therefore, the estimator for $R_2^{\rm L}(p)$ can be constructed as 
+\begin{align}
+R_2^{\rm L}(p) = \frac{P_W^{\ell=2}(p;\Delta_p=+\epsilon) - P_W^{\ell=2}(p;\Delta_p=-\epsilon)}{2\epsilon P(p)}.
+\end{align}
+
+
+\subsection{Halo tidal bias}
+
 
 \section{Halo tidal bias}
 \label{sec:bias}
-\begin{align}
-\delta_{\rm h} = b_1 \delta + \frac{b_2}{2}\delta^2 + \frac{b_{s^2}}{2}(s_{ij})^2,
-\end{align}
-where $(s_{ij})^2 \equiv \sum_{ij}s_{ij}s_{ij}$.
 \subsection{recap of $b_1$ and $b_2$ as response bias in separate universe simulations}
+
 \begin{align}
 n_{\ln{M}} = \frac{N(\ln{M})}{V_W},
 \end{align}
@@ -680,9 +756,9 @@ The second order Eulerian bias is defined as
 b_2(M) = \frac{1}{n_{\ln{M}}}\frac{\d^2 n_{\ln{M}}}{\d \Delta_0^2}.
 \end{align}
 Then, similary to the first order case, by using
-$\d/\d\Delta_0^{(1)}=
+$ \d/\d\Delta_0^{(1)}=
 \left.\partial/\partial\Delta_0^{(1)}\right|_{V_W} 
-+\left.\partial/\partial\Delta_0^{(1)}\right|_{N}$, 
++\left.\partial/\partial\Delta_0^{(1)}\right|_{N}$,
 we get
 \begin{align}
 b_2(M)
@@ -704,12 +780,79 @@ b_2(M)
 where we identify the first term in the second line as the second order Lagrangian bias.
 In fact, this term can be directly measured from separate universe simulations in the fixed comoving volume.
 
-\subsection{tidal bias : $b_{s^2}$}
+\begin{align}
+n_{\ln{M}}(\Delta_{0}) \equiv
+\frac{N_{\ln{M}}(\Delta_{0})}{V(\Delta_{0})}
+\end{align}
 
 \begin{align}
-\frac{b_{s^2}(M)}{2} \equiv \frac{\d^2 \delta_{\rm h}}{\d s_{ij}^2} 
-    = \frac{\d^2 \ln{ n_{\ln{M} } }}{\d s_{ij}^2} 
+b^{\rm E}_{1}
+= \frac{1}{n_{\ln{M}}(\Delta_0=0)}
+\frac{n_{\ln{M}}(\Delta_0=\epsilon)
+-
+n_{\ln{M}}(\Delta_0=-\epsilon)
+}{2\Delta_0}
 \end{align}
+
+
+\begin{align}
+b^{\rm L}_{1}
+= \frac{1}{N_{\ln{M}}(\Delta_0=0)}
+\frac{N_{\ln{M}}(\Delta_0=\epsilon)
+-
+N_{\ln{M}}(\Delta_0=-\epsilon)
+}{2\Delta_0}
+\end{align}
+
+
+\begin{align}
+b^{\rm E}_{2}
+= \frac{1}{n_{\ln{M}}(\Delta_0=0)}
+\frac{n_{\ln{M}}(\Delta_0=\epsilon)
++
+n_{\ln{M}}(\Delta_0=-\epsilon)
+-2n_{\ln{M}}(\Delta_0=0)}{\Delta^2_0}
+\end{align}
+
+\begin{align}
+b^{\rm L}_{2}
+= \frac{1}{N_{\ln{M}}(\Delta_0=0)}
+\frac{N_{\ln{M}}(\Delta_0=\epsilon)
++
+N_{\ln{M}}(\Delta_0=-\epsilon)
+-2N_{\ln{M}}(\Delta_0=0)}{\Delta^2_0}
+\end{align}
+
+
+\subsection{tidal bias : $b_{s^2}$}
+
+The tidal bias can also be interpreted as the response of the halo number density
+to the long-wavelength tidal field.
+
+\begin{align}
+n_{\ln{M}}(\Delta_{\rm p}) \equiv
+\frac{N_{\ln{M}}(\Delta_{\rm p})}{V(\Delta_{\rm p})}
+\end{align}
+
+\begin{align}
+b^{\rm E}_{s^2}
+= \frac{1}{n_{\ln{M}}(\Delta_{\rm p}=0)}
+\frac{n_{\ln{M}}(\Delta_{\rm p}=+2\epsilon)
++
+n_{\ln{M}}(\Delta_{\rm p}=-2\epsilon)
+-2n_{\ln{M}}(\Delta_{\rm p}=0)}{3\Delta^2_{\rm p}/8}
+\end{align}
+
+
+\begin{align}
+b^{\rm L}_{s^2}
+= \frac{1}{N_{\ln{M}}(\Delta_{\rm p}=0)}
+\frac{N_{\ln{M}}(\Delta_{\rm p}=+2\epsilon)
++
+N_{\ln{M}}(\Delta_{\rm p}=-2\epsilon)
+-2N_{\ln{M}}(\Delta_{\rm p}=0)}{3\Delta^2_{\rm p}/8}
+\end{align}
+
 
 Since in our anisotropic separate universe simulations we have homogeneous tidal field whose configuration is 
 \begin{align}
