@@ -14,6 +14,7 @@
 \renewcommand{\d}{\mathrm{d}}
 \newcommand{\vr}{{\bm r}}
 \newcommand{\vx}{{\bm x}}
+\newcommand{\vu}{{\bm u}}
 \newcommand{\vq}{{\bm q}}
 \newcommand{\vk}{{\bm k}}
 \newcommand{\vp}{{\bm p}}
@@ -229,6 +230,12 @@ therefore
 %\begin{align}
 %\Delta_i^{(2)} = \frac{1}{2}\left[ \Delta_i^{(1)} \right]^2.
 %\end{align}
+Together with the spherical collapse solution, we have the second order density as
+\begin{align}
+\Delta_0^{(2)} = 
+\frac{17}{21} {\Delta_0^{(1)}}^2 + \frac27 \sum_i {\Delta_i^{(1)}}^2,
+\end{align}
+which is consistent with the standard perturbation theory.
 For anisotropic simulations we compute the anisotropic scale factor
 by solving Eq.\eqref{eq:Deltai_eq} numerically.
 
@@ -371,7 +378,7 @@ where $D_W(t,\hat\vp)$ is the modified linear growth factor.
 Eq.~\eqref{eq:DW} can be directly compared to the results derived with standard
 perturbation theory in an Einstein de-Sitter universe.
 For isotropic perturbation, $\Delta_i = - \Delta_0 / 3$, so $D^{(1)}_W = D^{(1)} (1 + 13
-\Delta_0 / 21)$ and for pure tides, $\Delta_0=0$ and $\Delta_i = -\tau_i$, so $D^{(1)}_W = D^{(1)} (1 + 4 \tau_i / 7)$.
+\Delta_0 / 21)$ and for pure tides, $\Delta_0=0$ and $\Delta_i = -\tau_i$, so $D^{(1)}_W = D^{(1)} (1 + 4\sum_i \tau_i\hat{p}_i^2 / 7)$.
 
 At second order, Keeping up to the second order terms, we have
 \begin{align}
@@ -524,7 +531,6 @@ with the former being approximately the negative mean overdensity
 The subscripts of the two shear modes stand for ellipticity and
 prolaticity\footnote{We do not impose ordering on $\vDelta$ to compress the
 parameter space (cf.\ \cite{BondMyers96I}).}.
-
 For either response we have
 \begin{align}
     R_0 &= R_0, \nonumber\\
@@ -532,6 +538,7 @@ For either response we have
     &= - \bigl(\L_2(\hat p_1) - \L_2(\hat p_2)\bigr) R_2, \nonumber\\
     R_\mathrm{p} &= - \L_2(\hat p_3) R_2.
 \end{align}
+We measure the $R_{\rm p}$ response from our simulations.
 
 \HL{Should there be $R_\ell$ with $\ell>2$? Taylor expansion suggests
 no. But deep in nonlinear structures?}
@@ -541,7 +548,8 @@ no. But deep in nonlinear structures?}
 
 \section{Numerical implementation}
 \label{sec:num}
-In this section, we describe how to modify
+In this section, we describe how to modify the initial condition code 
+\texttt{2LPTic}~\cite{} and 
 the comsmological $N$-body simulation code \texttt{L-Gadget2}~\cite{Springel:2005},
 to perform the cosmological simulation in an anisotropic expanding universe.
 
@@ -549,21 +557,36 @@ to perform the cosmological simulation in an anisotropic expanding universe.
 \subsection{Initial conditions}
 \label{sub:ics}
 
-\KA{Almost written in Sec.2.2?}
 We can set up the initial condition by using the results in Sec.\ref{sub:lpt}.
-We modified \textit{2LPTic} to include the anisotropic expansion.
-that at the Zel'dovich approximation we find
-we can set up the initial conditions of the linear growth equations
-Eqs.~\eqref{eq:linear_growth_function} and \eqref{eq:ei} as
+We implelemted $\epsilon^{(1)}$ and $\epsilon^{(2)}$ field in \texttt{2LPTic},
+to accout the effect of the anisotropic expansion.
+The correction for the initial velocity is also given in term of $\epsilon$.
+At the Zel'dovich approximation since $\epsilon^{(1)}\propto D^{(2)}$, we find
 \begin{align}
-    \epsilon^{(1)}_i &=
-    -\frac47 \Delta_i(a_\mathrm{ini}) D^{(1)}(a_\mathrm{ini}) + \frac37 \Delta_0(a_\mathrm{ini}) D^{(1)}(a_\mathrm{ini}),
-    \nonumber\\
-    \frac{\d \epsilon^{(1)}_i}{\d t} &= 2 H(a_{\rm ini})f_1(a_{\rm ini})\epsilon^{(1)}_i,
-    \label{eq:ICs_ZA}
+    a\dot\epsilon^{(1)}_{,i} &=  H f_2 \epsilon^{(1)}_{,i},
+    \label{eq:vel_ZA}
 \end{align}
-with $f_1\equiv \d \ln D^{(1)}/\d \ln a \simeq [\Omega_m(a)]^{5/9}$
-at $a_\mathrm{ini}$ deep in the matter-dominated era.
+with $f_2\equiv \d \ln D^{(2)}/\d \ln a \simeq 2[\Omega_m(a)]^{6/11}$.
+At the second order, we approximate the time dependence of $\epsilon^{(2)}$ as $D^{(2)}D^{(1)}$, 
+which is exact in the matter-dominated era where $D^{(2)}\propto [D^{(1)}]^2$.
+Under this approximation, the correction of the second order velocity is given by
+\begin{align}
+    a\dot\epsilon^{(2)}_{,i} &=  H (f_1 + f_2 )\epsilon^{(2)}_{,i},
+    \label{eq:vel_2LPT}
+\end{align}
+where $f_1\equiv \d \ln D^{(1)}/\d \ln a \simeq [\Omega_m(a)]^{5/9}$.
+Since we generate the initial condition at $a_\mathrm{ini}$ being deep in the matter-dominated era,
+this approximation should be quit accurate.
+
+There is one other thing to note on the velocity. Here we derive the correction to the peculiar velocity $a\dot \vx$.
+However, \texttt{L-Gadget2} uses the canonical momentum $\vP \equiv a^2m\dot \vx$ as the internal velocity  variable
+and also uses another velocity variable $\vu \equiv a\vx/\sqrt{a}$ when reading the initial condition files.
+Now that we have the scale-dependent scale factors, leading to the modified velocity variables, 
+we have to be careful in these I/O places.
+Thus, we multiplied $\sqrt{1+\Delta_i}$ by $a\dot\Psi_i$ in generating the initial condition and
+then modified the convertion factor $a\sqrt{a}$ from $\vu$ to $\vP$ as $a_i\sqrt{a_i}$,
+which eventually results in the modified canonical momentum $P_i=a_i^2\dot x_i$.
+
 \subsection{Forces}
 \label{sub:treepm}
 
@@ -695,11 +718,39 @@ On the other hand, the drift operator should be modified due to the modified can
 \label{sec:results}
 In this section, we describes the parameters of simulations we run and show the results on the power spectrum responses and the halo tidal bias.
 
-\subsection{Simulation setups}
-Convergence tests: mass res, force res, force split.
+\begin{table}[htb]
+  \centering
+  \begin{tabular}{|c|c|} \hline
+    $\Omega_{\rm m}$ & 0.3089  \\
+    $\Omega_\Lambda$ & 0.6911 \\
+    $h$ & 0.6774 \\
+    $n_s$ & 0.9667 \\
+    $\sigma_8$ & 0.8159 \\
+    \hline
+  \end{tabular} 
+  \caption{Flat $\Lambda$CDM cosmological parameters we ues in this paper.}
+  \label{tab:cosmo_params}
+\end{table}
 
-We choose the background strain to satisfy
-$\Delta^{(1)}_0=0$ and $\Delta_{\rm e}=0$, so that the remaining degree of freedom is only $\Delta_{\rm p} = 3\Delta_3/2$.
+
+\subsection{Simulation setups}
+Our fiducial cosmology is set to be consistent with the Planck 2015 result\cite{} whose parameters are summerized in Tab.~\ref{tab:cosmo_params}.
+For tidal simulations, We chose the background strain to satisfy
+$\Delta^{(1)}_0=0$ and $\tau_{\rm e}=0$, so that the remaining degree of freedom is only $\tau_{\rm p} = 3\tau_3/2$.
+This means the configuration of the strain takes $(\tau_1, \tau_2, \tau_3) = ( -1, -1, +2 )\tau_{\rm p}/3 $.
+For measuring the power spectrum response and the tidal bias, 
+we employ a fiducial simulation with $\tau_{\rm p}=0$ and two pairs with $\tau_{\rm p} = \pm 0.045$. 
+
+The initial conditions are generated at redshift $z_i=49$ using \texttt{CLASS} and the modified \texttt{2LPTIC} with $1024^3$ particles.
+Note that each simulation with different $\tau_{\rm p}$ shares the initial random phases to cnacel the sample variance.
+We then run the modified \texttt{L-Gadget2} with $N_{\rm mesh}=2048^3$ TreePM grid.
+The box size of the simulations is $L = 1~ \mathrm{Gpc}/h$.
+We set the force splitting scale $x_s=6 \times L/N^{1/3}_{\rm mesh}$,
+after the comparison between our simulations with isotropic strain configuration and the usual separate universe simulations,
+which is summerized in Appendix.\ref{app:SU_comp}, 
+
+
+Convergence tests: mass res, force res, force split.
 
 \subsection{Power spectrum responses from simulations}
 In our settings, we can directly measure $R^{\rm L}_{\rm p}$ response, which is given by
@@ -907,6 +958,9 @@ No.~DE-AC02-05CH11231.
 
 \appendix
 
+\section{Comparison between our simulation and the conventional separate universe simulation}
+\label{app:SU_comp}
+In this appendix, we show the 
 
 
 \section{Models}
