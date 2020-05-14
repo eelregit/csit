@@ -557,8 +557,8 @@ to perform the cosmological simulation in an anisotropic expanding universe.
 \subsection{Initial conditions}
 \label{sub:ics}
 
-We can set up the initial condition by using the results in Sec.\ref{sub:lpt}.
-We implelemted $\epsilon^{(1)}$ and $\epsilon^{(2)}$ field in \texttt{2LPTic},
+We can set up the initial condition by using the results derived in Sec.\ref{sub:lpt}.
+We implelemted $\epsilon^{(1)}$ and $\epsilon^{(2)}$ field in \texttt{2LPTIC},
 to accout the effect of the anisotropic expansion.
 The correction for the initial velocity is also given in term of $\epsilon$.
 At the Zel'dovich approximation since $\epsilon^{(1)}\propto D^{(2)}$, we find
@@ -773,6 +773,18 @@ R_2^{\rm L}(p) = \frac{P_W^{\ell=2}(p;\Delta_p=+\epsilon) - P_W^{\ell=2}(p;\Delt
 
 
 \subsection{Halo tidal bias}
+-Halo fiding
+-abumdance matching
+\begin{align}
+\d^3\vq &= [1+\Delta_0]\d^3\vx 
+\\
+[1+\delta^{\rm L}_{\rm h}(\vq)]\d^3\vq &= [1+\delta^{\rm E}_{\rm h}(\vx)]\d^3\vx
+\end{align}
+leading to the consistency of bias
+\begin{align}
+b^{\rm E}_{s^2} = b^{\rm L}_{s^2} -\frac{2}{7}b_1^{\rm L}
+\end{align}
+
 
 
 \section{Halo tidal bias}
