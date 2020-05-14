@@ -591,7 +591,7 @@ void displacement_fields(void)
 		      cepsi2[axes][coord].re = cepgrad[3][coord].im * kvec[axes] / kmag2
 		      								- (3./7.)* (tides2 + trace/6. )* cdisp2[axes][coord].re;
 		      cepsi2[axes][coord].im = -cepgrad[3][coord].re * kvec[axes] / kmag2
-		      								- (3./7.)* (tides2 + trace/6. )* cdisp2[axes][coord].im;
+		      								 (3./7.)* (tides2 + trace/6. )* cdisp2[axes][coord].im;
 		    }
 		  else
 		    {
