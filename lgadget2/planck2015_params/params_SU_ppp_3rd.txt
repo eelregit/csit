@@ -1,0 +1,98 @@
+%  Example parameterfile for L-Gadget2
+
+%  File name parameters:
+
+InitCondFile    /mnt/sdceph/users/yinli/csit/planck2015/1000/1991/ppp0004/SU_test/ic/ic
+OutputDir    /mnt/sdceph/users/yinli/csit/planck2015/1000/1991/ppp0004/SU_test/nbody/
+
+
+EnergyFile        energy.txt
+InfoFile          info.txt
+TimingsFile       timings.txt
+CpuFile           cpu.txt
+
+RestartFile       restart
+SnapshotFileBase  snap
+
+AniFile			/home/yinli/csit/lgadget2/Aniss/Aniss_iso_z200
+
+% CPU-time limit
+
+TimeLimitCPU      120960
+ResubmitOn        0
+ResubmitCommand   xyz
+
+CpuTimeBetRestartFile  7200.0
+
+
+MaxMemSize        10000.0  % maximum allowed memory ceiling per CPU
+
+% Code options
+
+ICFormat              1       % only 1 is presently supported
+SnapFormat            1       % only 1 is presently supported
+
+NumFilesWrittenInParallel 8   % maximum number of files for which
+                              % simultaneous I/O is done
+
+
+%  Characteristics of run
+
+TimeBegin           0.02
+TimeMax	            0.995990
+
+Omega0	              0.311353
+OmegaLambda           0.696587
+OmegaBaryon           0.04860
+HubbleParam           0.674727
+
+BoxSize         996.054
+
+Softening             0.039
+SofteningMaxPhys      0.039
+
+% Output frequency
+
+OutputListFilename  output_times_SU.txt
+OutputListOn        1
+
+TimeBetSnapshot        0
+TimeOfFirstSnapshot    0
+
+TimeBetStatistics      0.1
+
+
+% Accuracy of time integration
+
+ErrTolIntAccuracy       0.05
+
+MaxSizeTimestep        0.025
+MinSizeTimestep        0
+MaxRMSDisplacementFac  0.25
+
+
+% Tree algorithm and force accuracy
+
+ErrTolTheta            0.5
+TypeOfOpeningCriterion 1
+ErrTolForceAcc         0.005
+
+
+% Parameters that affect memory usage of the code
+
+PartAllocFactor       2.0
+TreeAllocFactor       1.5
+
+BufferSize            50  % in MByte
+
+% System of units
+
+UnitLength_in_cm         3.085678e24        ;  1.0 Mpc
+UnitMass_in_g            1.989e43           ;  1.0e10 solar masses
+UnitVelocity_in_cm_per_s 1e5                ;  1 km/sec
+GravityConstantInternal  0
+
+
+
+
+
