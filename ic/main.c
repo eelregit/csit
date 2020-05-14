@@ -784,7 +784,7 @@ void displacement_fields(void)
 
 #ifdef ONLY_ZA
 		  P[n].Pos[axes] += dis + eps;
-		  P[n].Vel[axes] = (dis + 2. * eps) * vel_prefac/sqrt(1.-lambda[axes]);
+		  P[n].Vel[axes] = (dis + 2. * eps) * vel_prefac*sqrt(1.-lambda[axes]);
 #else
 		  P[n].Pos[axes] += dis + eps - 3./7. * dis2 + eps2;
 		  P[n].Vel[axes] = (dis + 2. * eps) * vel_prefac * sqrt(1.-lambda[axes]) 
