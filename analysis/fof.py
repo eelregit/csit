@@ -77,6 +77,6 @@ if __name__ == "__main__":
 #        for filename in ['iso', 'mmp001', 'ppm001', 'mmp002', 'ppm002', 'mmp005', 'ppm005', 'mmp008', 'ppm008' , 'mmp01', 'ppm01', 'mmp02', 'ppm02', 'mmp03', 'ppm03' , 'mmp04', 'ppm04', 'mmm0004', 'ppp0004', 'mmm0008', 'ppp0008', 'mmm001', 'ppp001','mmm002', 'ppp002','mmm003', 'ppp003','mmm007', 'ppp007','mmm01', 'ppp01']:
 #        for filename in ['iso', 'ppp0004', 'mmm0004', 'ppp007', 'mmm007', 'mmp01', 'ppm01', 'mmp001', 'ppm001']:
 #       for filename in ['mmm003', 'ppp007', 'mmm007', 'ppp0004', 'mmm0004', 'mmp01', 'ppm01', 'm01m01p01', 'p01p01m01', 'm002m002p013', 'm008m008p007', ]:
-#        for filename in ['iso', 'ppp003', 'mmm003', 'ppp007', 'mmm007', 'ppp0004', 'mmm0004']:
-        for filename in ['iso']:
+        for filename in ['iso', 'ppp003', 'mmm003', 'ppp007', 'mmm007', 'ppp0004', 'mmm0004']:
+#        for filename in ['iso']:
             compute_fof(filename, seed_num)

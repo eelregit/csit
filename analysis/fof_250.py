@@ -16,27 +16,11 @@ for i in range(1991, 1991+1):
     seedlist.append(str(i))
 
 force = 'treepm2048'
-box = 1000
+box = 250
 
 comm = CurrentMPIComm.get()
 print(f'rank: {comm.rank} / {comm.size}', flush=True)
 setup_logging("debug")
-
-def dh(kind):
-    if kind=='iso':
-        return 1.
-    elif kind=='ppp0004':
-        return 0.674727/0.6774
-    elif kind=='mmm0004':
-        return 0.680063/0.6774
-    elif kind=='ppp003':
-        return 0.657085/0.6774
-    elif kind=='mmm003':
-        return 0.697123/0.6774
-    elif kind=='ppp007':
-        return 0.628978/0.6774
-    elif kind=='mmm007':
-        return 0.722584/0.6774
 
 def compute_fof(kind, seed):
 
@@ -59,8 +43,8 @@ def compute_fof(kind, seed):
         print(comm.size)
         print(kind)
         print('reading snapshot files...')
-#    part_cat = Gadget1Catalog('/mnt/sdceph/users/yinli/csit/planck2015/%d/np1024/%s/%s/nbody/treepm2048/snapdir_005/snap_005.*' % (box, seed, kind))
-    part_cat = Gadget1Catalog('/mnt/sdceph/users/yinli/csit/planck2015/%d/%s/%s/SU_new/nbody/snapdir_001/snap_001.*' % (box, seed, kind))
+    part_cat = Gadget1Catalog('/mnt/sdceph/users/yinli/csit/planck2015/%d/np1024/%s/%s/nbody/treepm2048/snapdir_005/snap_005.*' % (box, seed, kind))
+#    part_cat = Gadget1Catalog('/mnt/sdceph/users/yinli/csit/nbody/planck2015/%d/%s/%s/%s/snapdir_005/snap_005.*' % (box, force, seed, kind))
 
     if comm.rank == 0:
         print(part_cat)
@@ -68,18 +52,13 @@ def compute_fof(kind, seed):
     # rescale coordinates
     z = part_cat.attrs['Redshift']
     part_cat.attrs['BoxSize'] *= a_ratio(z)  # from kpc/h to Mpc/h
-    part_cat.attrs['BoxSize'] /= dh(kind)  # from kpc/h to Mpc/h
     part_cat['Position'] *= a_ratio(z)
-    part_cat['Position'] /= dh(kind)
     part_cat['Velocity'] = part_cat['GadgetVelocity'] * a_ratio(z) ** 0.5  ##if Velocity is peculiar velocity,then v_p = a*dx/dt and GadgetVelocity u = v_p/sqrt(a).
-    part_cat['Velocity'] /= dh(kind)  ##if Velocity is peculiar velocity,then v_p = a*dx/dt and GadgetVelocity u = v_p/sqrt(a).
 
-    
     part_cat.attrs['Nmesh'] = (1,) * part_cat['Position'].shape[1]  # HACK to make FOF compute the mean_separation
 
     part_mass = part_cat['Mass'][0] * 1e10  # Msun/h
 
-#    f = FOF(part_cat, 0.05, 20, absolute=True)
     f = FOF(part_cat, 0.2, 20, absolute=True)
 
     halo_cat = f.to_halos(part_mass, cosmo, 0)  # NOTE check if this is the right cosmology
@@ -88,15 +67,11 @@ def compute_fof(kind, seed):
         print(halo_cat)
         print(halo_cat.columns)
 
-#    halo_cat.save('/mnt/sdceph/users/yinli/csit/planck2015/%d/np1024/%s/%s/halos' % (box, seed, kind))
-    halo_cat.save('/mnt/sdceph/users/yinli/csit/planck2015/%d/%s/%s/SU_new/halos' % (box, seed, kind))
-
+#    halo_cat.save('/mnt/sdceph/users/yinli/csit/nbody/planck2015/%d/%s/%s/halos/halo_%s' % (box, force, seed, kind))
+    halo_cat.save('/mnt/sdceph/users/yinli/csit/planck2015/%d/np1024/%s/%s/halos/' % (box, seed, kind))
 
 if __name__ == "__main__":
     for seed_num in seedlist:
-#        for filename in ['iso', 'mmp001', 'ppm001', 'mmp002', 'ppm002', 'mmp005', 'ppm005', 'mmp008', 'ppm008' , 'mmp01', 'ppm01', 'mmp02', 'ppm02', 'mmp03', 'ppm03' , 'mmp04', 'ppm04', 'mmm0004', 'ppp0004', 'mmm0008', 'ppp0008', 'mmm001', 'ppp001','mmm002', 'ppp002','mmm003', 'ppp003','mmm007', 'ppp007','mmm01', 'ppp01']:
-#        for filename in ['iso', 'ppp0004', 'mmm0004', 'ppp007', 'mmm007', 'mmp01', 'ppm01', 'mmp001', 'ppm001']:
-#       for filename in ['mmm003', 'ppp007', 'mmm007', 'ppp0004', 'mmm0004', 'mmp01', 'ppm01', 'm01m01p01', 'p01p01m01', 'm002m002p013', 'm008m008p007', ]:
-        for filename in ['iso', 'ppp003', 'mmm003', 'ppp007', 'mmm007', 'ppp0004', 'mmm0004']:
-#       for filename in ['iso']:
+#        for filename in ['mmp002', 'ppm002', 'mmp005', 'ppm005', 'mmp008', 'ppm008' , 'mmp01', 'ppm01', 'mmp02', 'ppm02', 'mmp03', 'ppm03' , 'mmp04', 'ppm04','mmm0008', 'ppp0008', 'mmm001', 'ppp001','mmm002', 'ppp002','mmm003', 'ppp003','mmm007', 'ppp007','mmm01', 'ppp01']:
+        for filename in ['iso', 'mmp01', 'ppm01']:
             compute_fof(filename, seed_num)
