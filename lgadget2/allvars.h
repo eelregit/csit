@@ -214,7 +214,8 @@ extern FILE *FdDE;  /*!< file handle for darkenergy.txt log-file. */
 #endif
 
 
-extern double DriftTable[DRIFT_TABLE_LENGTH];       /*!<  table for cosmological drift factors */
+extern double DriftTable[3][DRIFT_TABLE_LENGTH];       /*!<  table for cosmological drift factors */
+
 extern double GravKickTable[DRIFT_TABLE_LENGTH];    /*!<  table for cosmological kick factors */
 
 

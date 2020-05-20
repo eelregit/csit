@@ -20,7 +20,7 @@ static double logTimeMax;
 void init_drift_table(void)
 {
 #define WORKSIZE 100000
-  int i;
+  int i,j;
   double result, abserr;
   gsl_function F;
   gsl_integration_workspace  *workspace;
@@ -32,11 +32,13 @@ void init_drift_table(void)
 
   for(i = 0; i < DRIFT_TABLE_LENGTH; i++)
     {
-      F.function = &drift_integ;
-      gsl_integration_qag(&F, exp(logTimeBegin), exp(logTimeBegin + ((logTimeMax - logTimeBegin) / DRIFT_TABLE_LENGTH) * (i + 1)), All.Hubble,	/* note: absolute error just a dummy */
-			  1.0e-8, WORKSIZE, GSL_INTEG_GAUSS41, workspace, &result, &abserr);
-      DriftTable[i] = result;
-
+      for(j = 0; j < 3; j++){
+        F.function = &drift_integ;
+        F.params = &j;
+        gsl_integration_qag(&F, exp(logTimeBegin), exp(logTimeBegin + ((logTimeMax - logTimeBegin) / DRIFT_TABLE_LENGTH) * (i + 1)), All.Hubble,  /* note: absolute error just a dummy */
+          1.0e-8, WORKSIZE, GSL_INTEG_GAUSS41, workspace, &result, &abserr);
+        DriftTable[j][i] = result;
+      }
 
       F.function = &gravkick_integ;
       gsl_integration_qag(&F, exp(logTimeBegin), exp(logTimeBegin + ((logTimeMax - logTimeBegin) / DRIFT_TABLE_LENGTH) * (i + 1)), All.Hubble,	/* note: absolute error just a dummy */
@@ -50,6 +52,29 @@ void init_drift_table(void)
 
 
 
+/*
+double drift_integ(double a, void *param)
+{
+  double h;
+
+  h = hubble_function(a);
+
+  return 1 / (h * a * a * a);
+}
+*/
+double drift_integ(double a, void *param)
+{
+  double h;
+  double anifac[3];
+  int axes;
+
+  axes = *param
+
+  h = hubble_function(a);
+  eval_aniss(a, anifac);
+
+  return 1 / (h * a * anifac[axes] * anifac[axes]);
+}
 
 
 
@@ -84,7 +109,7 @@ double growthfactor_integ(double a, void *param)
 
 
 
-double get_drift_factor(int time0, int time1)
+double get_drift_factor(int time0, int time1, int axes)
 {
   double a1, a2, df1, df2, u1, u2;
   int i1, i2;
@@ -99,10 +124,11 @@ double get_drift_factor(int time0, int time1)
   if(i1 >= DRIFT_TABLE_LENGTH)
     i1 = DRIFT_TABLE_LENGTH - 1;
 
+  for()
   if(i1 <= 1)
-    df1 = u1 * DriftTable[0];
+    df1 = u1 * DriftTable[axes][0];
   else
-    df1 = DriftTable[i1 - 1] + (DriftTable[i1] - DriftTable[i1 - 1]) * (u1 - i1);
+    df1 = DriftTable[axes][i1 - 1] + (DriftTable[axes][i1] - DriftTable[axes][i1 - 1]) * (u1 - i1);
 
 
   u2 = (a2 - logTimeBegin) / (logTimeMax - logTimeBegin) * DRIFT_TABLE_LENGTH;
@@ -111,9 +137,9 @@ double get_drift_factor(int time0, int time1)
     i2 = DRIFT_TABLE_LENGTH - 1;
 
   if(i2 <= 1)
-    df2 = u2 * DriftTable[0];
+    df2 = u2 * DriftTable[axes][0];
   else
-    df2 = DriftTable[i2 - 1] + (DriftTable[i2] - DriftTable[i2 - 1]) * (u2 - i2);
+    df2 = DriftTable[axes][i2 - 1] + (DriftTable[axes][i2] - DriftTable[axes][i2 - 1]) * (u2 - i2);
 
   return df2 - df1;
 }

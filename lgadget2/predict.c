@@ -32,13 +32,13 @@
 void move_particles(int time0, int time1)
 {
   int i, j;
-  double dt_drift;
+  double dt_drift[3];
   double t0, t1;
   double iso = All.TimeBegin * exp(0.5 * (time0 + time1) * All.Timebase_interval);
-  double anifac[3];
-  eval_aniss(iso, anifac);
-  for(i=0; i<3; ++i)
-      anifac[i] = iso*iso / (anifac[i]*anifac[i]);
+//  double anifac[3];
+//  eval_aniss(iso, anifac);
+//  for(i=0; i<3; ++i)
+//      anifac[i] = iso*iso / (anifac[i]*anifac[i]);
 
 #ifdef LIGHTCONE
   double ThisBoxTime;
@@ -53,8 +53,9 @@ void move_particles(int time0, int time1)
 #ifdef HPM
   hpmStart(9, "Predict");
 #endif
-
-  dt_drift = get_drift_factor(time0, time1);
+  for(i = 0; i < 3; i++){
+    dt_drift[i] = get_drift_factor(time0, time1, i);
+  }
 
 #ifdef LIGHTCONE
   ThisBoxTime = All.TimeBegin * exp(time0*All.Timebase_interval);
@@ -83,7 +84,7 @@ void move_particles(int time0, int time1)
 	  LCPrevPos[2] = P[i].Pos[2];
 
 	  for(j = 0; j < 3; j++)
-	    P[i].Pos[j] += P[i].Vel[j] * dt_drift * anifac[j];  /* correct for lightcones? */
+	    P[i].Pos[j] += P[i].Vel[j] * dt_drift[j];  /* correct for lightcones? */
 
 	  check_particle(i, LCPrevPos, imageCoverage);
 	}
@@ -94,7 +95,7 @@ void move_particles(int time0, int time1)
       for(i = 0; i < NumPart; i++)
 	{
 	  for(j = 0; j < 3; j++)
-	    P[i].Pos[j] += P[i].Vel[j] * dt_drift * anifac[j];
+	    P[i].Pos[j] += P[i].Vel[j] * dt_drift[j];
 	}
 #ifdef LIGHTCONE
     }

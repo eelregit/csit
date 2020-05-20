@@ -59,8 +59,8 @@ FILE *FdInfo, *FdEnergy, *FdTimings, *FdCPU;
 FILE *FdDE; // file handle for darkenergy.txt log-file
 #endif
 
+double DriftTable[3][DRIFT_TABLE_LENGTH];
 
-double DriftTable[DRIFT_TABLE_LENGTH];
 double GravKickTable[DRIFT_TABLE_LENGTH];
 
 
