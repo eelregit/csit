@@ -549,7 +549,7 @@ no. But deep in nonlinear structures?}
 \section{Numerical implementation}
 \label{sec:num}
 In this section, we describe how to modify the initial condition code
-\texttt{2LPTic}~\cite{} and
+\texttt{2LPTIC}~\cite{Crocce_etal:2006} and
 the comsmological $N$-body simulation code \texttt{L-Gadget2}~\cite{Springel05},
 to perform the cosmological simulation in an anisotropic expanding universe.
 
@@ -733,8 +733,25 @@ In this section, we describes the parameters of simulations we run and show the 
 \end{table}
 
 
+
+%\begin{table}[htb]
+%  \centering
+%  \begin{tabular}{cccc} \hline
+%    Name & $L$ & IC & z_i  & # of realizationos  \\
+ %   $\Omega_\Lambda$ & 0.6911 \\
+ %   $h$ & 0.6774 \\
+ %   $n_s$ & 0.9667 \\
+ %   $\sigma_8$ & 0.8159 \\
+ %   \hline
+ % \end{tabular}
+ % \caption{Flat $\Lambda$CDM cosmological parameters we ues in this paper.}
+ % \label{tab:cosmo_params}
+%\end{table}
+
+
+
 \subsection{Simulation setups}
-Our fiducial cosmology is set to be consistent with the Planck 2015 result\cite{} whose parameters are summerized in Tab.~\ref{tab:cosmo_params}.
+Our fiducial cosmology is set to be consistent with the Planck 2015 result\cite{Planck2015} whose parameters are summerized in Tab.~\ref{tab:cosmo_params}.
 For tidal simulations, We chose the background strain to satisfy
 $\Delta^{(1)}_0=0$ and $\tau_{\rm e}=0$, so that the remaining degree of freedom is only $\tau_{\rm p} = 3\tau_3/2$.
 This means the configuration of the strain takes $(\tau_1, \tau_2, \tau_3) = ( -1, -1, +2 )\tau_{\rm p}/3 $.
@@ -972,7 +989,59 @@ No.~DE-AC02-05CH11231.
 
 \section{Comparison between our simulation and the conventional separate universe simulation}
 \label{app:SU_comp}
-In this appendix, we show the
+In this appendix, we show the result of the convergence test for the isotropic background
+by comparing our simulations with the conventional separate universe simulations.
+\subsection{Recap of the usual separate universe simulations}  
+One way to incorporate the isotropic super-box mode is to change the background parameters according to its value.
+This technique is based on the fact that
+the flat FLRW universe with the spherically homogenious density perturbation $\Delta_0$ is
+equivalent to the curved FLRW universe without $\Delta_0$.
+This means $\Delta_0$ can be absorbed into the background parameters in cosmological simulations.
+The relation of cosmological parameters between the global and local universe can be characterized 
+by the ratio of Hubble parameters,
+\begin{align}
+\delta h \equiv \frac{h_W}{h} = \sqrt{1- \frac35 \frac{\Omega_{\rm m}}{D(t_0)}\Delta_0^{(1)}(t_0) },
+\end{align} 
+where $h_W$ is the local Hubble parameter and hereafter the subscript $_W$ denotes local quantities.
+In terms of $\delta h$, other cosmological paramters are given by
+\begin{align}
+\Omega_{{\rm m}W} &= \Omega_{{\rm m}}  \delta h^{-2},\\
+\Omega_{\Lambda W} &= \Omega_{\Lambda} \delta h^{-2},\\
+\Omega_{KW} &= 1 - \delta h^{-2}.
+\end{align}
+
+In general, the time and comoving coordinates are also different among the global and local universes.
+Each cosmology has its own expansion history and thus $a_W\neq 1$ when $a=1$. 
+Therefore we need to find the relation between the global and local scale factors at the same physical time $t$.
+We can compute the difference between $a_W$ and $a$ by numerically solving Eq.~\eqref{eq:Deltai_eq} with $\tau_i=0$,
+since the difference of the Friedmann equations in the two cosmology solves the spherical collapse.
+We have to be careful to this mapping of time in generating the initial conditions and determining the output time. 
+
+As for the comoving length, it is common to use the unit of $\mathrm{Mpc}/h$ so the simulation box are given by
+$L~{\rm Mpc}/h$ and $L_W~{\rm Mpc}/h_W$ in each cosmology.
+The choice of $L_W$ depends on what one wants to measure directly from separate universe simulations.
+If one needs to obtain the Eularian response directly, $L_W$ is set to follow $a_W(t_{\rm out})L_W/h_W = a(t_{\rm out})L/h$ 
+with $t_{\rm out}$ being the output physical tim.
+In order to get the Lagrangian response directly, one have to set $L_W/h_W = L/h$.
+The former and the latter is called as the total derivative method and the growth-dilation method respectively in Ref.
+We employed the growth-dilation method where we set $L_W/h_W = L/h$ at all times to share the ramdom fluctuations 
+in the comoving scale in Mpc.
+
+\subsection{Power spectrum response}  
+Here we show the first and second Lagrangian response.
+
+\subsection{Halo bias: $b_1^{\rm L}$ and $b_2^{\rm L}$} 
+Here we show the first and second Lagrangian bias.
+
+\section{Convergence test in small box simulations}
+\label{app:250}
+
+\subsection{TreePM vs PMonly}
+\label{app:250}
+
+\subsection{Resolution}
+\label{app:250}
+
 
 
 \section{Models}
