@@ -174,7 +174,7 @@ double drift_integ(double a, void *param);
 double gravkick_integ(double a, void *param);
 double hydrokick_integ(double a, void *param);
 void   init_drift_table(void);
-double get_drift_factor(int time0, int time1);
+double get_drift_factor(int time0, int time1, int axes);
 
 int ngb_clear_buf(FLOAT searchcenter[3], FLOAT hguess, int numngb);
 
