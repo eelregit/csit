@@ -71,7 +71,7 @@ double drift_integ(double a, void *param)
   h = hubble_function(a);
   eval_aniss(a, anifac);
 
-  return 1 / (h * a * anifac[axes] * anifac[axes]);
+  return 1 / (h * a * anifac[*axes] * anifac[*axes]);
 }
 
 
