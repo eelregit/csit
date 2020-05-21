@@ -66,9 +66,7 @@ double drift_integ(double a, void *param)
 {
   double h;
   double anifac[3];
-  int axes;
-
-  axes = *param;
+  int *axes = (int *)param;
 
   h = hubble_function(a);
   eval_aniss(a, anifac);
@@ -114,7 +112,6 @@ double get_drift_factor(int time0, int time1, int axes)
   if(i1 >= DRIFT_TABLE_LENGTH)
     i1 = DRIFT_TABLE_LENGTH - 1;
 
-  for()
   if(i1 <= 1)
     df1 = u1 * DriftTable[axes][0];
   else
