@@ -111,7 +111,7 @@ void displacement_fields(void)
     printf("\nlambda[0] = %lf, lambda[1] = %lf, lambda[2] = %lf\n",lambda[0], lambda[1], lambda[2]);
   }
 
-  unsigned int bytes, nmesh3;
+  unsigned long int bytes, nmesh3;
   int coord;
   fftw_complex *(cdisp[3]), *(cdisp2[3]) ; /* ZA and 2nd order displacements */
   fftw_real *(disp[3]), *(disp2[3]) ;
@@ -770,7 +770,7 @@ void displacement_fields(void)
 		    disp2[axes][(ii * Nmesh + j) * (2 * (Nmesh / 2 + 1)) + kk] * f6 +
 		    disp2[axes][(ii * Nmesh + jj) * (2 * (Nmesh / 2 + 1)) + k] * f7 +
 		    disp2[axes][(ii * Nmesh + jj) * (2 * (Nmesh / 2 + 1)) + kk] * f8;
-		  dis2 /= (float) nmesh3;
+		  dis2 /= (double) nmesh3;
 
 		  eps2 = epsi2[axes][(i * Nmesh + j) * (2 * (Nmesh / 2 + 1)) + k] * f1 +
 		    epsi2[axes][(i * Nmesh + j) * (2 * (Nmesh / 2 + 1)) + kk] * f2 +
@@ -780,7 +780,7 @@ void displacement_fields(void)
 		    epsi2[axes][(ii * Nmesh + j) * (2 * (Nmesh / 2 + 1)) + kk] * f6 +
 		    epsi2[axes][(ii * Nmesh + jj) * (2 * (Nmesh / 2 + 1)) + k] * f7 +
 		    epsi2[axes][(ii * Nmesh + jj) * (2 * (Nmesh / 2 + 1)) + kk] * f8;
-		  eps2 /= (float) nmesh3;
+		  eps2 /= (double) nmesh3;
 
 #ifdef ONLY_ZA
 		  P[n].Pos[axes] += dis + eps;

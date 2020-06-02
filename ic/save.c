@@ -51,7 +51,7 @@ void save_local_data(void)
 {
 #define BUFFER 10
   size_t bytes;
-  float *block;
+  double *block;
   int *blockid;
   long long *blocklongid;
   int blockmaxlen, maxidlen, maxlongidlen;
@@ -161,7 +161,7 @@ void save_local_data(void)
       FatalError(24);
     }
 
-  blockmaxlen = bytes / (3 * sizeof(float));
+  blockmaxlen = bytes / (3 * sizeof(double));
 
   blockid = (int *) block;
   blocklongid = (long long *) block;
@@ -169,7 +169,7 @@ void save_local_data(void)
   maxlongidlen = bytes / (sizeof(long long));
 
   /* write coordinates */
-  dummy = sizeof(float) * 3 * NumPart;
+  dummy = sizeof(double) * 3 * NumPart;
 #ifdef  PRODUCEGAS
   dummy *= 2;
 #endif
@@ -188,12 +188,12 @@ void save_local_data(void)
 
       if(pc == blockmaxlen)
 	{
-	  my_fwrite(block, sizeof(float), 3 * pc, fd);
+	  my_fwrite(block, sizeof(double), 3 * pc, fd);
 	  pc = 0;
 	}
     }
   if(pc > 0)
-    my_fwrite(block, sizeof(float), 3 * pc, fd);
+    my_fwrite(block, sizeof(double), 3 * pc, fd);
 #ifdef  PRODUCEGAS
   for(i = 0, pc = 0; i < NumPart; i++)
     {
@@ -206,19 +206,19 @@ void save_local_data(void)
 
       if(pc == blockmaxlen)
 	{
-	  my_fwrite(block, sizeof(float), 3 * pc, fd);
+	  my_fwrite(block, sizeof(double), 3 * pc, fd);
 	  pc = 0;
 	}
     }
   if(pc > 0)
-    my_fwrite(block, sizeof(float), 3 * pc, fd);
+    my_fwrite(block, sizeof(double), 3 * pc, fd);
 #endif
   my_fwrite(&dummy, sizeof(dummy), 1, fd);
 
 
 
   /* write velocities */
-  dummy = sizeof(float) * 3 * NumPart;
+  dummy = sizeof(double) * 3 * NumPart;
 #ifdef  PRODUCEGAS
   dummy *= 2;
 #endif
@@ -242,12 +242,12 @@ void save_local_data(void)
 
       if(pc == blockmaxlen)
 	{
-	  my_fwrite(block, sizeof(float), 3 * pc, fd);
+	  my_fwrite(block, sizeof(double), 3 * pc, fd);
 	  pc = 0;
 	}
     }
   if(pc > 0)
-    my_fwrite(block, sizeof(float), 3 * pc, fd);
+    my_fwrite(block, sizeof(double), 3 * pc, fd);
 #ifdef PRODUCEGAS
   for(i = 0, pc = 0; i < NumPart; i++)
     {
@@ -261,12 +261,12 @@ void save_local_data(void)
 
       if(pc == blockmaxlen)
 	{
-	  my_fwrite(block, sizeof(float), 3 * pc, fd);
+	  my_fwrite(block, sizeof(double), 3 * pc, fd);
 	  pc = 0;
 	}
     }
   if(pc > 0)
-    my_fwrite(block, sizeof(float), 3 * pc, fd);
+    my_fwrite(block, sizeof(double), 3 * pc, fd);
 #endif
   my_fwrite(&dummy, sizeof(dummy), 1, fd);
 
@@ -349,7 +349,7 @@ void save_local_data(void)
 
   /* write zero temperatures if needed */
 #ifdef  PRODUCEGAS
-  dummy = sizeof(float) * NumPart;
+  dummy = sizeof(double) * NumPart;
   my_fwrite(&dummy, sizeof(dummy), 1, fd);
   for(i = 0, pc = 0; i < NumPart; i++)
     {
@@ -359,12 +359,12 @@ void save_local_data(void)
 
       if(pc == blockmaxlen)
 	{
-	  my_fwrite(block, sizeof(float), pc, fd);
+	  my_fwrite(block, sizeof(double), pc, fd);
 	  pc = 0;
 	}
     }
   if(pc > 0)
-    my_fwrite(block, sizeof(float), pc, fd);
+    my_fwrite(block, sizeof(double), pc, fd);
   my_fwrite(&dummy, sizeof(dummy), 1, fd);
 #endif
 
@@ -373,7 +373,7 @@ void save_local_data(void)
 #ifdef  MULTICOMPONENTGLASSFILE
   if(header.npart[0])
     {
-      dummy = sizeof(float) * header.npart[0];
+      dummy = sizeof(double) * header.npart[0];
       my_fwrite(&dummy, sizeof(dummy), 1, fd);
 
       for(i = 0, pc = 0; i < header.npart[0]; i++)
@@ -384,12 +384,12 @@ void save_local_data(void)
 
 	  if(pc == blockmaxlen)
 	    {
-	      my_fwrite(block, sizeof(float), pc, fd);
+	      my_fwrite(block, sizeof(double), pc, fd);
 	      pc = 0;
 	    }
 	}
       if(pc > 0)
-	my_fwrite(block, sizeof(float), pc, fd);
+	my_fwrite(block, sizeof(double), pc, fd);
       my_fwrite(&dummy, sizeof(dummy), 1, fd);
     }
 #endif

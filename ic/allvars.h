@@ -82,8 +82,8 @@ extern int      *Slab_to_task;
 
 extern struct part_data 
 {
-  float Pos[3];
-  float Vel[3];
+  double Pos[3];
+  double Vel[3];
 #ifdef  MULTICOMPONENTGLASSFILE                      
   int   Type;
 #endif
