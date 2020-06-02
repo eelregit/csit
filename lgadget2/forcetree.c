@@ -27,7 +27,7 @@
 static int last;		/* auxialiary variable used to set-up non-recursive walk */
 
 #define NTAB 1000
-static float shortrange_table[NTAB];
+static double shortrange_table[NTAB];
 
 
 

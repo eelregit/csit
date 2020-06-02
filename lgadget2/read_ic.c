@@ -192,7 +192,7 @@ int find_files(char *fname)
 
 void read_file(char *fname, int readTask, int lastTask)
 {
-  float *block;
+  double *block;
   int *blockid;
   long long *blocklongid;
   int blockmaxlen, maxidlen, type_of_id;
@@ -210,7 +210,7 @@ void read_file(char *fname, int readTask, int lastTask)
       endrun(24);
     }
 
-  blockmaxlen = bytes / (3 * sizeof(float));
+  blockmaxlen = bytes / (3 * sizeof(double));
   blockid = (int *) (block);
   blocklongid = (long long *) (block);
 
@@ -270,10 +270,10 @@ void read_file(char *fname, int readTask, int lastTask)
 	      if(pc > blockmaxlen)
 		pc = blockmaxlen;
 
-	      my_fread(block, sizeof(float), 3 * pc, fd);
+	      my_fread(block, sizeof(double), 3 * pc, fd);
 
 	      if(task != ThisTask)
-		MPI_Ssend(block, sizeof(float) * 3 * pc, MPI_BYTE, task, TAG_PDATA, MPI_COMM_WORLD);
+		MPI_Ssend(block, sizeof(double) * 3 * pc, MPI_BYTE, task, TAG_PDATA, MPI_COMM_WORLD);
 	      else
 		{
 		  for(n = 0; n < pc; n++)
@@ -311,10 +311,10 @@ void read_file(char *fname, int readTask, int lastTask)
 	      if(pc > blockmaxlen)
 		pc = blockmaxlen;
 
-	      my_fread(block, sizeof(float), 3 * pc, fd);
+	      my_fread(block, sizeof(double), 3 * pc, fd);
 
 	      if(task != ThisTask)
-		MPI_Ssend(block, sizeof(float) * 3 * pc, MPI_BYTE, task, TAG_PDATA, MPI_COMM_WORLD);
+		MPI_Ssend(block, sizeof(double) * 3 * pc, MPI_BYTE, task, TAG_PDATA, MPI_COMM_WORLD);
 	      else
 		{
 		  for(n = 0; n < pc; n++)
@@ -412,7 +412,7 @@ void read_file(char *fname, int readTask, int lastTask)
 	  if(pc > blockmaxlen)
 	    pc = blockmaxlen;
 
-	  MPI_Recv(block, sizeof(float) * 3 * pc, MPI_BYTE, readTask, TAG_PDATA, MPI_COMM_WORLD, &status);
+	  MPI_Recv(block, sizeof(double) * 3 * pc, MPI_BYTE, readTask, TAG_PDATA, MPI_COMM_WORLD, &status);
 
 	  for(n = 0; n < pc; n++)
 	    for(k = 0; k < 3; k++)
@@ -438,7 +438,7 @@ void read_file(char *fname, int readTask, int lastTask)
 	  if(pc > blockmaxlen)
 	    pc = blockmaxlen;
 
-	  MPI_Recv(block, sizeof(float) * 3 * pc, MPI_BYTE, readTask, TAG_PDATA, MPI_COMM_WORLD, &status);
+	  MPI_Recv(block, sizeof(double) * 3 * pc, MPI_BYTE, readTask, TAG_PDATA, MPI_COMM_WORLD, &status);
 
 	  for(n = 0; n < pc; n++)
 	    for(k = 0; k < 3; k++)
