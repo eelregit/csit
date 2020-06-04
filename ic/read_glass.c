@@ -11,8 +11,8 @@ void read_glass(char *fname)
 {
   int i, j, k, n, m, slab, count, type;
   unsigned int dummy, dummy2;
-  double *pos = 0;
-  double x, y, z;
+  float *pos = 0;
+  float x, y, z;
   FILE *fd = 0;
   size_t bytes;
   int *npart_Task;
@@ -67,21 +67,21 @@ void read_glass(char *fname)
 		Nglass += header1.npartTotal[k];
 
 	      printf("\nNglass= %d\n\n", Nglass);
-	      pos = (double *) malloc(sizeof(double) * Nglass * 3);
+	      pos = (float *) malloc(sizeof(float) * Nglass * 3);
 
 	      if(!(pos))
 		{
 		  printf("failed to allocate %g Mbyte on Task %d for glass file\n",
-			 sizeof(double) * Nglass * 3.0 / (1024.0 * 1024.0), ThisTask);
+			 sizeof(float) * Nglass * 3.0 / (1024.0 * 1024.0), ThisTask);
 		  FatalError(112);
 		}
 	    }
 
 	  SKIP;
-	  my_fread(&pos[3 * skip], sizeof(double), 3 * nlocal, fd);
+	  my_fread(&pos[3 * skip], sizeof(float), 3 * nlocal, fd);
 	  SKIP2;
 
-	  if(dummy != sizeof(double) * 3 * nlocal || dummy2 != sizeof(double) * 3 * nlocal)
+	  if(dummy != sizeof(float) * 3 * nlocal || dummy2 != sizeof(float) * 3 * nlocal)
 	    {
 	      printf("incorrect block structure in positions block!\n");
 	      FatalError(3);
@@ -97,17 +97,17 @@ void read_glass(char *fname)
 
   if(ThisTask != 0)
     {
-      pos = (double *) malloc(sizeof(double) * Nglass * 3);
+      pos = (float *) malloc(sizeof(float) * Nglass * 3);
 
       if(!(pos))
 	{
 	  printf("failed to allocate %g Mbyte on Task %d for glass file\n",
-		 sizeof(double) * Nglass * 3.0 / (1024.0 * 1024.0), ThisTask);
+		 sizeof(float) * Nglass * 3.0 / (1024.0 * 1024.0), ThisTask);
 	  FatalError(112);
 	}
     }
 
-  MPI_Bcast(&pos[0], sizeof(double) * Nglass * 3, MPI_BYTE, 0, MPI_COMM_WORLD);
+  MPI_Bcast(&pos[0], sizeof(float) * Nglass * 3, MPI_BYTE, 0, MPI_COMM_WORLD);
 
 
   npart_Task = malloc(sizeof(int) * NTask);
