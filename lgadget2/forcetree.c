@@ -127,8 +127,8 @@ int force_treebuild(void)
 		}
 	      else
 		{
-		  /* here we have found an empty slot where we can 
-		   * attach the new particle as a leaf 
+		  /* here we have found an empty slot where we can
+		   * attach the new particle as a leaf
 		   */
 		  Nodes[th].u.suns[subnode] = i;
 		  break;	/* done for this particle */
@@ -137,7 +137,7 @@ int force_treebuild(void)
 	  else
 	    {
 	      /* we try to insert into a leaf with a single particle
-	       * need to generate a new internal node at this point 
+	       * need to generate a new internal node at this point
 	       */
 	      Nodes[parent].u.suns[subnode] = nfree;
 
@@ -178,9 +178,9 @@ int force_treebuild(void)
 #ifndef NOTREERND
 	      if(nfreep->len < 1.0e-3 * All.ComovSoftening)
 		{
-		  /* seems like we're dealing with particles   
-		   * at identical locations. randomize 
-		   * subnode index (well below gravitational softening scale). 
+		  /* seems like we're dealing with particles
+		   * at identical locations. randomize
+		   * subnode index (well below gravitational softening scale).
 		   */
 		  subnode = (int) (8.0 * gsl_rng_uniform(random_generator));
 		  if(subnode >= 8)
@@ -189,7 +189,7 @@ int force_treebuild(void)
 #endif
 	      nfreep->u.suns[subnode] = th;
 
-	      th = nfree;	/* resume trying to insert the new particle at 
+	      th = nfree;	/* resume trying to insert the new particle at
 				   the newly created internal node */
 
 	      numnodes++;
@@ -758,11 +758,11 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 
 	      /* check in addition whether we lie inside the cell */
 
-	      if(anifacx * fabs(nop->center[0] - pos_x) < 0.60 * nop->len)
+	      if(fabs(nop->center[0] - pos_x) < 0.60 * nop->len)
 		{
-		  if(anifacy * fabs(nop->center[1] - pos_y) < 0.60 * nop->len)
+		  if(fabs(nop->center[1] - pos_y) < 0.60 * nop->len)
 		    {
-		      if(anifacz * fabs(nop->center[2] - pos_z) < 0.60 * nop->len)
+		      if(fabs(nop->center[2] - pos_z) < 0.60 * nop->len)
 			{
 			  no = nop->u.d.nextnode;
 			  continue;
