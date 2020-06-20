@@ -618,6 +618,8 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
   double anifacx = All.TimeAni[0] / anifac;
   double anifacy = All.TimeAni[1] / anifac;
   double anifacz = All.TimeAni[2] / anifac;
+  double Jacobi = anifacx * anifacy * anifacz;
+
 
   boxsize = All.BoxSize;
   boxhalf = 0.5 * All.BoxSize;
@@ -644,6 +646,7 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 
 
   rcut = All.Rcut[0];
+  rcut *= Jacobi;
   rcut2 = rcut * rcut;
   asmthfac = 0.5 / All.Asmth[0] * (NTAB / 3.0);
 
