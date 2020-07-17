@@ -4,6 +4,7 @@
 #include <math.h>
 #include <time.h>
 #include <mpi.h>
+#include <gsl/gsl_sf_gamma.h>
 
 #include "allvars.h"
 #include "proto.h"
@@ -27,8 +28,15 @@
 static int last;		/* auxialiary variable used to set-up non-recursive walk */
 
 #define NTAB 1000
+#define NTAB_iso 1000
 static double shortrange_table[NTAB];
-
+static double dI5_table[NTAB][NTAB_iso];
+static double dI7_table[NTAB][NTAB_iso];
+static double dI9_table[NTAB][NTAB_iso];
+static double dI11_table[NTAB][NTAB_iso];
+static double I7_table[NTAB][NTAB_iso];
+static double I9_table[NTAB][NTAB_iso];
+static double I11_table[NTAB][NTAB_iso];
 
 
 #define NEAREST(x) (((x)>boxhalf)?((x)-boxsize):(((x)<-boxhalf)?((x)+boxsize):(x)))
@@ -613,11 +621,20 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
   double acc_x, acc_y, acc_z, pos_x, pos_y, pos_z, aold;
   double eff_dist;
   double rcut, asmthfac, rcut2, dist;
+  double asmth2;
+  double iso, isofac;
   double boxsize, boxhalf;
-  double anifac = sqrt(All.TimeAni[0]*All.TimeAni[1]*All.TimeAni[2] / All.Time);
-  double anifacx = All.TimeAni[0] / anifac;
-  double anifacy = All.TimeAni[1] / anifac;
-  double anifacz = All.TimeAni[2] / anifac;
+  double anifacx = All.TimeAni[0] / All.Time;
+  double anifacy = All.TimeAni[1] / All.Time;
+  double anifacz = All.TimeAni[2] / All.Time;
+  double Jacobi = anifacx*anifacy*anifacz;
+  double iso = pow(Jacobi, 1./3.);
+  double danix = anifacx - iso;
+  double daniy = anifacy - iso;
+  double daniz = anifacz - iso;
+  double fac1, fac11, fac21, fac22, fac23, fac24, fac25, fac26, fac27, fac28;
+  double dI5, dI7, dI9, dI11;
+  double I7, I9, I11;
 
   boxsize = All.BoxSize;
   boxhalf = 0.5 * All.BoxSize;
@@ -646,6 +663,8 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
   rcut = All.Rcut[0];
   rcut2 = rcut * rcut;
   asmthfac = 0.5 / All.Asmth[0] * (NTAB / 3.0);
+  asmthfac /= iso;
+  isofac = iso * (NTAB_iso / 3.0);
 
 
   h = 2.8 * All.ComovSoftening;
@@ -758,11 +777,11 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 
 	      /* check in addition whether we lie inside the cell */
 
-	      if(anifacx * fabs(nop->center[0] - pos_x) < 0.60 * nop->len)
+	      if( fabs(nop->center[0] - pos_x) < 0.60 * nop->len)
 		{
-		  if(anifacy * fabs(nop->center[1] - pos_y) < 0.60 * nop->len)
+		  if( fabs(nop->center[1] - pos_y) < 0.60 * nop->len)
 		    {
-		      if(anifacz * fabs(nop->center[2] - pos_z) < 0.60 * nop->len)
+		      if( fabs(nop->center[2] - pos_z) < 0.60 * nop->len)
 			{
 			  no = nop->u.d.nextnode;
 			  continue;
@@ -798,14 +817,78 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	}
 
       tabindex = (int) (asmthfac * r);
+      tabindex_iso = (int) (isofac); 
+
+	  fac1 = mass / (2.*sqrt(M_PI));
+	  fac1 /= All.Asmth[0];
 
       if(tabindex < NTAB)
 	{
 	  fac *= shortrange_table[tabindex];
+	  if(tabindex_iso < NTAB_iso)
+	  {
+	  	dI5 = dI5_table[tabindex][tabindex_iso] / (4.*r);
+	  	dI7 = dI7_table[tabindex][tabindex_iso] / (4.*r);
+	  	dI9 = dI9_table[tabindex][tabindex_iso] / (4.*r);
+	  	dI11 = dI11_table[tabindex][tabindex_iso] / (4.*r);
+	  	I7 = I7_table[tabindex][tabindex_iso];
+	  	I9 = I9_table[tabindex][tabindex_iso];
+	  	I11 = I11_table[tabindex][tabindex_iso];
+	  }
 
-	  acc_x += dx * fac * All.Time*All.Time/(All.TimeAni[1]*All.TimeAni[2]);
-	  acc_y += dy * fac * All.Time*All.Time/(All.TimeAni[2]*All.TimeAni[0]);
-	  acc_z += dz * fac * All.Time*All.Time/(All.TimeAni[0]*All.TimeAni[1]);
+	  acc_x += dx * fac * anifacx;
+	  acc_y += dy * fac * anifacy;
+	  acc_z += dz * fac * anifacz;
+
+	  /* 1st order correction of Delta_alpha_i */
+
+	  fac11 = - iso * dI5 * ( danix + daniy + daniz );
+	  fac11 += iso / (2.0 * All.Asmth[0]) * dI7 * (danix*dx*dx + daniy*dy*dy + daniz*dz*dz);
+	  fac11 /= r;
+	  asmth2 = All.Asmth[0] * All.Asmth[0];
+
+	  acc_x -= -dx * fac1 * anifacx * ( fac11 + iso * I7 * danix / asmth2);
+	  acc_y -= -dy * fac1 * anifacy * ( fac11 + iso * I7 * daniy / asmth2 );
+	  acc_z -= -dz * fac1 * anifacz * ( fac11 + iso * I7 * daniz / asmth2 );
+
+	  /* 2nd order correction of Delta_alpha_i */
+	  //Im derivative terms
+	  // i=j terms
+	  fac21 = ( danix*danix + daniy*daniy + daniz*daniz );
+	  fac21 *= ( -dI5 + 3.0 * iso * iso * dI7 );
+
+	  fac22 = dx*dx*danix*danix + dy*dy*daniy*daniy + dz*dz*daniz*daniz;
+	  fac22 *= ( dI7/2.0 - iso * iso * 3.0 * dI9 ) ;
+	  fac22 /= asmth2;
+
+	  fac23 = dx*dx*pow(danix, 4) + dy*dy*pow(daniy, 4) + dz*dz*pow(daniz, 4);
+	  fac23 *= iso * iso * dI11;
+	  fac23 /= (asmth2*asmth2);
+
+	  // i \neq j terms
+	  fac24 = iso*iso*danix*daniy * ( dI7 - (dx*dx + dy*dy)/(2.0*asmth2) * dI9 + dx*dx*dy*dy/(4.0*asmth2*asmth2) );
+	  fac24 *= 2.0;
+
+	  fac25 = iso*iso*daniy*daniz * ( dI7 - (dy*dy + dz*dz)/(2.0*asmth2) * dI9 + dy*dy*dz*dz/(4.0*asmth2*asmth2) );
+	  fac25 *= 2.0;
+
+	  fac26 = iso*iso*daniz*danix * ( dI7 - (dz*dz + dx*dx)/(2.0*asmth2) * dI9 + dz*dz*dx*dx/(4.0*asmth2*asmth2) );
+	  fac26 *= 2.0;
+
+	  //f derivative terms
+	  // i=j terms
+	  fac27 = ( I7 - 6.0 * iso * iso * I9 ) / asmth2 ;
+
+	  // i \neq j terms
+	  fac28 = iso*iso* ( - (danix + daniy + daniz)/asmth2 + ( dx*dx*danix + dy*dy*daniy + dz*dz*daniz ) / (2.0*asmth2*asmth2) );
+	  fac28 *= 2.0;
+
+	  acc_x -= -dx * fac1 * anifacx * ( fac21 + fac22 + fac23 + fac24 +fac25 + fac26 ) / (2.0 * r);
+	  acc_x -= -dx * fac1 * anifacx * danix * (  fac27 +  fac28 ) / 2.0;
+	  acc_y -= -dy * fac1 * anifacy * ( fac21 + fac22 + fac23 + fac24 +fac25 + fac26 ) / (2.0 * r);
+	  acc_y -= -dy * fac1 * anifacy * daniy * (  fac27 +  fac28 ) / 2.0;
+	  acc_z -= -dz * fac1 * anifacz * ( fac21 + fac22 + fac23 + fac24 +fac25 + fac26 ) / (2.0 * r);
+	  acc_z -= -dz * fac1 * anifacz * daniz * (  fac27 +  fac28 ) / 2.0;
 
 	  ninteractions++;
 	}
@@ -883,16 +966,44 @@ void force_flag_localnodes(void)
 
 void force_treeinit(void)
 {
-  int i;
-  double u;
+  int i, j;
+  double u, iso;
 
   for(i = 0; i < NTAB; i++)
     {
       u = 3.0 / NTAB * (i + 0.5);
       shortrange_table[i] = erfc(u) + 2.0 * u / sqrt(M_PI) * exp(-u * u);
+      for(j = 0; j < NTAB_iso; j++)
+      {
+      	iso = 3.0 / NTAB_iso * (j + 0.5);
+      	dI5_table[i][j] = dIm(5, iso, u);
+      	dI7_table[i][j] = dIm(7, iso, u);
+      	dI9_table[i][j] = dIm(9, iso, u);
+      	dI11_table[i][j] = dIm(11, iso, u);
+      	I7_table[i][j] = Im(7, iso, u);
+      	I9_table[i][j] = Im(9, iso, u);
+      	I11_table[i][j] = Im(11, iso, u);
+      }
     }
 }
 
+double dIm(int m, double iso, double u);
+{
+	double prefac, expfac, gammafac;
+	prefac = pow(2, m) * pow(1./(2.0*iso*u), m);
+	expfac = 8. * iso * iso * pow(u, m);
+	gammafac = (m-2) * 4. * iso * iso * u * u;
+	gamma = gsl_sf_gamma_inc(m-2/2, 0) - gsl_sf_gamma_inc(m-2/2, u*u);
+	return prefac * ( expfac * exp(-u * u) - gammafac * gamma );
+}
+
+double Im(int m, double iso, double u);
+{
+	double prefac;
+	prefac = pow(2, m-2) * pow(1./(2.0*iso*u), m-2);
+	gamma = gsl_sf_gamma_inc(m-2/2, 0) - gsl_sf_gamma_inc(m-2/2, u*u);
+	return prefac * gamma;
+}
 
 
 /* this function allocates memory used for storage of the tree
