@@ -27,8 +27,8 @@
 
 static int last;		/* auxialiary variable used to set-up non-recursive walk */
 
-#define NTAB 1000
-#define NTAB_iso 1000
+#define NTAB 2000
+#define NTAB_iso 500
 static double shortrange_table[NTAB];
 static double dI5_table[NTAB][NTAB_iso];
 static double dI7_table[NTAB][NTAB_iso];
@@ -825,6 +825,11 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
       if(tabindex < NTAB)
 	{
 	  fac *= shortrange_table[tabindex];
+
+	  acc_x += dx * fac * anifacx;
+	  acc_y += dy * fac * anifacy;
+	  acc_z += dz * fac * anifacz;
+
 	  if(tabindex_iso < NTAB_iso)
 	  {
 	  	dI5 = dI5_table[tabindex][tabindex_iso] / (4.*r);
@@ -834,12 +839,7 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  	I7 = I7_table[tabindex][tabindex_iso];
 	  	I9 = I9_table[tabindex][tabindex_iso];
 	  	I11 = I11_table[tabindex][tabindex_iso];
-	  }
-
-	  acc_x += dx * fac * anifacx;
-	  acc_y += dy * fac * anifacy;
-	  acc_z += dz * fac * anifacz;
-
+	
 	  /* 1st order correction of Delta_alpha_i */
 
 	  fac11 = - iso * dI5 * ( danix + daniy + daniz );
@@ -891,6 +891,7 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  acc_z -= -dz * fac1 * anifacz * ( fac21 + fac22 + fac23 + fac24 +fac25 + fac26 ) / (2.0 * r);
 	  acc_z -= -dz * fac1 * anifacz * daniz * ( daniz * ( fac27 + fac28 * dz*dz ) + fac29 ) / 2.0;
 
+	  }
 	  ninteractions++;
 	}
     }
