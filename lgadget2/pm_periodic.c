@@ -123,10 +123,10 @@ void pmforce_periodic(void)
   int dimprod;
   size_t bytes_tot = 0, bytes;
   MPI_Status status;
-  double anifac = All.TimeAni[0]*All.TimeAni[1]*All.TimeAni[2] / All.Time;
-  double anifacx = anifac / (All.TimeAni[0]*All.TimeAni[0]);
-  double anifacy = anifac / (All.TimeAni[1]*All.TimeAni[1]);
-  double anifacz = anifac / (All.TimeAni[2]*All.TimeAni[2]);
+  double anifac = (All.Time*All.Time*All.Time) / (All.TimeAni[0]*All.TimeAni[1]*All.TimeAni[2]);
+  double anifacx = (All.Time*All.Time) / (All.TimeAni[0]*All.TimeAni[0]);
+  double anifacy = (All.Time*All.Time) / (All.TimeAni[1]*All.TimeAni[1]);
+  double anifacz = (All.Time*All.Time) / (All.TimeAni[2]*All.TimeAni[2]);
 
   if(ThisTask == 0)
     {
@@ -439,7 +439,7 @@ void pmforce_periodic(void)
 
 	  if(k2 > 0)
 	    {
-	      smth = -exp(-k2 * asmth2) / k2;
+	      smth = - anifac * exp(- (kx*kx + ky*ky + kz*kz) * asmth2) / k2;
 
 	      /* do deconvolution */
 
