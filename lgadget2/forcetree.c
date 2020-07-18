@@ -829,16 +829,17 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  acc_x += dx * fac * anifacx;
 	  acc_y += dy * fac * anifacy;
 	  acc_z += dz * fac * anifacz;
-	/*
+
+	if( r >= h ){
 	  if(tabindex_iso < NTAB_iso)
 	  {
-	  	dI5 = dI5_table[tabindex][tabindex_iso] / (4.*r);
-	  	dI7 = dI7_table[tabindex][tabindex_iso] / (4.*r);
-	  	dI9 = dI9_table[tabindex][tabindex_iso] / (4.*r);
-	  	dI11 = dI11_table[tabindex][tabindex_iso] / (4.*r);
-	  	I7 = I7_table[tabindex][tabindex_iso];
-	  	I9 = I9_table[tabindex][tabindex_iso];
-	  	I11 = I11_table[tabindex][tabindex_iso];
+	  		dI5 = dI5_table[tabindex][tabindex_iso] / (4.*r);
+	  		dI7 = dI7_table[tabindex][tabindex_iso] / (4.*r);
+	  		dI9 = dI9_table[tabindex][tabindex_iso] / (4.*r);
+	  		dI11 = dI11_table[tabindex][tabindex_iso] / (4.*r);
+	  		I7 = I7_table[tabindex][tabindex_iso];
+	  		I9 = I9_table[tabindex][tabindex_iso];
+	  		I11 = I11_table[tabindex][tabindex_iso];
 	
 	  // 1st order correction of Delta_alpha_i 
 
@@ -892,7 +893,7 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  acc_z -= -dz * fac1 * anifacz * daniz * ( daniz * ( fac27 + fac28 * dz*dz ) + fac29 ) / 2.0;
 
 	  }
-	*/
+	}
 	  ninteractions++;
 	}
     }
@@ -959,23 +960,32 @@ void force_flag_localnodes(void)
 }
 
 
-
 double dIm_func(int m, double iso, double u)
 {
 	double prefac, expfac, gammafac, gamma;
-	prefac = pow(2, m) * pow(1./(2.0*iso*u), m);
-	expfac = 8. * iso * iso * pow(u, m);
-	gammafac = (m-2) * 4. * iso * iso * u * u;
-	gamma = gsl_sf_gamma_inc(m-2/2, 0) - gsl_sf_gamma_inc(m-2/2, u*u);
-	return prefac * ( expfac * exp(-u * u) - gammafac * gamma );
+    if( u > 0. )
+    {
+        prefac = pow(2, m) * pow(1./(2.0*iso*u), m);
+        expfac = 8. * iso * iso * pow(u, m);
+        gammafac = (m-2) * 4. * iso * iso * u * u;
+        gamma = gsl_sf_gamma_inc(m-2/2, 0) - gsl_sf_gamma_inc(m-2/2, u*u);
+        return prefac * ( expfac * exp(-u * u) - gammafac * gamma );
+    } else {
+        return 0.0;
+    }
 }
 
 double Im_func(int m, double iso, double u)
 {
-	double prefac, gamma;
-	prefac = pow(2, m-2) * pow(1./(2.0*iso*u), m-2);
-	gamma = gsl_sf_gamma_inc(m-2/2, 0) - gsl_sf_gamma_inc(m-2/2, u*u);
-	return prefac * gamma;
+    if( u!=0 )
+    {
+        double prefac, gamma;
+        prefac = pow(2, m-2) * pow(1./(2.0*iso*u), m-2);
+        gamma = gsl_sf_gamma_inc(m-2/2, 0) - gsl_sf_gamma_inc(m-2/2, u*u);
+        return prefac * gamma;
+    } else {
+        return 2.0 / (m-2) / pow(iso, m-2);
+    }
 }
 
 
