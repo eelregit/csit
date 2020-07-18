@@ -829,18 +829,9 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  acc_x += dx * fac * anifacx;
 	  acc_y += dy * fac * anifacy;
 	  acc_z += dz * fac * anifacz;
-	  if(ThisTask == 0)
-      {
-      printf("\n 0th order acc finished.\n");
-      }
-
+	/*
 	  if(tabindex_iso < NTAB_iso)
 	  {
-		if(ThisTask == 0)
-      	{
-      	printf("\n  1th order acc started.\n");
-      	}
-
 	  	dI5 = dI5_table[tabindex][tabindex_iso] / (4.*r);
 	  	dI7 = dI7_table[tabindex][tabindex_iso] / (4.*r);
 	  	dI9 = dI9_table[tabindex][tabindex_iso] / (4.*r);
@@ -848,14 +839,8 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  	I7 = I7_table[tabindex][tabindex_iso];
 	  	I9 = I9_table[tabindex][tabindex_iso];
 	  	I11 = I11_table[tabindex][tabindex_iso];
-
-		if(ThisTask == 0)
-      	{
-      	printf("\n Reading Im table done.\n");
-      	}
-
 	
-	  /* 1st order correction of Delta_alpha_i */
+	  // 1st order correction of Delta_alpha_i 
 
 	  fac11 = - iso * dI5 * ( danix + daniy + daniz );
 	  fac11 += iso / (2.0 * All.Asmth[0]) * dI7 * (danix*dx*dx + daniy*dy*dy + daniz*dz*dz);
@@ -866,7 +851,7 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  acc_y -= -dy * fac1 * anifacy * ( fac11 + iso * I7 * daniy / asmth2 );
 	  acc_z -= -dz * fac1 * anifacz * ( fac11 + iso * I7 * daniz / asmth2 );
 
-	  /* 2nd order correction of Delta_alpha_i */
+	  // 2nd order correction of Delta_alpha_i
 	  //Im derivative terms
 	  // i=j terms
 	  fac21 = ( danix*danix + daniy*daniy + daniz*daniz );
@@ -899,20 +884,15 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  fac29 = iso*iso* ( - I9 * (danix + daniy + daniz)/asmth2 + I11 * ( dx*dx*danix + dy*dy*daniy + dz*dz*daniz ) / (2.0*asmth2*asmth2) );
 	  fac29 *= 2.0;
 
-	  acc_x -= -dx * fac1 * anifacx * ( fac21 + fac22 + fac23 + fac24 +fac25 + fac26 ) / (2.0 * r);
+	  acc_x -= -dx * fac1 * anifacx * ( fac21 + fac22 + fac23 + fac24 + fac25 + fac26 ) / (2.0 * r);
 	  acc_x -= -dx * fac1 * anifacx * danix * ( danix * ( fac27 + fac28 * dx*dx ) + fac29 ) / 2.0;
-	  acc_y -= -dy * fac1 * anifacy * ( fac21 + fac22 + fac23 + fac24 +fac25 + fac26 ) / (2.0 * r);
+	  acc_y -= -dy * fac1 * anifacy * ( fac21 + fac22 + fac23 + fac24 + fac25 + fac26 ) / (2.0 * r);
 	  acc_y -= -dy * fac1 * anifacy * daniy * ( daniy * ( fac27 + fac28 * dy*dy ) + fac29 ) / 2.0;
-	  acc_z -= -dz * fac1 * anifacz * ( fac21 + fac22 + fac23 + fac24 +fac25 + fac26 ) / (2.0 * r);
+	  acc_z -= -dz * fac1 * anifacz * ( fac21 + fac22 + fac23 + fac24 + fac25 + fac26 ) / (2.0 * r);
 	  acc_z -= -dz * fac1 * anifacz * daniz * ( daniz * ( fac27 + fac28 * dz*dz ) + fac29 ) / 2.0;
 
-		if(ThisTask == 0)
-      	{
-      	printf("\n evaluating acc finished.\n");
-		printf("\n ninteractions are %d.\n", ninteractions);
-      	}
-
 	  }
+	*/
 	  ninteractions++;
 	}
     }
