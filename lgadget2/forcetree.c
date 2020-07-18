@@ -616,13 +616,13 @@ void force_treeupdate_toplevel(int no, int level, int *nextfree)
 int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 {
   struct NODE *nop = 0;
-  int no, ninteractions, tabindex;
+  int no, ninteractions, tabindex, tabindex_iso;
   double r2, dx, dy, dz, mass, r, fac, u, h, h_inv, h3_inv;
   double acc_x, acc_y, acc_z, pos_x, pos_y, pos_z, aold;
   double eff_dist;
   double rcut, asmthfac, rcut2, dist;
   double asmth2;
-  double iso, isofac;
+  double isofac;
   double boxsize, boxhalf;
   double anifacx = All.TimeAni[0] / All.Time;
   double anifacy = All.TimeAni[1] / All.Time;
@@ -632,7 +632,7 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
   double danix = anifacx - iso;
   double daniy = anifacy - iso;
   double daniz = anifacz - iso;
-  double fac1, fac11, fac21, fac22, fac23, fac24, fac25, fac26, fac27, fac28;
+  double fac1, fac11, fac21, fac22, fac23, fac24, fac25, fac26, fac27, fac28, fac29;
   double dI5, dI7, dI9, dI11;
   double I7, I9, I11;
 
@@ -877,18 +877,19 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 
 	  //f derivative terms
 	  // i=j terms
-	  fac27 = ( I7 - 6.0 * iso * iso * I9 ) / asmth2 ;
+	  fac27 = ( I7 - 6.0 * iso * iso * I9  ) / asmth2;
+	  fac28 = I11 * iso * iso / (asmth2*asmth2);
 
 	  // i \neq j terms
-	  fac28 = iso*iso* ( - (danix + daniy + daniz)/asmth2 + ( dx*dx*danix + dy*dy*daniy + dz*dz*daniz ) / (2.0*asmth2*asmth2) );
-	  fac28 *= 2.0;
+	  fac29 = iso*iso* ( - I9 * (danix + daniy + daniz)/asmth2 + I11 * ( dx*dx*danix + dy*dy*daniy + dz*dz*daniz ) / (2.0*asmth2*asmth2) );
+	  fac29 *= 2.0;
 
 	  acc_x -= -dx * fac1 * anifacx * ( fac21 + fac22 + fac23 + fac24 +fac25 + fac26 ) / (2.0 * r);
-	  acc_x -= -dx * fac1 * anifacx * danix * (  fac27 +  fac28 ) / 2.0;
+	  acc_x -= -dx * fac1 * anifacx * danix * ( danix * ( fac27 + fac28 * dx*dx ) + fac29 ) / 2.0;
 	  acc_y -= -dy * fac1 * anifacy * ( fac21 + fac22 + fac23 + fac24 +fac25 + fac26 ) / (2.0 * r);
-	  acc_y -= -dy * fac1 * anifacy * daniy * (  fac27 +  fac28 ) / 2.0;
+	  acc_y -= -dy * fac1 * anifacy * daniy * ( daniy * ( fac27 + fac28 * dy*dy ) + fac29 ) / 2.0;
 	  acc_z -= -dz * fac1 * anifacz * ( fac21 + fac22 + fac23 + fac24 +fac25 + fac26 ) / (2.0 * r);
-	  acc_z -= -dz * fac1 * anifacz * daniz * (  fac27 +  fac28 ) / 2.0;
+	  acc_z -= -dz * fac1 * anifacz * daniz * ( daniz * ( fac27 + fac28 * dz*dz ) + fac29 ) / 2.0;
 
 	  ninteractions++;
 	}
@@ -976,18 +977,18 @@ void force_treeinit(void)
       for(j = 0; j < NTAB_iso; j++)
       {
       	iso = 3.0 / NTAB_iso * (j + 0.5);
-      	dI5_table[i][j] = dIm(5, iso, u);
-      	dI7_table[i][j] = dIm(7, iso, u);
-      	dI9_table[i][j] = dIm(9, iso, u);
-      	dI11_table[i][j] = dIm(11, iso, u);
-      	I7_table[i][j] = Im(7, iso, u);
-      	I9_table[i][j] = Im(9, iso, u);
-      	I11_table[i][j] = Im(11, iso, u);
+      	dI5_table[i][j] = dIm_func(5, iso, u);
+      	dI7_table[i][j] = dIm_func(7, iso, u);
+      	dI9_table[i][j] = dIm_func(9, iso, u);
+      	dI11_table[i][j] = dIm_func(11, iso, u);
+      	I7_table[i][j] = Im_func(7, iso, u);
+      	I9_table[i][j] = Im_func(9, iso, u);
+      	I11_table[i][j] = Im_func(11, iso, u);
       }
     }
 }
 
-double dIm(int m, double iso, double u);
+double dIm_func(int m, double iso, double u)
 {
 	double prefac, expfac, gammafac;
 	prefac = pow(2, m) * pow(1./(2.0*iso*u), m);
@@ -997,7 +998,7 @@ double dIm(int m, double iso, double u);
 	return prefac * ( expfac * exp(-u * u) - gammafac * gamma );
 }
 
-double Im(int m, double iso, double u);
+double Im_func(int m, double iso, double u)
 {
 	double prefac;
 	prefac = pow(2, m-2) * pow(1./(2.0*iso*u), m-2);
