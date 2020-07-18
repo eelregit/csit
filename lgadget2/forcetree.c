@@ -958,11 +958,23 @@ void force_flag_localnodes(void)
 
 
 
+double dIm_func(int m, double iso, double u)
+{
+	double prefac, expfac, gammafac, gamma;
+	prefac = pow(2, m) * pow(1./(2.0*iso*u), m);
+	expfac = 8. * iso * iso * pow(u, m);
+	gammafac = (m-2) * 4. * iso * iso * u * u;
+	gamma = gsl_sf_gamma_inc(m-2/2, 0) - gsl_sf_gamma_inc(m-2/2, u*u);
+	return prefac * ( expfac * exp(-u * u) - gammafac * gamma );
+}
 
-
-
-
-
+double Im_func(int m, double iso, double u)
+{
+	double prefac, gamma;
+	prefac = pow(2, m-2) * pow(1./(2.0*iso*u), m-2);
+	gamma = gsl_sf_gamma_inc(m-2/2, 0) - gsl_sf_gamma_inc(m-2/2, u*u);
+	return prefac * gamma;
+}
 
 
 void force_treeinit(void)
@@ -986,24 +998,6 @@ void force_treeinit(void)
       	I11_table[i][j] = Im_func(11, iso, u);
       }
     }
-}
-
-double dIm_func(int m, double iso, double u)
-{
-	double prefac, expfac, gammafac;
-	prefac = pow(2, m) * pow(1./(2.0*iso*u), m);
-	expfac = 8. * iso * iso * pow(u, m);
-	gammafac = (m-2) * 4. * iso * iso * u * u;
-	gamma = gsl_sf_gamma_inc(m-2/2, 0) - gsl_sf_gamma_inc(m-2/2, u*u);
-	return prefac * ( expfac * exp(-u * u) - gammafac * gamma );
-}
-
-double Im_func(int m, double iso, double u)
-{
-	double prefac;
-	prefac = pow(2, m-2) * pow(1./(2.0*iso*u), m-2);
-	gamma = gsl_sf_gamma_inc(m-2/2, 0) - gsl_sf_gamma_inc(m-2/2, u*u);
-	return prefac * gamma;
 }
 
 
