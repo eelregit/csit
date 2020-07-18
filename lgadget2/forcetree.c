@@ -862,9 +862,9 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  fac11 /= r;
 	  asmth2 = All.Asmth[0] * All.Asmth[0];
 
-	  acc_x -= -dx * fac1 * anifacx * ( fac11 + iso * I7 * danix / asmth2　);
-	  acc_y -= -dy * fac1 * anifacy * ( fac11 + iso * I7 * daniy / asmth2　);
-	  acc_z -= -dz * fac1 * anifacz * ( fac11 + iso * I7 * daniz / asmth2　);
+	  acc_x -= -dx * fac1 * anifacx * ( fac11 + iso * I7 * danix / asmth2 );
+	  acc_y -= -dy * fac1 * anifacy * ( fac11 + iso * I7 * daniy / asmth2 );
+	  acc_z -= -dz * fac1 * anifacz * ( fac11 + iso * I7 * daniz / asmth2 );
 
 	  /* 2nd order correction of Delta_alpha_i */
 	  //Im derivative terms
