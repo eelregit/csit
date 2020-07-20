@@ -833,20 +833,20 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	if( r >= h ){
 	  if(tabindex_iso < NTAB_iso)
 	  {
-	  		dI5 = dI5_table[tabindex][tabindex_iso] / (4.*r);
-	  		dI7 = dI7_table[tabindex][tabindex_iso] / (4.*r);
-	  		dI9 = dI9_table[tabindex][tabindex_iso] / (4.*r);
-	  		dI11 = dI11_table[tabindex][tabindex_iso] / (4.*r);
-	  		I7 = I7_table[tabindex][tabindex_iso];
-	  		I9 = I9_table[tabindex][tabindex_iso];
-	  		I11 = I11_table[tabindex][tabindex_iso];
+	  	dI5 = dI5_table[tabindex][tabindex_iso] / (4.*r);
+	  	dI7 = dI7_table[tabindex][tabindex_iso] / (4.*r);
+	  	dI9 = dI9_table[tabindex][tabindex_iso] / (4.*r);
+	  	dI11 = dI11_table[tabindex][tabindex_iso] / (4.*r);
+	  	I7 = I7_table[tabindex][tabindex_iso];
+	  	I9 = I9_table[tabindex][tabindex_iso];
+	  	I11 = I11_table[tabindex][tabindex_iso];
 	
 	  // 1st order correction of Delta_alpha_i 
 
-	  fac11 = - iso * dI5 * ( danix + daniy + daniz );
-	  fac11 += iso / (2.0 * All.Asmth[0]) * dI7 * (danix*dx*dx + daniy*dy*dy + daniz*dz*dz);
-	  fac11 /= r;
 	  asmth2 = All.Asmth[0] * All.Asmth[0];
+	  fac11 = - iso * dI5 * ( danix + daniy + daniz );
+	  fac11 += iso / (2.0 * asmth2) * dI7 * (danix*dx*dx + daniy*dy*dy + daniz*dz*dz);
+	  fac11 /= r;
 
 	  acc_x -= -dx * fac1 * anifacx * ( fac11 + iso * I7 * danix / asmth2 );
 	  acc_y -= -dy * fac1 * anifacy * ( fac11 + iso * I7 * daniy / asmth2 );
@@ -862,9 +862,9 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  fac22 *= ( dI7/2.0 - iso * iso * 3.0 * dI9 ) ;
 	  fac22 /= asmth2;
 
-	  fac23 = dx*dx*pow(danix, 4) + dy*dy*pow(daniy, 4) + dz*dz*pow(daniz, 4);
+	  fac23 = danix*danix*pow(dx, 4) + daniy*daniy*pow(dy, 4) + daniz*daniz*pow(dz, 4);
 	  fac23 *= iso * iso * dI11;
-	  fac23 /= (asmth2*asmth2);
+	  fac23 /= (4.0 * asmth2*asmth2);
 
 	  // i \neq j terms
 	  fac24 = iso*iso*danix*daniy * ( dI7 - (dx*dx + dy*dy)/(2.0*asmth2) * dI9 + dx*dx*dy*dy/(4.0*asmth2*asmth2) );
@@ -966,9 +966,9 @@ double dIm_func(int m, double iso, double u)
     if( u > 0. )
     {
         prefac = pow(2, m) * pow(1./(2.0*iso*u), m);
-        expfac = 8. * iso * iso * pow(u, m);
-        gammafac = (m-2) * 4. * iso * iso * u * u;
-        gamma = gsl_sf_gamma_inc(m-2/2, 0) - gsl_sf_gamma_inc(m-2/2, u*u);
+        expfac = 8.0 * iso * iso * pow(u, m);
+        gammafac = (m-2) * 4.0 * iso * iso * u * u;
+        gamma = gsl_sf_gamma_inc((m-2)/2.0, 0) - gsl_sf_gamma_inc((m-2)/2.0, u*u);
         return prefac * ( expfac * exp(-u * u) - gammafac * gamma );
     } else {
         return 0.0;
@@ -977,11 +977,11 @@ double dIm_func(int m, double iso, double u)
 
 double Im_func(int m, double iso, double u)
 {
-    if( u!=0 )
+    if( u > 0. )
     {
         double prefac, gamma;
         prefac = pow(2, m-2) * pow(1./(2.0*iso*u), m-2);
-        gamma = gsl_sf_gamma_inc(m-2/2, 0) - gsl_sf_gamma_inc(m-2/2, u*u);
+        gamma = gsl_sf_gamma_inc((m-2)/2.0, 0) - gsl_sf_gamma_inc((m-2)/2.0, u*u);
         return prefac * gamma;
     } else {
         return 2.0 / (m-2) / pow(iso, m-2);
