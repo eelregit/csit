@@ -632,7 +632,7 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
   double danix = anifacx - iso;
   double daniy = anifacy - iso;
   double daniz = anifacz - iso;
-  double fac1, fac11, fac21, fac22, fac23, fac24, fac25, fac26, fac27, fac28, fac29;
+  double fac1, fac11, fac12, fac21, fac22, fac23, fac24, fac25, fac26, fac2x, fac2y, fac2z;
   double dI5, dI7, dI9, dI11;
   double I7, I9, I11;
 
@@ -847,10 +847,11 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  fac11 = - iso * dI5 * ( danix + daniy + daniz );
 	  fac11 += iso / (2.0 * asmth2) * dI7 * (danix*dx*dx + daniy*dy*dy + daniz*dz*dz);
 	  fac11 /= r;
+	  fac12 = iso * I7 / asmth2;
 
-	  acc_x -= -dx * fac1 * anifacx * ( fac11 + iso * I7 * danix / asmth2 );
-	  acc_y -= -dy * fac1 * anifacy * ( fac11 + iso * I7 * daniy / asmth2 );
-	  acc_z -= -dz * fac1 * anifacz * ( fac11 + iso * I7 * daniz / asmth2 );
+	  acc_x += dx * fac1 * anifacx * ( fac11 + fac12 * danix );
+	  acc_y += dy * fac1 * anifacy * ( fac11 + fac12 * daniy );
+	  acc_z += dz * fac1 * anifacz * ( fac11 + fac12 * daniz );
 
 	  // 2nd order correction of Delta_alpha_i
 	  //Im derivative terms
@@ -862,35 +863,32 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  fac22 *= ( dI7/2.0 - iso * iso * 3.0 * dI9 ) ;
 	  fac22 /= asmth2;
 
-	  fac23 = danix*danix*pow(dx, 4) + daniy*daniy*pow(dy, 4) + daniz*daniz*pow(dz, 4);
+	  fac23 = danix*danix*dx*dx*dx*dx + daniy*daniy*dy*dy*dy*dy + daniz*daniz*dz*dz*dz*dz;
 	  fac23 *= iso * iso * dI11;
 	  fac23 /= (4.0 * asmth2*asmth2);
 
 	  // i \neq j terms
-	  fac24 = iso*iso*danix*daniy * ( dI7 - (dx*dx + dy*dy)/(2.0*asmth2) * dI9 + dx*dx*dy*dy/(4.0*asmth2*asmth2) );
+	  fac24 =  iso*iso*danix*daniy * ( dI7 - (dx*dx + dy*dy)/(2.0*asmth2) * dI9 + dx*dx*dy*dy/(4.0*asmth2*asmth2) );
+	  fac24 += iso*iso*daniy*daniz * ( dI7 - (dy*dy + dz*dz)/(2.0*asmth2) * dI9 + dy*dy*dz*dz/(4.0*asmth2*asmth2) );
+	  fac24 += iso*iso*daniz*danix * ( dI7 - (dz*dz + dx*dx)/(2.0*asmth2) * dI9 + dz*dz*dx*dx/(4.0*asmth2*asmth2) );
 	  fac24 *= 2.0;
-
-	  fac25 = iso*iso*daniy*daniz * ( dI7 - (dy*dy + dz*dz)/(2.0*asmth2) * dI9 + dy*dy*dz*dz/(4.0*asmth2*asmth2) );
-	  fac25 *= 2.0;
-
-	  fac26 = iso*iso*daniz*danix * ( dI7 - (dz*dz + dx*dx)/(2.0*asmth2) * dI9 + dz*dz*dx*dx/(4.0*asmth2*asmth2) );
-	  fac26 *= 2.0;
 
 	  //f derivative terms
 	  // i=j terms
-	  fac27 = ( I7 - 6.0 * iso * iso * I9  ) / asmth2;
-	  fac28 = I11 * iso * iso / (asmth2*asmth2);
+	  fac25 = ( I7 - 6.0 * iso * iso * I9  ) / asmth2;
+	  fac26 = I11 * iso * iso / (asmth2*asmth2);
 
 	  // i \neq j terms
-	  fac29 = iso*iso* ( - I9 * (danix + daniy + daniz)/asmth2 + I11 * ( dx*dx*danix + dy*dy*daniy + dz*dz*daniz ) / (2.0*asmth2*asmth2) );
-	  fac29 *= 2.0;
+	  fac2x = iso*iso * ( -I9 * (daniy + daniz) / asmth2 + I11 * ( daniy*dy*dy + daniz*dz*dz ) / (2.0*asmth2*asmth2) );
+	  fac2y = iso*iso * ( -I9 * (daniz + danix) / asmth2 + I11 * ( daniz*dz*dz + danix*dx*dx ) / (2.0*asmth2*asmth2) );
+	  fac2z = iso*iso * ( -I9 * (danix + daniy) / asmth2 + I11 * ( danix*dx*dx + daniy*dy*dy ) / (2.0*asmth2*asmth2) );
 
-	  acc_x -= -dx * fac1 * anifacx * ( fac21 + fac22 + fac23 + fac24 + fac25 + fac26 ) / (2.0 * r);
-	  acc_x -= -dx * fac1 * anifacx * danix * ( danix * ( fac27 + fac28 * dx*dx ) + fac29 ) / 2.0;
-	  acc_y -= -dy * fac1 * anifacy * ( fac21 + fac22 + fac23 + fac24 + fac25 + fac26 ) / (2.0 * r);
-	  acc_y -= -dy * fac1 * anifacy * daniy * ( daniy * ( fac27 + fac28 * dy*dy ) + fac29 ) / 2.0;
-	  acc_z -= -dz * fac1 * anifacz * ( fac21 + fac22 + fac23 + fac24 + fac25 + fac26 ) / (2.0 * r);
-	  acc_z -= -dz * fac1 * anifacz * daniz * ( daniz * ( fac27 + fac28 * dz*dz ) + fac29 ) / 2.0;
+	  acc_x += dx * fac1 * anifacx * ( fac21 + fac22 + fac23 + fac24  ) / (2.0 * r);
+	  acc_x += dx * fac1 * anifacx * danix * ( danix * ( fac25 + fac26 * dx*dx ) / 2.0 + fac2x );
+	  acc_y += dy * fac1 * anifacy * ( fac21 + fac22 + fac23 + fac24  ) / (2.0 * r);
+	  acc_x += dy * fac1 * anifacy * daniy * ( daniy * ( fac25 + fac26 * dy*dy ) / 2.0 + fac2y );
+	  acc_z += dz * fac1 * anifacz * ( fac21 + fac22 + fac23 + fac24  ) / (2.0 * r);
+	  acc_x += dz * fac1 * anifacz * daniz * ( daniz * ( fac25 + fac26 * dz*dz ) / 2.0 + fac2z );
 
 	  }
 	}
