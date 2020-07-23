@@ -639,6 +639,15 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
   boxsize = All.BoxSize;
   boxhalf = 0.5 * All.BoxSize;
 
+  if(ThisTask == 0)
+   {
+     printf("\niso = %lf\n", iso);
+     printf("\ndanix = %lf\n", danix);
+     printf("\ndaniy = %lf\n", daniy);
+     printf("\ndaniz = %lf\n", daniz);
+   }
+
+
   acc_x = 0;
   acc_y = 0;
   acc_z = 0;
@@ -733,21 +742,21 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	      /* check whether we can stop walking along this branch */
 	      eff_dist = rcut + 0.5 * nop->len;
 
-	      dist = NEAREST(nop->center[0] - pos_x) * anifacx;
+	      dist = NEAREST(nop->center[0] - pos_x);
 	      if(dist < -eff_dist || dist > eff_dist)
 		{
 		  no = nop->u.d.sibling;
 		  continue;
 		}
 
-	      dist = NEAREST(nop->center[1] - pos_y) * anifacy;
+	      dist = NEAREST(nop->center[1] - pos_y);
 	      if(dist < -eff_dist || dist > eff_dist)
 		{
 		  no = nop->u.d.sibling;
 		  continue;
 		}
 
-	      dist = NEAREST(nop->center[2] - pos_z) * anifacz;
+	      dist = NEAREST(nop->center[2] - pos_z);
 	      if(dist < -eff_dist || dist > eff_dist)
 		{
 		  no = nop->u.d.sibling;
@@ -1010,7 +1019,7 @@ void force_treeinit(void)
     }
     if(ThisTask == 0)
     {
-      printf("\n force_treeinit finished.\n");
+      printf("\nforce_treeinit finished.\n");
     }
 }
 
