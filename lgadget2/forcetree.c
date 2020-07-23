@@ -27,8 +27,8 @@
 
 static int last;		/* auxialiary variable used to set-up non-recursive walk */
 
-#define NTAB 10000
-#define NTAB_iso 10000
+#define NTAB 5000
+#define NTAB_iso 5000
 static double shortrange_table[NTAB];
 static double dI5_table[NTAB][NTAB_iso];
 static double dI7_table[NTAB][NTAB_iso];
@@ -673,7 +673,7 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 
   rcut = All.Rcut[0];
   rcut2 = rcut * rcut;
-  asmthfac = 0.5 / All.Asmth[0] * (NTAB / 15.0);
+  asmthfac = 0.5 / All.Asmth[0] * (NTAB / 3.0);
   asmthfac /= iso;
 
   h = 2.8 * All.ComovSoftening;
@@ -826,9 +826,9 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	}
 
       tabindex = (int) (asmthfac * r);
-      isofac = ( iso - 0.85 ) * (NTAB_iso / 0.3);
+      isofac = ( iso - 0.925 ) * (NTAB_iso / 0.15);
       tabindex_iso = (int) (isofac);
-      //iso = 0.85 + tabindex_iso * ( 0.3 / NTAB_iso );
+      //iso = 0.925 + tabindex_iso * ( 0.15 / NTAB_iso );
 
 	  fac1 = mass / (2.*sqrt(M_PI));
 	  fac1 /= All.Asmth[0];
@@ -844,10 +844,10 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	if( r >= h ){
 	  if(tabindex_iso < NTAB_iso)
 	  {
-	  	dI5 = dI5_table[tabindex][tabindex_iso] / (4.*r);
-	  	dI7 = dI7_table[tabindex][tabindex_iso] / (4.*r);
-	  	dI9 = dI9_table[tabindex][tabindex_iso] / (4.*r);
-	  	dI11 = dI11_table[tabindex][tabindex_iso] / (4.*r);
+	  	dI5 = dI5_table[tabindex][tabindex_iso] / (4.0*r);
+	  	dI7 = dI7_table[tabindex][tabindex_iso] / (4.0*r);
+	  	dI9 = dI9_table[tabindex][tabindex_iso] / (4.0*r);
+	  	dI11 = dI11_table[tabindex][tabindex_iso] / (4.0*r);
 	  	I7 = I7_table[tabindex][tabindex_iso];
 	  	I9 = I9_table[tabindex][tabindex_iso];
 	  	I11 = I11_table[tabindex][tabindex_iso];
@@ -1005,11 +1005,11 @@ void force_treeinit(void)
 
   for(i = 0; i < NTAB; i++)
     {
-      u = 15.0 / NTAB * (i + 0.5);
+      u = 3.0 / NTAB * (i + 0.5);
       shortrange_table[i] = erfc(u) + 2.0 * u / sqrt(M_PI) * exp(-u * u);
       for(j = 0; j < NTAB_iso; j++)
       {
-      	iso = 0.85 + ( 0.3 / NTAB_iso * (j + 0.5));
+      	iso = 0.925 + ( 0.15 / NTAB_iso * (j + 0.5));
       	dI5_table[i][j] = dIm_func(5, iso, u);
       	dI7_table[i][j] = dIm_func(7, iso, u);
       	dI9_table[i][j] = dIm_func(9, iso, u);
