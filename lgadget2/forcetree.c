@@ -635,6 +635,8 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
   double fac1, fac11, fac12, fac21, fac22, fac23, fac24, fac25, fac26, fac2x, fac2y, fac2z;
   double dI5, dI7, dI9, dI11;
   double I7, I9, I11;
+  double deci = 0.0;
+  double deci_iso = 0.0;
 
   boxsize = All.BoxSize;
   boxhalf = 0.5 * All.BoxSize;
@@ -826,31 +828,48 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	}
 
       tabindex = (int) (asmthfac * r);
+      deci = asmthfac * r - tabindex;
+
       isofac = ( iso - 0.925 ) * (NTAB_iso / 0.15);
       tabindex_iso = (int) (isofac);
+      deci_iso = isofac - tabindex_iso;
+
       //iso = 0.925 + tabindex_iso * ( 0.15 / NTAB_iso );
 
 	  fac1 = mass / (2.*sqrt(M_PI));
 	  fac1 /= All.Asmth[0];
 
-      if(tabindex < NTAB)
+      if(tabindex < NTAB-1)
 	{
-	  fac *= shortrange_table[tabindex];
+	  fac *= ( (1.0 - deci)*shortrange_table[tabindex] + deci*shortrange_table[tabindex+1] );
 
 	  acc_x += dx * fac * anifacx;
 	  acc_y += dy * fac * anifacy;
 	  acc_z += dz * fac * anifacz;
 
 	if( r >= h ){
-	  if(tabindex_iso < NTAB_iso)
+	  if(tabindex_iso < NTAB_iso-1)
 	  {
-	  	dI5 = dI5_table[tabindex][tabindex_iso] / (4.0*r);
-	  	dI7 = dI7_table[tabindex][tabindex_iso] / (4.0*r);
-	  	dI9 = dI9_table[tabindex][tabindex_iso] / (4.0*r);
-	  	dI11 = dI11_table[tabindex][tabindex_iso] / (4.0*r);
-	  	I7 = I7_table[tabindex][tabindex_iso];
-	  	I9 = I9_table[tabindex][tabindex_iso];
-	  	I11 = I11_table[tabindex][tabindex_iso];
+	  	dI5 =  (1.0 - deci) * ( (1.0 - deci_iso)*dI5_table[tabindex][tabindex_iso] + deci_iso*dI5_table[tabindex][tabindex_iso+1]  )/ (4.0*r);
+	  	dI5 += deci * ( (1.0 - deci_iso)*dI5_table[tabindex+1][tabindex_iso] + deci_iso*dI5_table[tabindex+1][tabindex_iso+1]  )/ (4.0*r);
+
+	  	dI7 =  (1.0 - deci) * ( (1.0 - deci_iso)*dI7_table[tabindex][tabindex_iso] + deci_iso*dI7_table[tabindex][tabindex_iso+1]  )/ (4.0*r);
+	  	dI7 += deci * ( (1.0 - deci_iso)*dI7_table[tabindex+1][tabindex_iso] + deci_iso*dI7_table[tabindex+1][tabindex_iso+1]  )/ (4.0*r);
+
+	  	dI9 =  (1.0 - deci) * ( (1.0 - deci_iso)*dI9_table[tabindex][tabindex_iso] + deci_iso*dI9_table[tabindex][tabindex_iso+1]  )/ (4.0*r);
+	  	dI9 += deci * ( (1.0 - deci_iso)*dI9_table[tabindex+1][tabindex_iso] + deci_iso*dI9_table[tabindex+1][tabindex_iso+1]  )/ (4.0*r);
+
+	  	dI11 =  (1.0 - deci) * ( (1.0 - deci_iso)*dI11_table[tabindex][tabindex_iso] + deci_iso*dI11_table[tabindex][tabindex_iso+1]  )/ (4.0*r);
+	  	dI11 += deci * ( (1.0 - deci_iso)*dI11_table[tabindex+1][tabindex_iso] + deci_iso*dI11_table[tabindex+1][tabindex_iso+1]  )/ (4.0*r);
+
+	  	I7 =  (1.0 - deci) * ( (1.0 - deci_iso)*I7_table[tabindex][tabindex_iso] + deci_iso*I7_table[tabindex][tabindex_iso+1]  );
+	  	I7 += deci * ( (1.0 - deci_iso)*I7_table[tabindex+1][tabindex_iso] + deci_iso*I7_table[tabindex+1][tabindex_iso+1]  );
+
+	  	I9 =  (1.0 - deci) * ( (1.0 - deci_iso)*I9_table[tabindex][tabindex_iso] + deci_iso*I9_table[tabindex][tabindex_iso+1]  );
+	  	I9 += deci * ( (1.0 - deci_iso)*I9_table[tabindex+1][tabindex_iso] + deci_iso*I9_table[tabindex+1][tabindex_iso+1]  );
+
+	  	I11 =  (1.0 - deci) * ( (1.0 - deci_iso)*I11_table[tabindex][tabindex_iso] + deci_iso*I11_table[tabindex][tabindex_iso+1]  );
+	  	I11 += deci * ( (1.0 - deci_iso)*I11_table[tabindex+1][tabindex_iso] + deci_iso*I11_table[tabindex+1][tabindex_iso+1]  );
 	
 	  // 1st order correction of Delta_alpha_i 
 
@@ -1005,11 +1024,11 @@ void force_treeinit(void)
 
   for(i = 0; i < NTAB; i++)
     {
-      u = 3.0 / NTAB * (i + 0.5);
+      u = 3.0 / NTAB * i;
       shortrange_table[i] = erfc(u) + 2.0 * u / sqrt(M_PI) * exp(-u * u);
       for(j = 0; j < NTAB_iso; j++)
       {
-      	iso = 0.925 + ( 0.15 / NTAB_iso * (j + 0.5));
+      	iso = 0.925 + ( 0.15 / NTAB_iso * j );
       	dI5_table[i][j] = dIm_func(5, iso, u);
       	dI7_table[i][j] = dIm_func(7, iso, u);
       	dI9_table[i][j] = dIm_func(9, iso, u);
