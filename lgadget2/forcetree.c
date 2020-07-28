@@ -830,11 +830,17 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
       tabindex = (int) (asmthfac * r);
       deci = asmthfac * r - tabindex;
 
-      isofac = ( iso - 0.925 ) * (NTAB_iso / 0.15);
+	//For pure tidal simulations where iso = 1.0 + O(tides^2)/3 so its variation is very small and the correction is always negative. 
+    //Thus here we take the interpolation range to be [0.998, 1.002]. I've cheked iso is indeed within this range for mmp01 and mpo01.
+      isofac = ( iso - 0.998 ) * (NTAB_iso / 0.004);	
       tabindex_iso = (int) (isofac);
       deci_iso = isofac - tabindex_iso;
 
-      //iso = 0.925 + tabindex_iso * ( 0.15 / NTAB_iso );
+    /*For isotropic simulations, we need to extend the range of interpolation.
+      isofac = ( iso - 0.998 ) * (NTAB_iso / 0.003);	
+      tabindex_iso = (int) (isofac);
+      deci_iso = isofac - tabindex_iso;
+    */
 
 	  fac1 = mass / (2.*sqrt(M_PI));
 	  fac1 /= All.Asmth[0];
@@ -1028,7 +1034,7 @@ void force_treeinit(void)
       shortrange_table[i] = erfc(u) + 2.0 * u / sqrt(M_PI) * exp(-u * u);
       for(j = 0; j < NTAB_iso; j++)
       {
-      	iso = 0.925 + ( 0.15 / NTAB_iso * j );
+      	iso = 0.998 + ( 0.004 / NTAB_iso * j );
       	dI5_table[i][j] = dIm_func(5, iso, u);
       	dI7_table[i][j] = dIm_func(7, iso, u);
       	dI9_table[i][j] = dIm_func(9, iso, u);
