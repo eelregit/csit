@@ -838,8 +838,24 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
       tabindex_iso = (int) (isofac);
       deci_iso = isofac - tabindex_iso;
 
+    if(r >= h)
+    {
 	  fac1 = Jacobi * mass / (2.*sqrt(M_PI));
 	  fac1 /= All.Asmth[0];
+	} else 
+	{
+	  u = r * h_inv;
+	  if(u < 0.5)
+	    fac1 = mass * h3_inv * (10.666666666667 + u * u * (32.0 * u - 38.4));
+		fac1 *= Jacobi * mass * r2 * r / (2.*sqrt(M_PI));
+		fac1 /= All.Asmth[0];
+	  else
+	    fac1 =
+	      mass * h3_inv * (21.333333333333 - 48.0 * u +
+			       38.4 * u * u - 10.666666666667 * u * u * u - 0.066666666667 / (u * u * u));
+		fac1 *= Jacobi * mass * r2 * r / (2.*sqrt(M_PI));
+		fac1 /= All.Asmth[0];
+	}
 
       if(tabindex < NTAB-1)
 	{
