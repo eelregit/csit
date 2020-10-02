@@ -867,7 +867,7 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  acc_y += dy * fac * anifacy;
 	  acc_z += dz * fac * anifacz;
 
-	if( r >= h){
+	if( r > 0.){
 	  if(tabindex_iso < NTAB_iso-1)
 	  {
 	  	dI3 =  (1.0 - deci) * ( (1.0 - deci_iso)*dI3_table[tabindex][tabindex_iso] + deci_iso*dI3_table[tabindex][tabindex_iso+1]  )/ (4.0*r);
