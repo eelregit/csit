@@ -29,7 +29,8 @@ static int last;		/* auxialiary variable used to set-up non-recursive walk */
 
 #define NTAB 5000
 #define NTAB_iso 5000
-static double shortrange_table[NTAB];
+//static double shortrange_table[NTAB];
+static double dI3_table[NTAB][NTAB_iso];
 static double dI5_table[NTAB][NTAB_iso];
 static double dI7_table[NTAB][NTAB_iso];
 static double dI9_table[NTAB][NTAB_iso];
@@ -837,20 +838,34 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
       tabindex_iso = (int) (isofac);
       deci_iso = isofac - tabindex_iso;
 
-	  fac1 = mass / (2.*sqrt(M_PI));
+	  fac1 = Jacobi * mass / (2.*sqrt(M_PI));
 	  fac1 /= All.Asmth[0];
 
       if(tabindex < NTAB-1)
 	{
-	  fac *= ( (1.0 - deci)*shortrange_table[tabindex] + deci*shortrange_table[tabindex+1] );
+	  //fac *= ( (1.0 - deci)*shortrange_table[tabindex] + deci*shortrange_table[tabindex+1] );
 
-	  acc_x += dx * fac * anifacx;
-	  acc_y += dy * fac * anifacy;
-	  acc_z += dz * fac * anifacz;
+	  acc_x += dx * anifacx;
+	  acc_y += dy * anifacy;
+	  acc_z += dz * anifacz;
 
-	if( (r >= h) && ( ( labs(danix) > 0.001) || ( labs(daniy) > 0.001) || ( labs(daniz) > 0.001) ) ){
+	if( r >= h){
 	  if(tabindex_iso < NTAB_iso-1)
 	  {
+	  	dI3 =  (1.0 - deci) * ( (1.0 - deci_iso)*dI3_table[tabindex][tabindex_iso] + deci_iso*dI3_table[tabindex][tabindex_iso+1]  )/ (4.0*r);
+	  	dI3 += deci * ( (1.0 - deci_iso)*dI3_table[tabindex+1][tabindex_iso] + deci_iso*dI3_table[tabindex+1][tabindex_iso+1]  )/ (4.0*r);
+
+	  // 0th order correction of Delta_alpha_i (Jacobian)
+
+	  fac0 = dI3 / r;
+
+	  acc_x += dx * fac1 * anifacx * fac0;
+	  acc_y += dy * fac1 * anifacy * fac0;
+	  acc_z += dz * fac1 * anifacz * fac0;
+
+	  if( ( fabs(danix) > 0.0001) || (fabs(daniy) > 0.0001) || (fabs(daniz) > 0.0001) )
+	  {
+
 	  	dI5 =  (1.0 - deci) * ( (1.0 - deci_iso)*dI5_table[tabindex][tabindex_iso] + deci_iso*dI5_table[tabindex][tabindex_iso+1]  )/ (4.0*r);
 	  	dI5 += deci * ( (1.0 - deci_iso)*dI5_table[tabindex+1][tabindex_iso] + deci_iso*dI5_table[tabindex+1][tabindex_iso+1]  )/ (4.0*r);
 
@@ -871,6 +886,7 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 
 	  	I11 =  (1.0 - deci) * ( (1.0 - deci_iso)*I11_table[tabindex][tabindex_iso] + deci_iso*I11_table[tabindex][tabindex_iso+1]  );
 	  	I11 += deci * ( (1.0 - deci_iso)*I11_table[tabindex+1][tabindex_iso] + deci_iso*I11_table[tabindex+1][tabindex_iso+1]  );
+
 	
 	  // 1st order correction of Delta_alpha_i 
 
@@ -920,6 +936,8 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  acc_y += dy * fac1 * anifacy * daniy * ( daniy * ( fac25 + fac26 * dy*dy ) / 2.0 + fac2y );
 	  acc_z += dz * fac1 * anifacz * ( fac21 + fac22 + fac23 + fac24  ) / (2.0 * r);
 	  acc_z += dz * fac1 * anifacz * daniz * ( daniz * ( fac25 + fac26 * dz*dz ) / 2.0 + fac2z );
+
+	  }
 
 	  }
 	}
@@ -1030,6 +1048,7 @@ void force_treeinit(void)
       for(j = 0; j < NTAB_iso; j++)
       {
       	iso = 0.95 + ( 0.1 / NTAB_iso * j );
+      	dI3_table[i][j] = dIm_func(3, iso, u);
       	dI5_table[i][j] = dIm_func(5, iso, u);
       	dI7_table[i][j] = dIm_func(7, iso, u);
       	dI9_table[i][j] = dIm_func(9, iso, u);
