@@ -633,8 +633,8 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
   double danix = anifacx - iso;
   double daniy = anifacy - iso;
   double daniz = anifacz - iso;
-  double fac1, fac11, fac12, fac21, fac22, fac23, fac24, fac25, fac26, fac2x, fac2y, fac2z;
-  double dI5, dI7, dI9, dI11;
+  double fac0, fac1, fac11, fac12, fac21, fac22, fac23, fac24, fac25, fac26, fac2x, fac2y, fac2z;
+  double dI3, dI5, dI7, dI9, dI11;
   double I7, I9, I11;
   double deci = 0.0;
   double deci_iso = 0.0;
@@ -1062,7 +1062,7 @@ void force_treeinit(void)
   for(i = 0; i < NTAB; i++)
     {
       u = 3.0 / NTAB * i;
-      shortrange_table[i] = erfc(u) + 2.0 * u / sqrt(M_PI) * exp(-u * u);
+      //shortrange_table[i] = erfc(u) + 2.0 * u / sqrt(M_PI) * exp(-u * u);
       for(j = 0; j < NTAB_iso; j++)
       {
       	iso = 0.95 + ( 0.1 / NTAB_iso * j );
