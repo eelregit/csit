@@ -27,17 +27,16 @@
 
 static int last;		/* auxialiary variable used to set-up non-recursive walk */
 
-#define NTAB 5000
-#define NTAB_iso 5000
+#define NTAB 10000
 //static double shortrange_table[NTAB];
-static double dI3_table[NTAB][NTAB_iso];
-static double dI5_table[NTAB][NTAB_iso];
-static double dI7_table[NTAB][NTAB_iso];
-static double dI9_table[NTAB][NTAB_iso];
-static double dI11_table[NTAB][NTAB_iso];
-static double I7_table[NTAB][NTAB_iso];
-static double I9_table[NTAB][NTAB_iso];
-static double I11_table[NTAB][NTAB_iso];
+static double dI3_table[NTAB];
+static double dI5_table[NTAB];
+static double dI7_table[NTAB];
+static double dI9_table[NTAB];
+static double dI11_table[NTAB];
+static double I7_table[NTAB];
+static double I9_table[NTAB];
+static double I11_table[NTAB];
 
 
 #define NEAREST(x) (((x)>boxhalf)?((x)-boxsize):(((x)<-boxhalf)?((x)+boxsize):(x)))
@@ -629,15 +628,14 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
   double anifacy = All.TimeAni[1] / All.Time;
   double anifacz = All.TimeAni[2] / All.Time;
   double Jacobi = anifacx*anifacy*anifacz;
-  double iso = pow(Jacobi, 1./3.);
-  double danix = anifacx - iso;
-  double daniy = anifacy - iso;
-  double daniz = anifacz - iso;
+ // double iso = pow(Jacobi, 1./3.);
+  double danix = anifacx - 1.0;
+  double daniy = anifacy - 1.0;
+  double daniz = anifacz - 1.0;
   double fac0, fac1, fac11, fac12, fac21, fac22, fac23, fac24, fac25, fac26, fac2x, fac2y, fac2z;
   double dI3, dI5, dI7, dI9, dI11;
   double I7, I9, I11;
   double deci = 0.0;
-  double deci_iso = 0.0;
 
   boxsize = All.BoxSize;
   boxhalf = 0.5 * All.BoxSize;
@@ -677,7 +675,7 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
   rcut = All.Rcut[0];
   rcut2 = rcut * rcut;
   asmthfac = 0.5 / All.Asmth[0] * (NTAB / 3.0);
-  asmthfac /= iso;
+//  asmthfac /= iso;
 
   h = 2.8 * All.ComovSoftening;
   h_inv = 1.0 / h;
@@ -831,32 +829,13 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
       tabindex = (int) (asmthfac * r);
       deci = asmthfac * r - tabindex;
 
-	//For pure tidal simulations where iso = 1.0 + O(tides^2)/3 so its variation is very small and the correction is always negative. 
-    //Thus here we take the interpolation range to be [0.998, 1.002]. I've cheked iso is indeed within this range for mmp01 and mpo01.
-    //After some test, it seems that the following interpolation is fine.
-      isofac = ( iso - 0.95 ) * (NTAB_iso / 0.1);	
-      tabindex_iso = (int) (isofac);
-      deci_iso = isofac - tabindex_iso;
-
     if(r >= h)
     {
 	  fac1 = Jacobi * mass / (2.*sqrt(M_PI));
 	  fac1 /= All.Asmth[0];
 	} else 
 	{
-	  u = r * h_inv;
-	  if(u < 0.5){
-	    fac1 = mass * h3_inv * (10.666666666667 + u * u * (32.0 * u - 38.4));
-		fac1 *= Jacobi * mass * r2 * r / (2.*sqrt(M_PI));
-		fac1 /= All.Asmth[0];
-	}
-	 else{
-	  	fac1 =
-	      mass * h3_inv * (21.333333333333 - 48.0 * u +
-			       38.4 * u * u - 10.666666666667 * u * u * u - 0.066666666667 / (u * u * u));
-		fac1 *= Jacobi * mass * r2 * r / (2.*sqrt(M_PI));
-		fac1 /= All.Asmth[0];
-		}
+	  fac1 = 0.0
 	}
 
       if(tabindex < NTAB-1)
@@ -867,13 +846,10 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  acc_y += dy * fac * anifacy;
 	  acc_z += dz * fac * anifacz;
 
-	if( r > 0.){
-	  if(tabindex_iso < NTAB_iso-1)
-	  {
-	  	dI3 =  (1.0 - deci) * ( (1.0 - deci_iso)*dI3_table[tabindex][tabindex_iso] + deci_iso*dI3_table[tabindex][tabindex_iso+1]  )/ (4.0*r);
-	  	dI3 += deci * ( (1.0 - deci_iso)*dI3_table[tabindex+1][tabindex_iso] + deci_iso*dI3_table[tabindex+1][tabindex_iso+1]  )/ (4.0*r);
+	if( r >= h){
+	  dI3 =  (1.0 - deci) * dI3_table[tabindex] + deci*dI3_table[tabindex+1]  / (4.0*r);
 
-	  // 0th order correction of Delta_alpha_i (Jacobian)
+	  // 0th order correction of Delta_i (Jacobian)
 
 	  fac0 = dI3 / r;
 
@@ -884,80 +860,72 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  if( ( fabs(danix) > 0.0001) || (fabs(daniy) > 0.0001) || (fabs(daniz) > 0.0001) )
 	  {
 
-	  	dI5 =  (1.0 - deci) * ( (1.0 - deci_iso)*dI5_table[tabindex][tabindex_iso] + deci_iso*dI5_table[tabindex][tabindex_iso+1]  )/ (4.0*r);
-	  	dI5 += deci * ( (1.0 - deci_iso)*dI5_table[tabindex+1][tabindex_iso] + deci_iso*dI5_table[tabindex+1][tabindex_iso+1]  )/ (4.0*r);
+	  	dI5 =  (1.0 - deci) * dI5_table[tabindex] + deci*dI5_table[tabindex+1] / (4.0*r);
 
-	  	dI7 =  (1.0 - deci) * ( (1.0 - deci_iso)*dI7_table[tabindex][tabindex_iso] + deci_iso*dI7_table[tabindex][tabindex_iso+1]  )/ (4.0*r);
-	  	dI7 += deci * ( (1.0 - deci_iso)*dI7_table[tabindex+1][tabindex_iso] + deci_iso*dI7_table[tabindex+1][tabindex_iso+1]  )/ (4.0*r);
+	  	dI7 =  (1.0 - deci) * dI7_table[tabindex] + deci*dI7_table[tabindex+1] / (4.0*r);
 
-	  	dI9 =  (1.0 - deci) * ( (1.0 - deci_iso)*dI9_table[tabindex][tabindex_iso] + deci_iso*dI9_table[tabindex][tabindex_iso+1]  )/ (4.0*r);
-	  	dI9 += deci * ( (1.0 - deci_iso)*dI9_table[tabindex+1][tabindex_iso] + deci_iso*dI9_table[tabindex+1][tabindex_iso+1]  )/ (4.0*r);
+	  	dI9 =  (1.0 - deci) * dI9_table[tabindex] + deci*dI9_table[tabindex+1] / (4.0*r);
 
-	  	dI11 =  (1.0 - deci) * ( (1.0 - deci_iso)*dI11_table[tabindex][tabindex_iso] + deci_iso*dI11_table[tabindex][tabindex_iso+1]  )/ (4.0*r);
-	  	dI11 += deci * ( (1.0 - deci_iso)*dI11_table[tabindex+1][tabindex_iso] + deci_iso*dI11_table[tabindex+1][tabindex_iso+1]  )/ (4.0*r);
+	  	dI11 =  (1.0 - deci) * dI11_table[tabindex] + deci*dI11_table[tabindex+1] / (4.0*r);
 
-	  	I7 =  (1.0 - deci) * ( (1.0 - deci_iso)*I7_table[tabindex][tabindex_iso] + deci_iso*I7_table[tabindex][tabindex_iso+1]  );
-	  	I7 += deci * ( (1.0 - deci_iso)*I7_table[tabindex+1][tabindex_iso] + deci_iso*I7_table[tabindex+1][tabindex_iso+1]  );
+	  	I7 =  (1.0 - deci) * I7_table[tabindex] + deci*I7_table[tabindex+1];
 
-	  	I9 =  (1.0 - deci) * ( (1.0 - deci_iso)*I9_table[tabindex][tabindex_iso] + deci_iso*I9_table[tabindex][tabindex_iso+1]  );
-	  	I9 += deci * ( (1.0 - deci_iso)*I9_table[tabindex+1][tabindex_iso] + deci_iso*I9_table[tabindex+1][tabindex_iso+1]  );
+	  	I9 =  (1.0 - deci) * I9_table[tabindex] + deci*I9_table[tabindex+1];
 
-	  	I11 =  (1.0 - deci) * ( (1.0 - deci_iso)*I11_table[tabindex][tabindex_iso] + deci_iso*I11_table[tabindex][tabindex_iso+1]  );
-	  	I11 += deci * ( (1.0 - deci_iso)*I11_table[tabindex+1][tabindex_iso] + deci_iso*I11_table[tabindex+1][tabindex_iso+1]  );
+	  	I11 =  (1.0 - deci) * I11_table[tabindex] + deci*I11_table[tabindex+1];
 
 	
-	  // 1st order correction of Delta_alpha_i 
+	  // 1st order correction of Delta_i 
 
 	  asmth2 = All.Asmth[0] * All.Asmth[0];
-	  fac11 = - iso * dI5 * ( danix + daniy + daniz );
-	  fac11 += iso / (2.0 * asmth2) * dI7 * (danix*dx*dx + daniy*dy*dy + daniz*dz*dz);
+	  fac11 = - dI5 * ( danix + daniy + daniz );
+	  fac11 += dI7 * (danix*dx*dx + daniy*dy*dy + daniz*dz*dz) / (2.0 * asmth2);
 	  fac11 /= r;
-	  fac12 = iso * I7 / asmth2;
+	  fac12 = I7 / asmth2;
 
 	  acc_x += dx * fac1 * anifacx * ( fac11 + fac12 * danix );
 	  acc_y += dy * fac1 * anifacy * ( fac11 + fac12 * daniy );
 	  acc_z += dz * fac1 * anifacz * ( fac11 + fac12 * daniz );
 
-	  // 2nd order correction of Delta_alpha_i
+	  // 2nd order correction of Delta_i
 	  //Im derivative terms
 	  // i=j terms
 	  fac21 = ( danix*danix + daniy*daniy + daniz*daniz );
-	  fac21 *= ( -dI5 + 3.0 * iso * iso * dI7 );
+	  fac21 *= ( -dI5 + 3.0 * dI7 );
 
 	  fac22 = dx*dx*danix*danix + dy*dy*daniy*daniy + dz*dz*daniz*daniz;
-	  fac22 *= ( dI7/2.0 - iso * iso * 3.0 * dI9 ) ;
+	  fac22 *= ( dI7/2.0 - 3.0 * dI9 ) ;
 	  fac22 /= asmth2;
 
 	  fac23 = danix*danix*dx*dx*dx*dx + daniy*daniy*dy*dy*dy*dy + daniz*daniz*dz*dz*dz*dz;
-	  fac23 *= iso * iso * dI11;
+	  fac23 *= dI11;
 	  fac23 /= (4.0 * asmth2*asmth2);
 
 	  // i \neq j terms
-	  fac24 =  iso*iso*danix*daniy * ( dI7 - (dx*dx + dy*dy)/(2.0*asmth2) * dI9 + dI11 * dx*dx*dy*dy/(4.0*asmth2*asmth2) );
-	  fac24 += iso*iso*daniy*daniz * ( dI7 - (dy*dy + dz*dz)/(2.0*asmth2) * dI9 + dI11 * dy*dy*dz*dz/(4.0*asmth2*asmth2) );
-	  fac24 += iso*iso*daniz*danix * ( dI7 - (dz*dz + dx*dx)/(2.0*asmth2) * dI9 + dI11 * dz*dz*dx*dx/(4.0*asmth2*asmth2) );
+	  fac24 =  danix*daniy * ( dI7 - (dx*dx + dy*dy)/(2.0*asmth2) * dI9 + dI11 * dx*dx*dy*dy/(4.0*asmth2*asmth2) );
+	  fac24 += daniy*daniz * ( dI7 - (dy*dy + dz*dz)/(2.0*asmth2) * dI9 + dI11 * dy*dy*dz*dz/(4.0*asmth2*asmth2) );
+	  fac24 += daniz*danix * ( dI7 - (dz*dz + dx*dx)/(2.0*asmth2) * dI9 + dI11 * dz*dz*dx*dx/(4.0*asmth2*asmth2) );
 	  fac24 *= 2.0;
 
 	  //f derivative terms
 	  // i=j terms
-	  fac25 = ( I7 - 6.0 * iso * iso * I9  ) / asmth2;
-	  fac26 = I11 * iso * iso / (asmth2*asmth2);
+	  fac25 = ( I7/2.0 - 3.0 * I9  ) / asmth2; 
+	  fac26 = I11 / (2.0*asmth2*asmth2);
 
 	  // i \neq j terms
-	  fac2x = iso*iso * ( -I9 * (daniy + daniz) / asmth2 + I11 * ( daniy*dy*dy + daniz*dz*dz ) / (2.0*asmth2*asmth2) );
-	  fac2y = iso*iso * ( -I9 * (daniz + danix) / asmth2 + I11 * ( daniz*dz*dz + danix*dx*dx ) / (2.0*asmth2*asmth2) );
-	  fac2z = iso*iso * ( -I9 * (danix + daniy) / asmth2 + I11 * ( danix*dx*dx + daniy*dy*dy ) / (2.0*asmth2*asmth2) );
+	  fac2x = ( -I9 * (daniy + daniz) / (2.0*asmth2) + I11 * ( daniy*dy*dy + daniz*dz*dz ) / (4.0*asmth2*asmth2) );
+	  fac2y = ( -I9 * (daniz + danix) / (2.0*asmth2) + I11 * ( daniz*dz*dz + danix*dx*dx ) / (4.0*asmth2*asmth2) );
+	  fac2z = ( -I9 * (danix + daniy) / (2.0*asmth2) + I11 * ( danix*dx*dx + daniy*dy*dy ) / (4.0*asmth2*asmth2) );
 
 	  acc_x += dx * fac1 * anifacx * ( fac21 + fac22 + fac23 + fac24  ) / (2.0 * r);
-	  acc_x += dx * fac1 * anifacx * danix * ( danix * ( fac25 + fac26 * dx*dx ) / 2.0 + fac2x );
+	  acc_x += dx * fac1 * anifacx * danix * ( danix * ( fac25 + fac26 * dx*dx )  + fac2x );
 	  acc_y += dy * fac1 * anifacy * ( fac21 + fac22 + fac23 + fac24  ) / (2.0 * r);
-	  acc_y += dy * fac1 * anifacy * daniy * ( daniy * ( fac25 + fac26 * dy*dy ) / 2.0 + fac2y );
+	  acc_y += dy * fac1 * anifacy * daniy * ( daniy * ( fac25 + fac26 * dy*dy )  + fac2y );
 	  acc_z += dz * fac1 * anifacz * ( fac21 + fac22 + fac23 + fac24  ) / (2.0 * r);
-	  acc_z += dz * fac1 * anifacz * daniz * ( daniz * ( fac25 + fac26 * dz*dz ) / 2.0 + fac2z );
+	  acc_z += dz * fac1 * anifacz * daniz * ( daniz * ( fac25 + fac26 * dz*dz )  + fac2z );
 
 	  }
 
-	  }
 	}
 	  ninteractions++;
 	}
