@@ -17,8 +17,8 @@ void force_treeupdate_toplevel(int no, int level, int *nextfree);
 void force_exchange_pseudodata(void);
 void force_treeinit(void);
 
-double dIm_func(int, double, double);
-double Im_func(int, double, double);
+double dIm_func(int, double);
+double Im_func(int, double);
 
 
 int force_treeevaluate_shortrange(int target, int mode, FLOAT *acc);

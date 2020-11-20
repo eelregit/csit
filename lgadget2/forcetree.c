@@ -835,7 +835,7 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  fac1 /= All.Asmth[0];
 	} else 
 	{
-	  fac1 = 0.0
+	  fac1 = 0.0;
 	}
 
       if(tabindex < NTAB-1)
