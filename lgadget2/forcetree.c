@@ -847,7 +847,7 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  acc_z += dz * fac * anifacz;
 
 	if( r >= h){
-	  dI3 =  (1.0 - deci) * dI3_table[tabindex] + deci*dI3_table[tabindex+1]  / (4.0*r);
+	  dI3 = ( (1.0 - deci) * dI3_table[tabindex] + deci*dI3_table[tabindex+1] ) / (4.0*r);
 
 	  // 0th order correction of Delta_i (Jacobian)
 
@@ -860,13 +860,13 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  if( ( fabs(danix) > 0.0001) || (fabs(daniy) > 0.0001) || (fabs(daniz) > 0.0001) )
 	  {
 
-	  	dI5 =  (1.0 - deci) * dI5_table[tabindex] + deci*dI5_table[tabindex+1] / (4.0*r);
+	  	dI5 = ( (1.0 - deci) * dI5_table[tabindex] + deci*dI5_table[tabindex+1] ) / (4.0*r);
 
-	  	dI7 =  (1.0 - deci) * dI7_table[tabindex] + deci*dI7_table[tabindex+1] / (4.0*r);
+	  	dI7 = ( (1.0 - deci) * dI7_table[tabindex] + deci*dI7_table[tabindex+1] ) / (4.0*r);
 
-	  	dI9 =  (1.0 - deci) * dI9_table[tabindex] + deci*dI9_table[tabindex+1] / (4.0*r);
+	  	dI9 = ( (1.0 - deci) * dI9_table[tabindex] + deci*dI9_table[tabindex+1] ) / (4.0*r);
 
-	  	dI11 =  (1.0 - deci) * dI11_table[tabindex] + deci*dI11_table[tabindex+1] / (4.0*r);
+	  	dI11 = ( (1.0 - deci) * dI11_table[tabindex] + deci*dI11_table[tabindex+1] ) / (4.0*r);
 
 	  	I7 =  (1.0 - deci) * I7_table[tabindex] + deci*I7_table[tabindex+1];
 
@@ -993,14 +993,14 @@ void force_flag_localnodes(void)
 }
 
 
-double dIm_func(int m, double iso, double u)
+double dIm_func(int m, double u)
 {
 	double prefac, expfac, gammafac, gamma;
     if( u > 0. )
     {
-        prefac = pow(2, m) * pow(1./(2.0*iso*u), m);
-        expfac = 8.0 * iso * iso * pow(u, m);
-        gammafac = (m-2) * 4.0 * iso * iso * u * u;
+        prefac = pow(2, m) * pow(1./(2.0*u), m);
+        expfac = 8.0 * pow(u, m);
+        gammafac = (m-2) * 4.0  * u * u;
         gamma = gsl_sf_gamma_inc((m-2)/2.0, 0) - gsl_sf_gamma_inc((m-2)/2.0, u*u);
         return prefac * ( expfac * exp(-u * u) - gammafac * gamma );
     } else {
@@ -1008,41 +1008,37 @@ double dIm_func(int m, double iso, double u)
     }
 }
 
-double Im_func(int m, double iso, double u)
+double Im_func(int m, double u)
 {
     if( u > 0. )
     {
         double prefac, gamma;
-        prefac = pow(2, m-2) * pow(1./(2.0*iso*u), m-2);
+        prefac = pow(1./u, m-2);
         gamma = gsl_sf_gamma_inc((m-2)/2.0, 0) - gsl_sf_gamma_inc((m-2)/2.0, u*u);
         return prefac * gamma;
     } else {
-        return 2.0 / (m-2) / pow(iso, m-2);
+        return 2.0 / (-m+2);
     }
 }
 
 
 void force_treeinit(void)
 {
-  int i, j;
-  double u, iso;
+  int i;
+  double u;
 
   for(i = 0; i < NTAB; i++)
     {
       u = 3.0 / NTAB * i;
       //shortrange_table[i] = erfc(u) + 2.0 * u / sqrt(M_PI) * exp(-u * u);
-      for(j = 0; j < NTAB_iso; j++)
-      {
-      	iso = 0.95 + ( 0.1 / NTAB_iso * j );
-      	dI3_table[i][j] = dIm_func(3, iso, u);
-      	dI5_table[i][j] = dIm_func(5, iso, u);
-      	dI7_table[i][j] = dIm_func(7, iso, u);
-      	dI9_table[i][j] = dIm_func(9, iso, u);
-      	dI11_table[i][j] = dIm_func(11, iso, u);
-      	I7_table[i][j] = Im_func(7, iso, u);
-      	I9_table[i][j] = Im_func(9, iso, u);
-      	I11_table[i][j] = Im_func(11, iso, u);
-      }
+      dI3_table[i] = dIm_func(3, u);
+      dI5_table[i] = dIm_func(5, u);
+      dI7_table[i] = dIm_func(7, u);
+      dI9_table[i] = dIm_func(9, u);
+      dI11_table[i] = dIm_func(11, u);
+      I7_table[i]  = Im_func(7, u);
+      I9_table[i]  = Im_func(9, u);
+      I11_table[i] = Im_func(11, u);
     }
     if(ThisTask == 0)
     {
