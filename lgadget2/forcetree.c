@@ -627,7 +627,7 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
   double anifacx = All.TimeAni[0] / All.Time;
   double anifacy = All.TimeAni[1] / All.Time;
   double anifacz = All.TimeAni[2] / All.Time;
-  double Jacobi = anifacx*anifacy*anifacz;
+  double Jacobi = 1.0/(anifacx*anifacy*anifacz);
  // double iso = pow(Jacobi, 1./3.);
   double danix = anifacx - 1.0;
   double daniy = anifacy - 1.0;
