@@ -831,7 +831,7 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 
     if(r >= h)
     {
-	  fac1 = Jacobi * mass / (2.*sqrt(M_PI));
+	  fac1 = mass / (2.*sqrt(M_PI)); // needs Jacobian?
 	  fac1 /= All.Asmth[0];
 	} else 
 	{
