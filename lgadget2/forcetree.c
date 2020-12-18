@@ -860,13 +860,13 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  if( ( fabs(danix) > 0.0001) || (fabs(daniy) > 0.0001) || (fabs(daniz) > 0.0001) )
 	  {
 
-	  	dI5 = ( (1.0 - deci) * dI5_table[tabindex] + deci*dI5_table[tabindex+1] ) / * (2.0/r);
+	  	dI5 = ( (1.0 - deci) * dI5_table[tabindex] + deci*dI5_table[tabindex+1] ) * (2.0/r);
 
-	  	dI7 = ( (1.0 - deci) * dI7_table[tabindex] + deci*dI7_table[tabindex+1] ) / * (2.0/r);
+	  	dI7 = ( (1.0 - deci) * dI7_table[tabindex] + deci*dI7_table[tabindex+1] ) * (2.0/r);
 
-	  	dI9 = ( (1.0 - deci) * dI9_table[tabindex] + deci*dI9_table[tabindex+1] ) / * (2.0/r);
+	  	dI9 = ( (1.0 - deci) * dI9_table[tabindex] + deci*dI9_table[tabindex+1] ) * (2.0/r);
 
-	  	dI11 = ( (1.0 - deci) * dI11_table[tabindex] + deci*dI11_table[tabindex+1] ) / * (2.0/r);
+	  	dI11 = ( (1.0 - deci) * dI11_table[tabindex] + deci*dI11_table[tabindex+1] ) * (2.0/r);
 
 	  	I7 =  (1.0 - deci) * I7_table[tabindex] + deci*I7_table[tabindex+1];
 
