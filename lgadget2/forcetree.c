@@ -847,7 +847,7 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  acc_z += dz * fac * anifacz;
 
 	if( r >= h){
-	  dI3 = ( (1.0 - deci) * dI3_table[tabindex] + deci*dI3_table[tabindex+1] ) / (4.0*r);
+	  dI3 = ( (1.0 - deci) * dI3_table[tabindex] + deci*dI3_table[tabindex+1] ) * (2.0/r);
 
 	  // 0th order correction of Delta_i (Jacobian)
 
@@ -860,13 +860,13 @@ int force_treeevaluate_shortrange(int target, int mode, FLOAT * acc)
 	  if( ( fabs(danix) > 0.0001) || (fabs(daniy) > 0.0001) || (fabs(daniz) > 0.0001) )
 	  {
 
-	  	dI5 = ( (1.0 - deci) * dI5_table[tabindex] + deci*dI5_table[tabindex+1] ) / (4.0*r);
+	  	dI5 = ( (1.0 - deci) * dI5_table[tabindex] + deci*dI5_table[tabindex+1] ) / * (2.0/r);
 
-	  	dI7 = ( (1.0 - deci) * dI7_table[tabindex] + deci*dI7_table[tabindex+1] ) / (4.0*r);
+	  	dI7 = ( (1.0 - deci) * dI7_table[tabindex] + deci*dI7_table[tabindex+1] ) / * (2.0/r);
 
-	  	dI9 = ( (1.0 - deci) * dI9_table[tabindex] + deci*dI9_table[tabindex+1] ) / (4.0*r);
+	  	dI9 = ( (1.0 - deci) * dI9_table[tabindex] + deci*dI9_table[tabindex+1] ) / * (2.0/r);
 
-	  	dI11 = ( (1.0 - deci) * dI11_table[tabindex] + deci*dI11_table[tabindex+1] ) / (4.0*r);
+	  	dI11 = ( (1.0 - deci) * dI11_table[tabindex] + deci*dI11_table[tabindex+1] ) / * (2.0/r);
 
 	  	I7 =  (1.0 - deci) * I7_table[tabindex] + deci*I7_table[tabindex+1];
 
@@ -995,14 +995,13 @@ void force_flag_localnodes(void)
 
 double dIm_func(int m, double u)
 {
-	double prefac, expfac, gammafac, gamma;
+	double gammafac, gamma;
     if( u > 0. )
     {
-        prefac = pow(2, m) * pow(1./(2.0*u), m);
-        expfac = 8.0 * pow(u, m);
-        gammafac = (m-2) * 4.0  * u * u;
+        gammafac = (m-2) / 2.0 ;
+        gammafac *= pow(u, 2-m);
         gamma = gsl_sf_gamma_inc((m-2)/2.0, 0) - gsl_sf_gamma_inc((m-2)/2.0, u*u);
-        return prefac * ( expfac * exp(-u * u) - gammafac * gamma );
+        return exp(-u * u) - gammafac * gamma;
     } else {
         return 0.0;
     }
@@ -1017,7 +1016,7 @@ double Im_func(int m, double u)
         gamma = gsl_sf_gamma_inc((m-2)/2.0, 0) - gsl_sf_gamma_inc((m-2)/2.0, u*u);
         return prefac * gamma;
     } else {
-        return 2.0 / (-m+2);
+        return 2.0 / (m-2);
     }
 }
 
